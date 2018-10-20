@@ -1,0 +1,78 @@
+WordTerminator{
+	qproperty-geometry:rect(100 100 1000 790);
+	background:#ffffff;
+}
+
+/***********QLabel***********/
+/***********CopyLabel***********/
+/***********LinkLabel***********/
+/**********QLineEdit**********/
+/**********QPushButton**********/
+/**********WTButton**********/
+/**********QRadioButton**********/
+/***********QCheckBox***********/
+/************QListView************/
+/***********QStackedWidget***********/
+/**********QScrollArea**********/
+/***********QWidget***********/
+/***********QTextEdit***********/
+
+QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView{
+	font-family:"Microsoft Yahei";
+}
+
+/***********QLabel***********/
+QLabel#label_menubg{
+	qproperty-geometry:rect(0 0 180 790);
+	background:url(skin/picture/15.6/bg_wt.png);
+}
+
+/**********WTButton**********/
+WTButton#btn_lib,
+WTButton#btn_mem,
+WTButton#btn_set{
+	font-size:24px;
+	color:#ffffff;
+}
+WTButton#btn_lib:indicator,
+WTButton#btn_mem:indicator,
+WTButton#btn_set:indicator{
+	width:40px;
+	height:40px;
+}
+WTButton#btn_lib:hover,
+WTButton#btn_mem:hover,
+WTButton#btn_set:hover{
+	background:#2f88d5;
+}
+WTButton#btn_lib:checked,
+WTButton#btn_mem:checked,
+WTButton#btn_set:checked{
+	background:#4595d9;
+}
+WTButton#btn_lib{
+	qproperty-geometry:rect(0 100 180 40);
+}
+WTButton#btn_lib:indicator:checked,
+WTButton#btn_lib:indicator:unchecked{
+	image:url(skin/picture/15.6/dictionary.png);
+}
+WTButton#btn_mem{
+	qproperty-geometry:rect(0 150 180 40);
+}
+WTButton#btn_mem:indicator:checked,
+WTButton#btn_mem:indicator:unchecked{
+	image:url(skin/picture/15.6/memory.png);
+}
+WTButton#btn_set{
+	qproperty-geometry:rect(0 200 180 40);
+}
+WTButton#btn_set:indicator:checked,
+WTButton#btn_set:indicator:unchecked{
+	image:url(skin/picture/15.6/setting.png);
+}
+
+/***********QStackedWidget***********/
+QStackedWidget#stackedWidget{
+	qproperty-geometry:rect(180 0 820 790);
+}

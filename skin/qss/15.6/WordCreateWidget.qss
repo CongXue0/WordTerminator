@@ -1,0 +1,342 @@
+/**********QScrollArea**********/
+QScrollArea#scrollArea{
+	qproperty-geometry:rect(0 0 820 790);
+	background:rgba(255,255,255,0);
+	border:0px;
+}
+
+/***********QWidget***********/
+QWidget#widget{
+	qproperty-geometry:rect(0 0 820 2800);
+	background:rgba(255,255,255,0);
+}
+
+QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
+
+/***********QLabel***********/
+QLabel#label_word,
+QLabel#label_phoneticSymbol,
+QLabel#label_voice,
+QLabel#label_adj_Chinese,
+QLabel#label_adj_English,
+QLabel#label_adv_Chinese,
+QLabel#label_adv_English,
+QLabel#label_vt_Chinese,
+QLabel#label_vt_English,
+QLabel#label_vi_Chinese,
+QLabel#label_vi_English,
+QLabel#label_v_pastTense,
+QLabel#label_v_pastParticiple,
+QLabel#label_v_presentParticiple,
+QLabel#label_v_thirdPersonSingular,
+QLabel#label_noun_Chinese,
+QLabel#label_noun_English,
+QLabel#label_prep_Chinese,
+QLabel#label_prep_English,
+QLabel#label_conj_Chinese,
+QLabel#label_conj_English,
+QLabel#label_pron_Chinese,
+QLabel#label_pron_English,
+QLabel#label_art_Chinese,
+QLabel#label_art_English,
+QLabel#label_exampleSentence,
+QLabel#label_synonym,
+QLabel#label_antonym{
+	/*background:#005656;*/
+	font-size:28px;
+	qproperty-alignment:'AlignLeft | AlignVCenter';
+}
+QLabel#label_word{
+	qproperty-geometry:rect(10 20 150 50);
+	color:#fc4343;
+}
+QLabel#label_phoneticSymbol{
+	qproperty-geometry:rect(10 160 60 50);
+	color:#666666;
+}
+QLabel#label_voice{
+	qproperty-geometry:rect(385 160 140 50);
+	color:#666666;
+}
+QLabel#label_adj_Chinese{
+	qproperty-geometry:rect(10 230 125 50);
+	color:#666666;
+}
+QLabel#label_adj_English{
+	qproperty-geometry:rect(10 300 125 50);
+	color:#666666;
+}
+QLabel#label_adv_Chinese{
+	qproperty-geometry:rect(10 370 130 50);
+	color:#666666;
+}
+QLabel#label_adv_English{
+	qproperty-geometry:rect(10 440 130 50);
+	color:#666666;
+}
+QLabel#label_vt_Chinese{
+	qproperty-geometry:rect(10 510 110 50);
+	color:#666666;
+}
+QLabel#label_vt_English{
+	qproperty-geometry:rect(10 580 110 50);
+	color:#666666;
+}
+QLabel#label_vi_Chinese{
+	qproperty-geometry:rect(10 650 105 50);
+	color:#666666;
+}
+QLabel#label_vi_English{
+	qproperty-geometry:rect(10 720 105 50);
+	color:#666666;
+}
+QLabel#label_v_pastTense{
+	qproperty-geometry:rect(10 790 90 50);
+	color:#666666;
+}
+QLabel#label_v_pastParticiple{
+	qproperty-geometry:rect(410 790 115 50);
+	color:#666666;
+}
+QLabel#label_v_presentParticiple{
+	qproperty-geometry:rect(10 860 115 50);
+	color:#666666;
+}
+QLabel#label_v_thirdPersonSingular{
+	qproperty-geometry:rect(410 860 170 50);
+	color:#666666;
+}
+QLabel#label_noun_Chinese{
+	qproperty-geometry:rect(10 930 100 50);
+	color:#666666;
+}
+QLabel#label_noun_English{
+	qproperty-geometry:rect(10 1000 100 50);
+	color:#666666;
+}
+QLabel#label_prep_Chinese{
+	qproperty-geometry:rect(10 1070 145 50);
+	color:#666666;
+}
+QLabel#label_prep_English{
+	qproperty-geometry:rect(10 1140 145 50);
+	color:#666666;
+}
+QLabel#label_conj_Chinese{
+	qproperty-geometry:rect(10 1210 140 50);
+	color:#666666;
+}
+QLabel#label_conj_English{
+	qproperty-geometry:rect(10 1280 140 50);
+	color:#666666;
+}
+QLabel#label_pron_Chinese{
+	qproperty-geometry:rect(10 1350 145 50);
+	color:#666666;
+}
+QLabel#label_pron_English{
+	qproperty-geometry:rect(10 1420 145 50);
+	color:#666666;
+}
+QLabel#label_art_Chinese{
+	qproperty-geometry:rect(10 1490 120 50);
+	color:#666666;
+}
+QLabel#label_art_English{
+	qproperty-geometry:rect(10 1560 120 50);
+	color:#666666;
+}
+QLabel#label_exampleSentence{
+	qproperty-geometry:rect(10 1630 90 50);
+	color:#666666;
+}
+QLabel#label_synonym{
+	qproperty-geometry:rect(10 2540 90 50);
+	color:#666666;
+}
+QLabel#label_antonym{
+	qproperty-geometry:rect(10 2610 90 50);
+	color:#666666;
+}
+
+/**********QLineEdit**********/
+QLineEdit#lineEdit_word,
+QLineEdit#lineEdit_phoneticSymbol,
+QLineEdit#lineEdit_voice,
+QLineEdit#lineEdit_adj_Chinese,
+QLineEdit#lineEdit_adj_English,
+QLineEdit#lineEdit_adv_Chinese,
+QLineEdit#lineEdit_adv_English,
+QLineEdit#lineEdit_vt_Chinese,
+QLineEdit#lineEdit_vt_English,
+QLineEdit#lineEdit_vi_Chinese,
+QLineEdit#lineEdit_vi_English,
+QLineEdit#lineEdit_v_pastTense,
+QLineEdit#lineEdit_v_pastParticiple,
+QLineEdit#lineEdit_v_presentParticiple,
+QLineEdit#lineEdit_v_thirdPersonSingular,
+QLineEdit#lineEdit_noun_Chinese,
+QLineEdit#lineEdit_noun_English,
+QLineEdit#lineEdit_prep_Chinese,
+QLineEdit#lineEdit_prep_English,
+QLineEdit#lineEdit_conj_Chinese,
+QLineEdit#lineEdit_conj_English,
+QLineEdit#lineEdit_pron_Chinese,
+QLineEdit#lineEdit_pron_English,
+QLineEdit#lineEdit_art_Chinese,
+QLineEdit#lineEdit_art_English,
+QLineEdit#lineEdit_synonym,
+QLineEdit#lineEdit_antonym{
+	/*background:#005656;*/
+	font-size:28px;
+}
+QLineEdit#lineEdit_word{
+	qproperty-geometry:rect(166 20 624 50);
+}
+QLineEdit#lineEdit_phoneticSymbol{
+	qproperty-geometry:rect(75 160 300 50);
+}
+QLineEdit#lineEdit_voice{
+	qproperty-geometry:rect(530 160 260 50);
+}
+QLineEdit#lineEdit_adj_Chinese{
+	qproperty-geometry:rect(140 230 650 50);
+}
+QLineEdit#lineEdit_adj_English{
+	qproperty-geometry:rect(140 300 650 50);
+}
+QLineEdit#lineEdit_adv_Chinese{
+	qproperty-geometry:rect(145 370 645 50);
+}
+QLineEdit#lineEdit_adv_English{
+	qproperty-geometry:rect(145 440 645 50);
+}
+QLineEdit#lineEdit_vt_Chinese{
+	qproperty-geometry:rect(125 510 665 50);
+}
+QLineEdit#lineEdit_vt_English{
+	qproperty-geometry:rect(125 580 665 50);
+}
+QLineEdit#lineEdit_vi_Chinese{
+	qproperty-geometry:rect(120 650 670 50);
+}
+QLineEdit#lineEdit_vi_English{
+	qproperty-geometry:rect(120 720 670 50);
+}
+QLineEdit#lineEdit_v_pastTense{
+	qproperty-geometry:rect(105 790 285 50);
+}
+QLineEdit#lineEdit_v_pastParticiple{
+	qproperty-geometry:rect(530 790 260 50);
+}
+QLineEdit#lineEdit_v_presentParticiple{
+	qproperty-geometry:rect(130 860 260 50);
+}
+QLineEdit#lineEdit_v_thirdPersonSingular{
+	qproperty-geometry:rect(585 860 205 50);
+}
+QLineEdit#lineEdit_noun_Chinese{
+	qproperty-geometry:rect(115 930 675 50);
+}
+QLineEdit#lineEdit_noun_English{
+	qproperty-geometry:rect(115 1000 675 50);
+}
+QLineEdit#lineEdit_prep_Chinese{
+	qproperty-geometry:rect(160 1070 630 50);
+}
+QLineEdit#lineEdit_prep_English{
+	qproperty-geometry:rect(160 1140 630 50);
+}
+QLineEdit#lineEdit_conj_Chinese{
+	qproperty-geometry:rect(155 1210 635 50);
+}
+QLineEdit#lineEdit_conj_English{
+	qproperty-geometry:rect(155 1280 635 50);
+}
+QLineEdit#lineEdit_pron_Chinese{
+	qproperty-geometry:rect(160 1350 630 50);
+}
+QLineEdit#lineEdit_pron_English{
+	qproperty-geometry:rect(160 1420 630 50);
+}
+QLineEdit#lineEdit_art_Chinese{
+	qproperty-geometry:rect(135 1490 655 50);
+}
+QLineEdit#lineEdit_art_English{
+	qproperty-geometry:rect(135 1560 655 50);
+}
+QLineEdit#lineEdit_synonym{
+	qproperty-geometry:rect(105 2540 685 50);
+}
+QLineEdit#lineEdit_antonym{
+	qproperty-geometry:rect(105 2610 685 50);
+}
+
+/***********QCheckBox***********/
+QCheckBox#checkBox_phrase{
+	qproperty-geometry:rect(10 90 200 50);
+	/*background:#005656;*/
+	font-size:28px;
+	color:#fc4343;
+	spacing:5px;
+}
+QCheckBox#checkBox_phrase::indicator{
+	width:50px;
+	height:50px;
+}
+QCheckBox#checkBox_phrase::indicator::unchecked{
+	image:url(skin/picture/15.6/check1_inactive.png);
+}
+QCheckBox#checkBox_phrase::indicator::checked{
+	image:url(skin/picture/15.6/check1_active.png);
+}
+
+/***********QTextEdit***********/
+QTextEdit#textEdit_exampleSentence1,
+QTextEdit#textEdit_exampleSentence2,
+QTextEdit#textEdit_exampleSentence3,
+QTextEdit#textEdit_exampleSentence4,
+QTextEdit#textEdit_exampleSentence5,
+QTextEdit#textEdit_exampleSentence6{
+	font-size:28px;
+}
+QTextEdit#textEdit_exampleSentence1{
+	qproperty-geometry:rect(10 1700 780 120);
+}
+QTextEdit#textEdit_exampleSentence2{
+	qproperty-geometry:rect(10 1840 780 120);
+}
+QTextEdit#textEdit_exampleSentence3{
+	qproperty-geometry:rect(10 1980 780 120);
+}
+QTextEdit#textEdit_exampleSentence4{
+	qproperty-geometry:rect(10 2120 780 120);
+}
+QTextEdit#textEdit_exampleSentence5{
+	qproperty-geometry:rect(10 2260 780 120);
+}
+QTextEdit#textEdit_exampleSentence6{
+	qproperty-geometry:rect(10 2400 780 120);
+}
+
+/**********QPushButton**********/
+QPushButton#btn_cancel{
+	qproperty-geometry:rect(250 2680 100 100);
+	background:url(skin/picture/15.6/cross.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_cancel:hover{
+	background:url(skin/picture/15.6/cross_hover.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_cancel:pressed{
+	background:url(skin/picture/15.6/cross_pressed.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_confirm{
+	qproperty-geometry:rect(450 2680 100 100);
+	background:url(skin/picture/15.6/hook.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_confirm:hover{
+	background:url(skin/picture/15.6/hook_hover.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_confirm:pressed{
+	background:url(skin/picture/15.6/hook_pressed.png) 0 center no-repeat rgba(255,255,255,0);
+}

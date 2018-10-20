@@ -1,0 +1,207 @@
+/***********QWidget***********/
+QWidget#widget_topBar{
+	qproperty-geometry:rect(0 0 660 40);
+	background:#d7f3fe;
+}
+QWidget#widget_show{
+	/*qproperty-geometry:rect(0 0 660 1600);*/
+	background:rgba(255,255,255,0);
+}
+
+QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
+
+/**********QPushButton**********/
+QPushButton#btn_return,
+QPushButton#btn_mid,
+QPushButton#btn_max,
+QPushButton#btn_add,
+QPushButton#btn_delete,
+QPushButton#btn_edit,
+QPushButton#btn_reset{
+	border:2px solid #f5f6f7;
+	border-radius:5px;
+}
+QPushButton#btn_return{
+	qproperty-geometry:rect(16 4 64 32);
+	background:url(skin/picture/14/left.png) 0 center no-repeat #ffffff;
+}
+QPushButton#btn_return:hover{
+	background:url(skin/picture/14/left_hover.png) 0 center no-repeat #f0f0f0;
+}
+QPushButton#btn_mid{
+	qproperty-geometry:rect(180 4 64 32);
+	background:#ffffff;
+	font-size:22px;
+	font-weight:bold;
+	color:#656669;
+}
+QPushButton#btn_mid:hover{
+	background:#f0f0f0;
+}
+QPushButton#btn_max{
+	qproperty-geometry:rect(260 4 64 32);
+	background:#ffffff;
+	font-size:22px;
+	font-weight:bold;
+	color:#656669;
+}
+QPushButton#btn_max:hover{
+	background:#f0f0f0;
+}
+QPushButton#btn_add{
+	qproperty-geometry:rect(340 4 64 32);
+	background:url(skin/picture/14/add.png) 0 center no-repeat #ffffff;
+}
+QPushButton#btn_add:hover{
+	background:url(skin/picture/14/add_hover.png) 0 center no-repeat #f0f0f0;
+}
+QPushButton#btn_delete{
+	qproperty-geometry:rect(420 4 64 32);
+	background:url(skin/picture/14/delete.png) 0 center no-repeat #ffffff;
+}
+QPushButton#btn_delete:hover{
+	background:url(skin/picture/14/delete_hover.png) 0 center no-repeat #f0f0f0;
+}
+QPushButton#btn_edit{
+	qproperty-geometry:rect(500 4 64 32);
+	background:url(skin/picture/14/edit.png) 0 center no-repeat #ffffff;
+}
+QPushButton#btn_edit:hover{
+	background:url(skin/picture/14/edit_hover.png) 0 center no-repeat #f0f0f0;
+}
+QPushButton#btn_reset{
+	qproperty-geometry:rect(580 4 64 32);
+	background:url(skin/picture/14/reset.png) 0 center no-repeat #ffffff;
+}
+QPushButton#btn_reset:hover{
+	background:url(skin/picture/14/reset_hover.png) 0 center no-repeat #f0f0f0;
+}
+
+/**********WTButton**********/
+WTButton#wbtn_isRemember{
+	qproperty-geometry:rect(100 4 64 32);
+	background:url(skin/picture/14/notforever.png) 0 center no-repeat #ffffff;
+	border:2px solid #f5f6f7;
+	border-radius:5px;
+}
+WTButton#wbtn_isRemember:indicator{
+	background:rgba(255,255,255,0);
+}
+WTButton#wbtn_isRemember:hover{
+	background:url(skin/picture/14/notforever_hover.png) 0 center no-repeat #f0f0f0;
+}
+WTButton#wbtn_isRemember:checked{
+	background:url(skin/picture/14/forever.png) 0 center no-repeat #ffffff;
+}
+WTButton#wbtn_isRemember:checked:hover{
+	background:url(skin/picture/14/forever_hover.png) 0 center no-repeat #f0f0f0;
+}
+
+/**********QScrollArea**********/
+QScrollArea#scrollArea{
+	qproperty-geometry:rect(0 40 660 590);
+	background:rgba(255,255,255,0);
+	border:0px;
+}
+
+/***********CopyLabel***********/
+CopyLabel{
+	border:0px;
+}
+CopyLabel#copyLabel_word,
+CopyLabel#copyLabel_phoneticSymbol,
+CopyLabel#copyLabel_times{
+	background:rgba(0,255,255,0);
+}
+CopyLabel#copyLabel_word{
+	font-size:29px;
+	font-weight:bold;
+	color:#3b93ee;
+}
+CopyLabel#copyLabel_phoneticSymbol{
+	font-size:23px;
+	color:#666666;
+}
+CopyLabel#copyLabel_times{
+	font-size:23px;
+	color:#666666;
+}
+CopyLabel#copyLabel_property1,
+CopyLabel#copyLabel_property2,
+CopyLabel#copyLabel_property3,
+CopyLabel#copyLabel_property4,
+CopyLabel#copyLabel_property5,
+CopyLabel#copyLabel_property6,
+CopyLabel#copyLabel_property7,
+CopyLabel#copyLabel_property8,
+CopyLabel#copyLabel_property9,
+CopyLabel#copyLabel_property10,
+CopyLabel#copyLabel_property11,
+CopyLabel#copyLabel_property12,
+CopyLabel#copyLabel_property13,
+CopyLabel#copyLabel_property14,
+CopyLabel#copyLabel_property15,
+CopyLabel#copyLabel_property16,
+CopyLabel#copyLabel_property17,
+CopyLabel#copyLabel_property18,
+CopyLabel#copyLabel_property19,
+CopyLabel#copyLabel_property20{
+	background:#eaf5ff;
+	border-radius:5px;
+	font-size:20px;
+	color:#177bd0;
+}
+CopyLabel#copyLabel_explain1,
+CopyLabel#copyLabel_explain2,
+CopyLabel#copyLabel_explain3,
+CopyLabel#copyLabel_explain4,
+CopyLabel#copyLabel_explain5,
+CopyLabel#copyLabel_explain6,
+CopyLabel#copyLabel_explain7,
+CopyLabel#copyLabel_explain8,
+CopyLabel#copyLabel_explain9,
+CopyLabel#copyLabel_explain10,
+CopyLabel#copyLabel_explain11,
+CopyLabel#copyLabel_explain12,
+CopyLabel#copyLabel_explain13,
+CopyLabel#copyLabel_explain14,
+CopyLabel#copyLabel_explain15,
+CopyLabel#copyLabel_explain16,
+CopyLabel#copyLabel_explain17,
+CopyLabel#copyLabel_explain18,
+CopyLabel#copyLabel_explain19,
+CopyLabel#copyLabel_explain20,
+CopyLabel#copyLabel_exampleSentence,
+CopyLabel#copyLabel_example1,
+CopyLabel#copyLabel_example2,
+CopyLabel#copyLabel_example3,
+CopyLabel#copyLabel_example4,
+CopyLabel#copyLabel_example5,
+CopyLabel#copyLabel_example6,
+CopyLabel#copyLabel_synonym,
+CopyLabel#copyLabel_antonym{
+	background:rgba(0,255,255,0);
+	font-size:20px;
+}
+
+/***********LinkLabel***********/
+LinkLabel#linkLabel_synonym1,
+LinkLabel#linkLabel_synonym2,
+LinkLabel#linkLabel_synonym3,
+LinkLabel#linkLabel_synonym4,
+LinkLabel#linkLabel_synonym5,
+LinkLabel#linkLabel_synonym6,
+LinkLabel#linkLabel_synonym7,
+LinkLabel#linkLabel_synonym8,
+LinkLabel#linkLabel_antonym1,
+LinkLabel#linkLabel_antonym2,
+LinkLabel#linkLabel_antonym3,
+LinkLabel#linkLabel_antonym4,
+LinkLabel#linkLabel_antonym5,
+LinkLabel#linkLabel_antonym6,
+LinkLabel#linkLabel_antonym7,
+LinkLabel#linkLabel_antonym8{
+	background:rgba(0,255,255,0);
+	font-size:20px;
+	color:#177bd0;
+}
