@@ -10,6 +10,7 @@
 #include "json.h"
 #include "wordadmin.h"
 
+QString WTool::m_uniStr = QString(QString("？！。，：、（）·").unicode());
 int WTool::leastForeverTimes = 0;
 uint WTool::memoryInterval = 0;
 uint WTool::declineArray[DECLINE_NUM] = {0};
@@ -43,7 +44,7 @@ int WTool::divide(int a, int b)
 
 QString WTool::getWordDBFilePath()
 {
-    return APPPATH + QString("/user/db/word.db");
+    return QString("./user/db/word.db");
 }
 
 int WTool::rand(int a, int b)
@@ -58,40 +59,21 @@ QDateTime WTool::getCurDateTimeMinus(uint sec)
     return QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() - sec);
 }
 
-bool WTool::readFileInfo(QString relPath, QString absPath, QString &info)
+QString WTool::readFileInfo(QString path)
 {
-    QFile file(relPath);
+    QString info;
+    QFile file(path);
     file.open(QFile::ReadOnly);
-    if (file.isOpen() == true)
+    if (file.isOpen())
     {
         info = QLatin1String(file.readAll());
         file.close();
-//        if (info.length() > 0 && QChar('\n') == info.at(info.length() - 1))
-//        {
-//            info = info.mid(0, info.length() - 1);//去除多余回车
-//        }
-        return true;
-    }
-    else
-    {
-        file.setFileName(absPath);
-        file.open(QFile::ReadOnly);
-        if (file.isOpen() == true)
+        if (info.length() > 0 && QChar('\n') == info.at(info.length() - 1))
         {
-            info = QLatin1String(file.readAll());
-            file.close();
-//            if (info.length() > 0 && QChar('\n') == info.at(info.length() - 1))
-//            {
-//                info = info.mid(0, info.length() - 1);//去除多余回车
-//            }
-            return true;
-        }
-        else
-        {
-            info = "";
-            return false;
+            info = info.mid(0, info.length() - 1);
         }
     }
+    return info;
 }
 
 int WTool::getFontLength(QFont font, QString txt)
@@ -318,20 +300,17 @@ bool WTool::isEnglishSentence(QString txt, char fl)
     return flag;
 }
 
-bool WTool::isWritting(QString txt)
+bool WTool::isWritting(const QString &txt)
 {
-    int len = txt.length();
+    QString txtTmp = QString(txt.unicode());
+    int len = txtTmp.length();
     bool flag = true;
     QChar ch;
     for (int i = 0; i < len; i++)
     {
-        ch = txt.at(i);
-        if (((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && isChineseChar(ch) == false &&
-            (ch >= '0' && ch <= '9') == false && ch != ' ' && ch != ';' && ch != '?' && ch != '.' && ch != ',' &&
-            ch != '<' && ch != '>' && ch != ':' && ch != '\'' && ch != '[' && ch != ']' && ch != '{' && ch != '}' &&
-            ch != '=' && ch != '+' && ch != '-' && ch != '*' && ch != '&' && ch != '%' && ch != '$' && ch != '#' &&
-            ch != '@' && ch != '!' && ch != '？' && ch != '！' && ch != '。' && ch != '，' && ch != '：' && ch != '、' &&
-            ch != '（' && ch != '）' && ch != '·' && ch != '~' && ch != '`' && ch != '\n')
+        ch = txtTmp.at(i);
+        if (((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && isChineseChar(ch) == false && (ch >= '0' && ch <= '9') == false && ch != ' ' && ch != ';' && ch != '?' && ch != '.' && ch != ',' && ch != '<' && ch != '>' && ch != ':' && ch != '\'' && ch != '[' && ch != ']' && ch != '{' && ch != '}' && ch != '=' && ch != '+' && ch != '-' && ch != '*' && ch != '&' && ch != '%' && ch != '$' && ch != '#' && ch != '@' && ch != '!'  && ch != '~' && ch != '`' && ch != '\n' &&
+            ch != m_uniStr.at(0) && ch != m_uniStr.at(1) && ch != m_uniStr.at(2) && ch != m_uniStr.at(3) && ch != m_uniStr.at(4) && ch != m_uniStr.at(5) && ch != m_uniStr.at(6) && ch != m_uniStr.at(7) && ch != m_uniStr.at(8))
         {
             flag = false;
             break;
@@ -349,24 +328,6 @@ bool WTool::isChineseChar(QChar ch)
         return false;
 }
 
-//bool WTool::textFrontCompare(QString txt, QString front)
-//{
-//    if (front.isEmpty() == true)
-//        return true;
-//    if (txt.length() < front.length())
-//        return false;
-//    return txt.mid(0, front.length()) == front;
-//}
-
-//bool WTool::textEndCompare(QString txt, QString end)
-//{
-//    if (end.isEmpty() == true)
-//        return true;
-//    if (txt.length() < end.length())
-//        return false;
-//    return txt.mid(txt.length() - end.length(), end.length()) == end;
-//}
-
 QStringList WTool::filterWordFromList(QStringList list, QString txt, QString strategy)
 {
     int count = list.size();
@@ -379,7 +340,6 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         for (int i = 0; i < count; i++)
         {
             tmp = list.at(i);
-//            if (textFrontCompare(tmp, txt) == true)
             if (tmp.startsWith(txt) == true)
                 wordList.append(tmp);
         }
@@ -389,7 +349,6 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         for (int i = 0; i < count; i++)
         {
             tmp = list.at(i);
-//            if (textEndCompare(tmp, txt) == true)
             if (tmp.endsWith(txt) == true)
                 wordList.append(tmp);
         }
@@ -432,25 +391,26 @@ QString WTool::shieldWord(QString txt, QString word)
 
 void WTool::memoryConfigInit()
 {
-    QString path = APPPATH + "/user/config/memory.json";
-    Json json;
-    if (json.read(path) == false)
+    QString path = "./user/config/memory.json";
+    bool ok;
+    QtJson::JsonObject result = QtJson::parse(readFileInfo(path), ok).toMap();
+    if (ok == false)
     {
-        qDebug() << "memoryConfig fail";
+        DEBUG << "memoryConfig fail";
         return;
     }
 
-    leastForeverTimes = json["leastForeverTimes"].toInt();
+    leastForeverTimes = result["leastForeverTimes"].toInt();
 
-    memoryInterval = json["memoryInterval"].toInt();
+    memoryInterval = result["memoryInterval"].toInt();
 
-    JsonMap tmp = json["decline"];
+    QtJson::JsonObject tmp = result["decline"].toMap();
     for (int i = 0; i < 10; i++)
     {
         declineArray[i] = tmp[QString::number(i + 1)].toInt();
-        qDebug() << declineArray[i];
+        DEBUG << declineArray[i];
     }
-    qDebug() << "memoryConfig success";
+    DEBUG << "memoryConfig success";
 }
 
 uint WTool::getDeclinePeriod(int times)
@@ -478,7 +438,7 @@ bool WTool::memoryDecline(int &times, QDateTime &start, QDateTime end)
             break;
         t = getDeclinePeriod(times) * 3600;
     }
-    if (tmp1 != times)
+    if (static_cast<int>(tmp1) != times)
     {
         start = QDateTime::fromTime_t(start.toTime_t() + tmp2 - sec);
         return true;
@@ -541,62 +501,35 @@ void WTool::sDelay(uint sec, uint period, bool *isRun)
 
 QString WTool::getWordTerminatorQss()
 {
-    QString info;
-    QString screenSize = getScreenSize();
-    QString relPath = QString("skin/qss/%1/WordTerminator.qss").arg(screenSize);
-    QString absPath = APPPATH + QString("/skin/qss/%1/WordTerminator.qss").arg(screenSize);
-    readFileInfo(relPath, absPath, info);
-    return info;
+    return readFileInfo(QString("./skin/qss/%1/WordTerminator.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordLibraryWidgetQss()
 {
-    QString info;
-    QString screenSize = getScreenSize();
-    QString relPath = QString("skin/qss/%1/WordLibraryWidget.qss").arg(screenSize);
-    QString absPath = APPPATH + QString("/skin/qss/%1/WordLibraryWidget.qss").arg(screenSize);
-    readFileInfo(relPath, absPath, info);
-    return info;
+    return readFileInfo(QString("./skin/qss/%1/WordLibraryWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordCreateWidgetQss()
 {
-    QString info;
-    QString screenSize = getScreenSize();
-    QString relPath = QString("skin/qss/%1/WordCreateWidget.qss").arg(screenSize);
-    QString absPath = APPPATH + QString("/skin/qss/%1/WordCreateWidget.qss").arg(screenSize);
-    readFileInfo(relPath, absPath, info);
-    return info;
+    return readFileInfo(QString("./skin/qss/%1/WordCreateWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordShowWidgetQss()
 {
-    QString info;
-    QString screenSize = getScreenSize();
-    QString relPath = QString("skin/qss/%1/WordShowWidget.qss").arg(screenSize);
-    QString absPath = APPPATH + QString("/skin/qss/%1/WordShowWidget.qss").arg(screenSize);
-    readFileInfo(relPath, absPath, info);
-    return info;
+    return readFileInfo(QString("./skin/qss/%1/WordShowWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordMemorizeWidgetQss()
 {
-    QString info;
-    QString screenSize = getScreenSize();
-    QString relPath = QString("skin/qss/%1/WordMemorizeWidget.qss").arg(screenSize);
-    QString absPath = APPPATH + QString("/skin/qss/%1/WordMemorizeWidget.qss").arg(screenSize);
-    readFileInfo(relPath, absPath, info);
-    return info;
+    return readFileInfo(QString("./skin/qss/%1/WordMemorizeWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordMemorizeWidgetJsonPath()
 {
-    QString screenSize = getScreenSize();
-    QString path = APPPATH + QString("/skin/qss/%1/WordMemorizeWidget.json").arg(screenSize);
-    return path;
+    return QString("./skin/qss/%1/WordMemorizeWidget.json").arg(getScreenSize());
 }
 
 QString WTool::getConfigPath()
 {
-    return APPPATH + "/user/config/config.xml";
+    return "./user/config/config.xml";
 }

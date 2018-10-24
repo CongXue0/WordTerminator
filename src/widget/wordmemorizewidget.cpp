@@ -279,29 +279,30 @@ void WordMemorizeWidget::loadStyleSheet()
 void WordMemorizeWidget::loadJsonRect()
 {
     QString path = WTool::getWordMemorizeWidgetJsonPath();
-    Json json;
-    if (json.read(path) == false)
+    bool ok;
+    QtJson::JsonObject result = QtJson::parse(WTool::readFileInfo(path), ok).toMap();
+    if (ok == false)
     {
-        qDebug() << "open json file " + path + " failed";
+        DEBUG << "open json file " + path + " failed";
         return;
     }
 
-    JsonMap tmp = json["explorate"]["left"];
+    QtJson::JsonObject tmp = result["explorate"].toMap()["left"].toMap();
     rect_explorate_left.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 
-    tmp = json["explorate"]["right"];
+    tmp = result["explorate"].toMap()["right"].toMap();
     rect_explorate_right.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 
-    tmp = json["explorate"]["center"];
+    tmp = result["explorate"].toMap()["center"].toMap();
     rect_explorate_center.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 
-    tmp = json["recall"]["left"];
+    tmp = result["recall"].toMap()["left"].toMap();
     rect_recall_left.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 
-    tmp = json["recall"]["right"];
+    tmp = result["recall"].toMap()["right"].toMap();
     rect_recall_right.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 
-    tmp = json["recall"]["center"];
+    tmp = result["recall"].toMap()["center"].toMap();
     rect_recall_center.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
 }
 
@@ -1099,7 +1100,7 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
             label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
             this->testListInit();
             m_mutex.unlock();
-            qDebug() << "m_testNum:" << m_testNum;
+            DEBUG << "m_testNum:" << m_testNum;
             if (m_testNum > 0)
                 this->loadTestInfo();
             else
@@ -1400,7 +1401,7 @@ void WordMemorizeWidget::slot_wordCanMemorize(QString name)
         m_mutex.unlock();
     }
     else
-        qDebug() << "wordCanMemorize get word fail";
+        DEBUG << "wordCanMemorize get word fail";
 }
 
 void WordMemorizeWidget::slot_wordTimeDecline(QString name)

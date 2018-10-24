@@ -332,7 +332,7 @@ bool WordAdmin::updateWord(WordInfo *word)
                 .arg(word->m_art_Chinese).arg(word->m_art_English).arg(word->m_exampleSentence[0]).arg(word->m_exampleSentence[1])
                 .arg(word->m_exampleSentence[2]).arg(word->m_exampleSentence[3]).arg(word->m_exampleSentence[4])
                 .arg(word->m_exampleSentence[5]).arg(word->m_synonym).arg(word->m_antonym).arg(word->m_name);
-//            qDebug() << sql;
+//            DEBUG << sql;
             if (query.exec(sql) == true)
             {
                 m_wordLib[i].m_times = word->m_times;
@@ -485,7 +485,7 @@ bool WordAdmin::deleteWord(QString name)
             QString sql = QString("delete from WordLibrary where Name=\"%1\"").arg(name);
             if (query.exec(sql) == true)
             {
-                qDebug() << "delete " + name + " success";
+                DEBUG << "delete " + name + " success";
                 m_currentNum--;
                 m_wordLib[i].init();
                 if (i == m_currentTop - 1)
@@ -741,7 +741,7 @@ int WordAdmin::getWordCanMemorizeNumFromTimes(int t1, int t2, bool isRemember)
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
             (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
         {
-//            qDebug() << m_wordLib[i].toString();
+//            DEBUG << m_wordLib[i].toString();
 //            QString info = m_wordLib[i].toString();
             if ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                 m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval())
@@ -751,9 +751,9 @@ int WordAdmin::getWordCanMemorizeNumFromTimes(int t1, int t2, bool isRemember)
             }
             else
             {
-//                qDebug() << m_wordLib[i].toString();
+//                DEBUG << m_wordLib[i].toString();
             }
-//            qDebug() << info;
+//            DEBUG << info;
         }
     }
     m_mutex.unlock();
@@ -801,12 +801,12 @@ WordAdmin::WordAdmin(QObject *parent) : QObject(parent)
     this->initDB();
     if (this->loadAllWord() == false)
     {
-        qDebug() << "loadAllWord fail";
+        DEBUG << "loadAllWord fail";
         m_mutex.lockForRead();
     }
     else
     {
-        qDebug() << "loadAllWord success";
+        DEBUG << "loadAllWord success";
         checkAllWordTimesDecline();
     }
 }
@@ -818,7 +818,7 @@ void WordAdmin::initDB()
     db.setDatabaseName(WTool::getWordDBFilePath());
     if (db.open() == true)
     {
-        qDebug() << "db open success";
+        DEBUG << "db open success";
         QStringList existTables = db.tables();
         if (existTables.contains("WordLibrary") == false)
         {
@@ -864,14 +864,14 @@ void WordAdmin::initDB()
                 .arg("[Antonym] nvarchar");             //37
             QSqlQuery query;
             if (query.exec(sql) == true)
-                qDebug() << "DB init success";
+                DEBUG << "DB init success";
             else
-                qDebug() << "DB init fail";
+                DEBUG << "DB init fail";
         }
     }
     else
     {
-        qDebug() << "db open fail";
+        DEBUG << "db open fail";
     }
     m_mutex.unlock();
 }
@@ -923,9 +923,9 @@ int WordAdmin::checkAllWordTimesDecline()
                 .arg(m_wordLib[i].m_times).arg(m_wordLib[i].m_modifyTime.toString(TIMEFORMAT))
                 .arg(m_wordLib[i].m_remember).arg(m_wordLib[i].m_name);
             if (query.exec(sql) == true);
-//                qDebug() << m_wordLib[i].m_times << " checktimes change success";
+//                DEBUG << m_wordLib[i].m_times << " checktimes change success";
 //            else
-//                qDebug() << m_wordLib[i].m_times << " checktimes change fail";
+//                DEBUG << m_wordLib[i].m_times << " checktimes change fail";
         }
     }
     m_mutex.unlock();

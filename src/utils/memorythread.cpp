@@ -30,7 +30,7 @@ void MemoryThread::run()
         m_nameList.clear();
         for (int i = 0; i < m_infoList.size(); i++)
             m_nameList.append(m_infoList.at(i).m_name);
-        qDebug() << "memotyInfoListSize: " << m_infoList.size();
+        DEBUG << "memotyInfoListSize: " << m_infoList.size();
         while (m_isRun == true && startDateTime.secsTo(QDateTime::currentDateTime()) < 25 * 60)
         {
             if (m_infoList.size() > 0)

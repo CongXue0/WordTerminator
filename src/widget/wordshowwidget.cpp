@@ -2,7 +2,6 @@
 #include "wtool.h"
 #include <QDebug>
 #include <QThread>
-#include <QCoreApplication>
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QKeyEvent>
@@ -790,7 +789,7 @@ void WordShowWidget::slot_wbtnRemember_Clicked(bool active)
 
 void WordShowWidget::slot_wordLinkPressed()
 {
-    //    qDebug() << sender()->objectName() << " pressed";
+    //    DEBUG << sender()->objectName() << " pressed";
 }
 
 void WordShowWidget::slot_wordTimeDecline(QString name)

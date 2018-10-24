@@ -31,7 +31,7 @@ void ForgetThread::run()
         m_nameList.clear();
         for (int i = 0; i < m_infoList.size(); i++)
             m_nameList.append(m_infoList.at(i).m_name);
-        qDebug() << "forgetInfoListSize: " << m_infoList.size();
+        DEBUG << "forgetInfoListSize: " << m_infoList.size();
         while (m_isRun == true && startDateTime.secsTo(QDateTime::currentDateTime()) < 10 * 60)
         {
             if (m_infoList.size() > 0)
@@ -50,7 +50,7 @@ void ForgetThread::run()
                             m_infoList.at(i).m_modifyTime.toString(TIMEFORMAT), "RememberState",
                             QString::number(m_infoList[i].m_remember)) == true)
                         {
-                            qDebug() << m_infoList.at(i).m_name << " forget times";
+                            DEBUG << m_infoList.at(i).m_name << " forget times";
                             emit wordTimeDeclineSignal(m_infoList.at(i).m_name);
                             m_nameList.removeAt(i);
                             m_infoList.removeAt(i);
@@ -67,7 +67,7 @@ void ForgetThread::run()
 
 void ForgetThread::slot_wordTimeIncrease(QString name)
 {
-    qDebug() << name << " slot_wordTimeIncrease";
+    DEBUG << name << " slot_wordTimeIncrease";
     m_mutex.lock();
     if (m_nameList.contains(name) == true)
     {

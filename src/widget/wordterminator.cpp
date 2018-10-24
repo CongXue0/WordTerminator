@@ -15,6 +15,7 @@
 #include <QTextCodec>
 #include <QStandardPaths>
 #include "global.h"
+#include <QCoreApplication>
 
 extern WordAdmin *p_wordAdmin;
 extern ForgetThread *p_forgetThread;
@@ -28,6 +29,8 @@ WordTerminator::WordTerminator(QWidget *parent) :
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint |
         Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
 
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    QDir::setCurrent(QCoreApplication::applicationDirPath());
     Global::setXmlPath(WTool::getConfigPath());
     Global::load();
 
@@ -203,7 +206,7 @@ void WordTerminator::popWidgetIndex()
         m_widgets.remove(m_widgets.size() - 1);
     }
     else
-        qDebug() << "popWidgetIndex error";
+        DEBUG << "popWidgetIndex error";
 }
 
 void WordTerminator::clearWidgetIndex()

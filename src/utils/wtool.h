@@ -3,13 +3,11 @@
 #include <QString>
 #include <QRect>
 #include <QFont>
-#include <QCoreApplication>
 #include <QDebug>
 
 #define DECLINE_NUM 10
 #define BOOLSTR(a) ((a == true) ? "true" : "false")
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
-#define APPPATH QCoreApplication::applicationDirPath()
 #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split('\\').last()).arg(__FUNCTION__).arg(__LINE__)
 
 class WTool
@@ -24,7 +22,7 @@ public:
     static QDateTime getCurDateTimeMinus(uint sec);
 
     /* 文件操作 */
-    static bool readFileInfo(QString relPath, QString absPath, QString &info);//相对 绝对 路径
+    static QString readFileInfo(QString path);
 
     /* QString功能 */
     static int getFontLength(QFont font, QString txt);
@@ -36,10 +34,8 @@ public:
     static bool isLetter(QString txt, char fl = ' ');//fl 为过滤字符，默认过滤空格
     static bool isLanguage(QString txt, char fl = ' ');
     static bool isEnglishSentence(QString txt, char fl = ' ');
-    static bool isWritting(QString txt);
+    static bool isWritting(const QString &txt);
     static bool isChineseChar(QChar ch);
-//    static bool textFrontCompare(QString txt, QString front);//是否以front开头
-//    static bool textEndCompare(QString txt, QString end);//是否以end结尾
     static QStringList filterWordFromList(QStringList list, QString txt, QString strategy = "prefix");
     static QString shieldWord(QString txt, QString word);
 
@@ -67,6 +63,7 @@ public:
     static QString getConfigPath();
 
 private:
+    static QString m_uniStr;
     static int leastForeverTimes;
     static uint memoryInterval;//单位 分钟
     static uint declineArray[DECLINE_NUM];//单位 小时

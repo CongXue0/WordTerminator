@@ -1,5 +1,4 @@
 #include "global.h"
-#include <QCoreApplication>
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
