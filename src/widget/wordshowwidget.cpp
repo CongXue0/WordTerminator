@@ -171,7 +171,7 @@ void WordShowWidget::recoveryInterface()
 
 bool WordShowWidget::loadWordInfo(QString name)
 {
-    if (p_wordAdmin->getWordInfo(name, &m_word) == true)
+    if (p_wordAdmin->getWordInfo(name, &m_word))
     {
         setWordInfo();
         setViewPosition();
@@ -189,7 +189,7 @@ void WordShowWidget::loadStyleSheet()
 void WordShowWidget::setWordInfo()
 {
     copyLabel_word->setText(m_word.m_name);
-    if (m_word.m_phoneticSymbol.isEmpty() == false)
+    if (!m_word.m_phoneticSymbol.isEmpty())
     {
         copyLabel_phoneticSymbol->setText(m_word.m_phoneticSymbol);
         copyLabel_phoneticSymbol->show();
@@ -197,7 +197,7 @@ void WordShowWidget::setWordInfo()
     copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
     wbtn_isRemember->setActive(m_word.m_remember > 0);
     int i = 0;
-    if (m_word.m_adj_Chinese.isEmpty() == false)
+    if (!m_word.m_adj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -206,7 +206,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_adj_English.isEmpty() == false)
+    if (!m_word.m_adj_English.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -215,7 +215,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_adv_Chinese.isEmpty() == false)
+    if (!m_word.m_adv_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -224,7 +224,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_adv_English.isEmpty() == false)
+    if (!m_word.m_adv_English.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -234,9 +234,9 @@ void WordShowWidget::setWordInfo()
         i++;
     }
     if (m_word.m_vt_Chinese == m_word.m_vi_Chinese && m_word.m_vt_English == m_word.m_vi_English &&
-        (m_word.m_vt_Chinese.isEmpty() == false || m_word.m_vt_English.isEmpty() == false))
+        (!m_word.m_vt_Chinese.isEmpty() || !m_word.m_vt_English.isEmpty()))
     {
-        if (m_word.m_vt_Chinese.isEmpty() == false)
+        if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -245,7 +245,7 @@ void WordShowWidget::setWordInfo()
             copyLabel_explain[i]->show();
             i++;
         }
-        if (m_word.m_vt_English.isEmpty() == false)
+        if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -257,7 +257,7 @@ void WordShowWidget::setWordInfo()
     }
     else
     {
-        if (m_word.m_vt_Chinese.isEmpty() == false)
+        if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -266,7 +266,7 @@ void WordShowWidget::setWordInfo()
             copyLabel_explain[i]->show();
             i++;
         }
-        if (m_word.m_vt_English.isEmpty() == false)
+        if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -275,7 +275,7 @@ void WordShowWidget::setWordInfo()
             copyLabel_explain[i]->show();
             i++;
         }
-        if (m_word.m_vi_Chinese.isEmpty() == false)
+        if (!m_word.m_vi_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -284,7 +284,7 @@ void WordShowWidget::setWordInfo()
             copyLabel_explain[i]->show();
             i++;
         }
-        if (m_word.m_vi_English.isEmpty() == false)
+        if (!m_word.m_vi_English.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -294,25 +294,25 @@ void WordShowWidget::setWordInfo()
             i++;
         }
     }
-    if (m_word.m_pastTense.isEmpty() == false || m_word.m_pastParticiple.isEmpty() == false ||
-        m_word.m_presentParticiple.isEmpty() == false || m_word.m_thirdPersonSingular.isEmpty() == false)
+    if (!m_word.m_pastTense.isEmpty() || !m_word.m_pastParticiple.isEmpty() ||
+        !m_word.m_presentParticiple.isEmpty() || !m_word.m_thirdPersonSingular.isEmpty())
     {
         copyLabel_property[i]->setText("变形");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         copyLabel_property[i]->show();
-        if (m_word.m_pastTense.isEmpty() == false)
+        if (!m_word.m_pastTense.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  过去式: " + m_word.m_pastTense);
-        if (m_word.m_pastParticiple.isEmpty() == false)
+        if (!m_word.m_pastParticiple.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  过去分词: " + m_word.m_pastParticiple);
-        if (m_word.m_presentParticiple.isEmpty() == false)
+        if (!m_word.m_presentParticiple.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  现在分词: " + m_word.m_presentParticiple);
-        if (m_word.m_thirdPersonSingular.isEmpty() == false)
+        if (!m_word.m_thirdPersonSingular.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  第三人称单数: " + m_word.m_thirdPersonSingular);
         copyLabel_explain[i]->setText(copyLabel_explain[i]->text().trimmed());
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_noun_Chinese.isEmpty() == false)
+    if (!m_word.m_noun_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -321,7 +321,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_noun_English.isEmpty() == false)
+    if (!m_word.m_noun_English.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -330,7 +330,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_prep_Chinese.isEmpty() == false)
+    if (!m_word.m_prep_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -339,7 +339,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_prep_English.isEmpty() == false)
+    if (!m_word.m_prep_English.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -348,7 +348,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_conj_Chinese.isEmpty() == false)
+    if (!m_word.m_conj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -357,7 +357,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_conj_English.isEmpty() == false)
+    if (!m_word.m_conj_English.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -366,7 +366,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_pron_Chinese.isEmpty() == false)
+    if (!m_word.m_pron_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -375,7 +375,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_pron_English.isEmpty() == false)
+    if (!m_word.m_pron_English.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -384,7 +384,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_art_Chinese.isEmpty() == false)
+    if (!m_word.m_art_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -393,7 +393,7 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->show();
         i++;
     }
-    if (m_word.m_art_English.isEmpty() == false)
+    if (!m_word.m_art_English.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -403,15 +403,15 @@ void WordShowWidget::setWordInfo()
         i++;
     }
     m_propertyNum = i;
-    if (m_word.m_exampleSentence[0].isEmpty() == false || m_word.m_exampleSentence[1].isEmpty() == false ||
-        m_word.m_exampleSentence[2].isEmpty() == false || m_word.m_exampleSentence[3].isEmpty() == false ||
-        m_word.m_exampleSentence[4].isEmpty() == false || m_word.m_exampleSentence[5].isEmpty() == false)
+    if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
+        !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
+        !m_word.m_exampleSentence[4].isEmpty() || !m_word.m_exampleSentence[5].isEmpty())
     {
         copyLabel_exampleSentence->setText("例句：");
         copyLabel_exampleSentence->show();
         for (i = 0; i < 6; i++)
         {
-            if (m_word.m_exampleSentence[i].isEmpty() == false)
+            if (!m_word.m_exampleSentence[i].isEmpty())
             {
                 copyLabel_example[i]->setText(QString("%1. %2").arg(i + 1).arg(m_word.m_exampleSentence[i]));
                 copyLabel_example[i]->show();
@@ -423,7 +423,7 @@ void WordShowWidget::setWordInfo()
             }
         }
     }
-    if (m_word.m_synonym.isEmpty() == false)
+    if (!m_word.m_synonym.isEmpty())
     {
         copyLabel_synonym->setText("同义词：");
         copyLabel_synonym->show();
@@ -438,7 +438,7 @@ void WordShowWidget::setWordInfo()
         }
         m_synonymNum = i;
     }
-    if (m_word.m_antonym.isEmpty() == false)
+    if (!m_word.m_antonym.isEmpty())
     {
         copyLabel_antonym->setText("反义词：");
         copyLabel_antonym->show();
@@ -469,7 +469,7 @@ void WordShowWidget::setViewPosition_14()// 643 635
     int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
     copyLabel_word->setGeometry(x, y, len, h);
 
-    if (copyLabel_phoneticSymbol->text().isEmpty() == false)
+    if (!copyLabel_phoneticSymbol->text().isEmpty())
     {
         len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
         x = copyLabel_word->x() + copyLabel_word->width() + 16;
@@ -499,7 +499,7 @@ void WordShowWidget::setViewPosition_14()// 643 635
         copyLabel_explain[i]->setGeometry(x, y, len, h);
     }
 
-    if (copyLabel_exampleSentence->text().isEmpty() == false)
+    if (!copyLabel_exampleSentence->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -521,7 +521,7 @@ void WordShowWidget::setViewPosition_14()// 643 635
         }
     }
 
-    if (copyLabel_synonym->text().isEmpty() == false)
+    if (!copyLabel_synonym->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -540,7 +540,7 @@ void WordShowWidget::setViewPosition_14()// 643 635
         }
     }
 
-    if (copyLabel_antonym->text().isEmpty() == false)
+    if (!copyLabel_antonym->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -569,7 +569,7 @@ void WordShowWidget::setViewPosition_15()
     int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
     copyLabel_word->setGeometry(x, y, len, h);
 
-    if (copyLabel_phoneticSymbol->text().isEmpty() == false)
+    if (!copyLabel_phoneticSymbol->text().isEmpty())
     {
         len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
         x = copyLabel_word->x() + copyLabel_word->width() + 20;
@@ -599,7 +599,7 @@ void WordShowWidget::setViewPosition_15()
         copyLabel_explain[i]->setGeometry(x, y, len, h);
     }
 
-    if (copyLabel_exampleSentence->text().isEmpty() == false)
+    if (!copyLabel_exampleSentence->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -621,7 +621,7 @@ void WordShowWidget::setViewPosition_15()
         }
     }
 
-    if (copyLabel_synonym->text().isEmpty() == false)
+    if (!copyLabel_synonym->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -640,7 +640,7 @@ void WordShowWidget::setViewPosition_15()
         }
     }
 
-    if (copyLabel_antonym->text().isEmpty() == false)
+    if (!copyLabel_antonym->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -675,7 +675,7 @@ void WordShowWidget::slot_btnMid_Clicked()
         m_word.m_times = 10;
         m_word.m_modifyTime = QDateTime::currentDateTime();
         m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-        if (p_wordAdmin->updateWord(&m_word) == true)
+        if (p_wordAdmin->updateWord(&m_word))
         {
             copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
             if (m_screenSize == "14")
@@ -700,7 +700,7 @@ void WordShowWidget::slot_btnMax_Clicked()
         m_word.m_times = 100;
         m_word.m_modifyTime = QDateTime::currentDateTime();
         m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-        if (p_wordAdmin->updateWord(&m_word) == true)
+        if (p_wordAdmin->updateWord(&m_word))
         {
             copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
             if (m_screenSize == "14")
@@ -723,7 +723,7 @@ void WordShowWidget::slot_btnAdd_Clicked()
     m_word.m_times++;
     m_word.m_modifyTime = QDateTime::currentDateTime();
     m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-    if (p_wordAdmin->updateWord(&m_word) == true)
+    if (p_wordAdmin->updateWord(&m_word))
     {
         copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
         if (m_screenSize == "14")
@@ -745,7 +745,7 @@ void WordShowWidget::slot_btnDelete_Clicked()
     if (QMessageBox::question(this, "question", QString("是否删除 %1?").arg(m_word.m_name),
         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
     {
-        if (p_wordAdmin->deleteWord(m_word.m_name) == true)
+        if (p_wordAdmin->deleteWord(m_word.m_name))
         {
             emit sendMessageSignal(WMessage("delete success", m_word.m_name));
             emit wordTimeIncreaseSignal(m_word.m_name);
@@ -765,7 +765,7 @@ void WordShowWidget::slot_btnReset_Clicked()
     m_word.m_times = 0;
     m_word.m_modifyTime = QDateTime::currentDateTime();
     m_word.m_remember = (m_word.m_remember > 0) ? 2 : -1;
-    if (p_wordAdmin->updateWord(&m_word) == true)
+    if (p_wordAdmin->updateWord(&m_word))
     {
         copyLabel_times->setText("T:0");
         emit wordTimeIncreaseSignal(m_word.m_name);

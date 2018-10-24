@@ -275,7 +275,7 @@ void WordCreateWidget::setCreateMode(WordCreateWidget::CREATE_MODE mode)
 bool WordCreateWidget::loadWordInfo(QString name)
 {
     WordInfo word;
-    if (p_wordAdmin->getWordInfo(name, &word) == true)
+    if (p_wordAdmin->getWordInfo(name, &word))
     {
         lineEdit_word->setText(word.m_name);
         m_times = word.m_times;
@@ -323,59 +323,59 @@ void WordCreateWidget::loadStyleSheet()
 QString WordCreateWidget::inputCheck()
 {
     QString info = "";
-    if (checkBox_phrase->isChecked() == false && lineEdit_word->text().isEmpty() == true)
+    if (!checkBox_phrase->isChecked() && lineEdit_word->text().isEmpty())
         info.append("单词不能为空\n");
-    else if (checkBox_phrase->isChecked() == true && lineEdit_word->text().isEmpty() == true)
+    else if (checkBox_phrase->isChecked() && lineEdit_word->text().isEmpty())
         info.append("词组不能为空\n");
-    if (lineEdit_adj_Chinese->text().trimmed().isEmpty() == true && lineEdit_adj_English->text().trimmed().isEmpty() == true &&
-        lineEdit_adv_Chinese->text().trimmed().isEmpty() == true && lineEdit_adv_English->text().trimmed().isEmpty() == true &&
-        lineEdit_vt_Chinese->text().trimmed().isEmpty() == true && lineEdit_vt_English->text().trimmed().isEmpty() == true &&
-        lineEdit_vi_Chinese->text().trimmed().isEmpty() == true && lineEdit_vi_English->text().trimmed().isEmpty() == true &&
-        lineEdit_v_pastTense->text().trimmed().isEmpty() == true && lineEdit_v_pastParticiple->text().trimmed().isEmpty() == true &&
-        lineEdit_v_presentParticiple->text().trimmed().isEmpty() == true && lineEdit_v_thirdPersonSingular->text().trimmed().isEmpty() &&
-        lineEdit_noun_Chinese->text().trimmed().isEmpty() == true && lineEdit_noun_English->text().trimmed().isEmpty() == true &&
-        lineEdit_prep_Chinese->text().trimmed().isEmpty() == true && lineEdit_prep_English->text().trimmed().isEmpty() == true &&
-        lineEdit_conj_Chinese->text().trimmed().isEmpty() == true && lineEdit_conj_English->text().trimmed().isEmpty() == true &&
-        lineEdit_pron_Chinese->text().trimmed().isEmpty() == true && lineEdit_pron_English->text().trimmed().isEmpty() == true &&
-        lineEdit_art_Chinese->text().trimmed().isEmpty() == true && lineEdit_art_English->text().trimmed().isEmpty() == true)
+    if (lineEdit_adj_Chinese->text().trimmed().isEmpty() && lineEdit_adj_English->text().trimmed().isEmpty() &&
+        lineEdit_adv_Chinese->text().trimmed().isEmpty() && lineEdit_adv_English->text().trimmed().isEmpty() &&
+        lineEdit_vt_Chinese->text().trimmed().isEmpty() && lineEdit_vt_English->text().trimmed().isEmpty() &&
+        lineEdit_vi_Chinese->text().trimmed().isEmpty() && lineEdit_vi_English->text().trimmed().isEmpty() &&
+        lineEdit_v_pastTense->text().trimmed().isEmpty() && lineEdit_v_pastParticiple->text().trimmed().isEmpty() &&
+        lineEdit_v_presentParticiple->text().trimmed().isEmpty() && lineEdit_v_thirdPersonSingular->text().trimmed().isEmpty() &&
+        lineEdit_noun_Chinese->text().trimmed().isEmpty() && lineEdit_noun_English->text().trimmed().isEmpty() &&
+        lineEdit_prep_Chinese->text().trimmed().isEmpty() && lineEdit_prep_English->text().trimmed().isEmpty() &&
+        lineEdit_conj_Chinese->text().trimmed().isEmpty() && lineEdit_conj_English->text().trimmed().isEmpty() &&
+        lineEdit_pron_Chinese->text().trimmed().isEmpty() && lineEdit_pron_English->text().trimmed().isEmpty() &&
+        lineEdit_art_Chinese->text().trimmed().isEmpty() && lineEdit_art_English->text().trimmed().isEmpty())
         info.append("释义不能全为空\n");
-    if (checkBox_phrase->isChecked() == false && (WTool::isLetter(lineEdit_word->text().trimmed()) == false ||
-        lineEdit_word->text().trimmed().contains(' ') == true))
+    if (!checkBox_phrase->isChecked() && (!WTool::isLetter(lineEdit_word->text().trimmed()) ||
+        lineEdit_word->text().trimmed().contains(' ')))
         info.append("单词输入错误\n");
-    else if (checkBox_phrase->isChecked() == true && (WTool::isLetter(lineEdit_word->text().trimmed()) == false ||
-        lineEdit_word->text().trimmed().contains(' ') == false))
+    else if (checkBox_phrase->isChecked() && (!WTool::isLetter(lineEdit_word->text().trimmed()) ||
+        !lineEdit_word->text().trimmed().contains(' ')))
         info.append("词组输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_adj_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_adj_English->text(), ';'))
         info.append("adj. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_adv_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_adv_English->text(), ';'))
         info.append("adv. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_vt_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_vt_English->text(), ';'))
         info.append("vt. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_vi_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_vi_English->text(), ';'))
         info.append("vi. 输入错误\n");
-    if (WTool::isLetter(lineEdit_v_pastTense->text()) == false)
+    if (!WTool::isLetter(lineEdit_v_pastTense->text()))
         info.append("过去式输入错误\n");
-    if (WTool::isLetter(lineEdit_v_pastParticiple->text()) == false)
+    if (!WTool::isLetter(lineEdit_v_pastParticiple->text()))
         info.append("过去分词输入错误\n");
-    if (WTool::isLetter(lineEdit_v_presentParticiple->text()) == false)
+    if (!WTool::isLetter(lineEdit_v_presentParticiple->text()))
         info.append("现在分词输入错误\n");
-    if (WTool::isLetter(lineEdit_v_thirdPersonSingular->text()) == false)
+    if (!WTool::isLetter(lineEdit_v_thirdPersonSingular->text()))
         info.append("第三人称单数输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_noun_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_noun_English->text(), ';'))
         info.append("noun. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_prep_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_prep_English->text(), ';'))
         info.append("prep. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_conj_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_conj_English->text(), ';'))
         info.append("conj. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_pron_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_pron_English->text(), ';'))
         info.append("pron. 输入错误\n");
-    if (WTool::isEnglishSentence(lineEdit_art_English->text(), ';') == false)
+    if (!WTool::isEnglishSentence(lineEdit_art_English->text(), ';'))
         info.append("art. 输入错误\n");
-    if (WTool::isLetter(lineEdit_synonym->text(), ';') == false)
+    if (!WTool::isLetter(lineEdit_synonym->text(), ';'))
         info.append("同义词输入错误\n");
-    if (WTool::isLetter(lineEdit_antonym->text(), ';') == false)
+    if (!WTool::isLetter(lineEdit_antonym->text(), ';'))
         info.append("反义词输入错误\n");
-    if (info.isEmpty() == false && info.at(info.length() - 1) == '\n');
+    if (!info.isEmpty() && info.at(info.length() - 1) == '\n');
         info = info.mid(0, info.length() - 1);
     return info;
 }
@@ -388,14 +388,14 @@ void WordCreateWidget::slot_btnCancel_clicked()
 void WordCreateWidget::slot_btnConfirm_clicked()
 {
     QString checkInfo = inputCheck();
-    if (checkInfo.isEmpty() == false)
+    if (!checkInfo.isEmpty())
     {
         QMessageBox::about(this, "提示", checkInfo);
         return;
     }
     if (m_mode == CREATE)
     {
-        if (p_wordAdmin->isWordExist(lineEdit_word->text().trimmed()) == true)
+        if (p_wordAdmin->isWordExist(lineEdit_word->text().trimmed()))
         {
             QMessageBox::about(this, "提示", "无法创建已存在的单词");
             return;
@@ -403,7 +403,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     }
     else if (m_mode == MODIFY)
     {
-        if (p_wordAdmin->isWordExist(lineEdit_word->text().trimmed()) == false)
+        if (!p_wordAdmin->isWordExist(lineEdit_word->text().trimmed()))
         {
             QMessageBox::about(this, "提示", "无法编辑不存在的单词");
             return;
@@ -458,7 +458,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
 
     if (m_mode == CREATE)
     {
-        if (p_wordAdmin->insertWord(&wordInfo) == true)
+        if (p_wordAdmin->insertWord(&wordInfo))
         {
             QMessageBox::about(this, "提示", wordInfo.m_name + " 创建成功");
             emit sendMessageSignal(WMessage("create success", wordInfo.m_name));
@@ -470,7 +470,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     }
     else if (m_mode == MODIFY)
     {
-        if (p_wordAdmin->updateWord(&wordInfo) == true)
+        if (p_wordAdmin->updateWord(&wordInfo))
         {
             QMessageBox::about(this, "提示", wordInfo.m_name + " 修改成功");
             emit sendMessageSignal(WMessage("modify success", wordInfo.m_name));

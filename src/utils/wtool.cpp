@@ -135,11 +135,10 @@ int WTool::getTextLineNumber(QFont font, QString txt, int lineWidth)
 int WTool::getWordBorder(QString txt, int start, bool leftToRight)
 {
     int len = txt.length();
-    if (len <= 0 || start < 0 || start > len || (start == 0 && leftToRight == false) ||
-        (start == len && leftToRight == true))
+    if (len <= 0 || start < 0 || start > len || (start == 0 && !leftToRight) || (start == len && leftToRight))
         return -1;
     int k = -1;
-    if (leftToRight == true)
+    if (leftToRight)
     {
         for (int i = start; i < len; i++)
         {
@@ -171,11 +170,10 @@ int WTool::getWordBorder(QString txt, int start, bool leftToRight)
 int WTool::skipChar(QString txt, int start, char ch, bool leftToRight)
 {
     int len = txt.length();
-    if (len <= 0 || start < 0 || start > len || (start == 0 && leftToRight == false) ||
-        (start == len && leftToRight == true))
+    if (len <= 0 || start < 0 || start > len || (start == 0 && !leftToRight) || (start == len && leftToRight))
         return -1;
     int k = -1;
-    if (leftToRight == true)
+    if (leftToRight)
     {
         for (int i = start; i < len; i++)
         {
@@ -216,19 +214,19 @@ QString WTool::arrangeWord(QString word, char sp)
     {
         QString tmp = list.at(i);
         tmp = tmp.trimmed();
-        if (tmp.isEmpty() == false)
+        if (!tmp.isEmpty())
         {
             word.append(tmp + "; ");
         }
     }
-    if (word.isEmpty() == false && word.at(word.length() - 2) == ';')
+    if (!word.isEmpty() && word.at(word.length() - 2) == ';')
         word = word.mid(0, word.length() - 2);
     return word;
 }
 
 bool WTool::isSpace(QString txt)
 {
-    if (txt.isEmpty() == true)
+    if (txt.isEmpty())
         return true;
     int len = txt.length();
     bool flag = true;
@@ -251,8 +249,7 @@ bool WTool::isLetter(QString txt, char fl)
     for (int i = 0; i < len; i++)
     {
         ch = txt.at(i);
-        if ( ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && ch != ' ' &&
-            ch != '-' && ch != '\'' && ch != '/' && ch != fl)
+        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) && ch != ' ' && ch != '-' && ch != '\'' && ch != '/' && ch != fl)
         {
             flag = false;
             break;
@@ -269,8 +266,7 @@ bool WTool::isLanguage(QString txt, char fl)
     for (int i = 0; i < len; i++)
     {
         ch = txt.at(i);
-        if ( ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && isChineseChar(ch) == false &&
-            ch != ' ' && ch != fl)
+        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) && !isChineseChar(ch) && ch != ' ' && ch != fl)
         {
             flag = false;
             break;
@@ -287,7 +283,7 @@ bool WTool::isEnglishSentence(QString txt, char fl)
     for (int i = 0; i < len; i++)
     {
         ch = txt.at(i);
-        if ( ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && isChineseChar(ch) == false &&
+        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) && !isChineseChar(ch) &&
             ch != ' ' && ch != fl && ch != ',' && ch != '.' && ch != '!' && ch != '?' && ch != '\'' && ch != '(' &&
             ch != ')' && ch != '/' && ch != '-' && ch != '~' && ch != '|' && ch != '=' && ch != '+' && ch != '?' &&
             ch != '#' && ch != '$' && ch != '*' && ch != ';' && ch != '[' && ch != ']' && ch != '\\' && ch != '{' &&
@@ -309,7 +305,7 @@ bool WTool::isWritting(const QString &txt)
     for (int i = 0; i < len; i++)
     {
         ch = txtTmp.at(i);
-        if (((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) == false  && isChineseChar(ch) == false && (ch >= '0' && ch <= '9') == false && ch != ' ' && ch != ';' && ch != '?' && ch != '.' && ch != ',' && ch != '<' && ch != '>' && ch != ':' && ch != '\'' && ch != '[' && ch != ']' && ch != '{' && ch != '}' && ch != '=' && ch != '+' && ch != '-' && ch != '*' && ch != '&' && ch != '%' && ch != '$' && ch != '#' && ch != '@' && ch != '!'  && ch != '~' && ch != '`' && ch != '\n' &&
+        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))  && !isChineseChar(ch) && (ch >= '0' && ch <= '9') == false && ch != ' ' && ch != ';' && ch != '?' && ch != '.' && ch != ',' && ch != '<' && ch != '>' && ch != ':' && ch != '\'' && ch != '[' && ch != ']' && ch != '{' && ch != '}' && ch != '=' && ch != '+' && ch != '-' && ch != '*' && ch != '&' && ch != '%' && ch != '$' && ch != '#' && ch != '@' && ch != '!'  && ch != '~' && ch != '`' && ch != '\n' &&
             ch != m_uniStr.at(0) && ch != m_uniStr.at(1) && ch != m_uniStr.at(2) && ch != m_uniStr.at(3) && ch != m_uniStr.at(4) && ch != m_uniStr.at(5) && ch != m_uniStr.at(6) && ch != m_uniStr.at(7) && ch != m_uniStr.at(8))
         {
             flag = false;
@@ -331,7 +327,7 @@ bool WTool::isChineseChar(QChar ch)
 QStringList WTool::filterWordFromList(QStringList list, QString txt, QString strategy)
 {
     int count = list.size();
-    if (count == 0 || txt.isEmpty() == true)
+    if (count == 0 || txt.isEmpty())
         return list;
     QStringList wordList;
     QString tmp;
@@ -340,7 +336,7 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         for (int i = 0; i < count; i++)
         {
             tmp = list.at(i);
-            if (tmp.startsWith(txt) == true)
+            if (tmp.startsWith(txt))
                 wordList.append(tmp);
         }
     }
@@ -349,7 +345,7 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         for (int i = 0; i < count; i++)
         {
             tmp = list.at(i);
-            if (tmp.endsWith(txt) == true)
+            if (tmp.endsWith(txt))
                 wordList.append(tmp);
         }
     }
@@ -358,7 +354,7 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         for (int i = 0; i < count; i++)
         {
             tmp = list.at(i);
-            if (tmp.contains(txt) == true)
+            if (tmp.contains(txt))
                 wordList.append(tmp);
         }
     }
@@ -369,7 +365,7 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         {
             tmp = list.at(i);
             p_wordAdmin->getWordInfo(tmp, &wordInfo);
-            if (wordInfo.contains(txt) == true)
+            if (wordInfo.contains(txt))
                 wordList.append(tmp);
         }
     }
@@ -380,7 +376,7 @@ QString WTool::shieldWord(QString txt, QString word)
 {
     if (txt.isEmpty() || word.isEmpty() || txt.length() < word.length())
         return txt;
-    if (txt.contains(word) == false)
+    if (!txt.contains(word))
         return txt;
     QString tmp;
     for (int i = 0; i < word.length(); i++)
@@ -394,7 +390,7 @@ void WTool::memoryConfigInit()
     QString path = "./user/config/memory.json";
     bool ok;
     QtJson::JsonObject result = QtJson::parse(readFileInfo(path), ok).toMap();
-    if (ok == false)
+    if (!ok)
     {
         DEBUG << "memoryConfig fail";
         return;

@@ -9,7 +9,7 @@ LinkLabel::LinkLabel(QWidget *parent) : QLineEdit(parent)
 
 void LinkLabel::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (this->selectedText().isEmpty() == true)
+    if (this->selectedText().isEmpty())
         emit released();
     QLineEdit::mouseReleaseEvent(e);
 }

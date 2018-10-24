@@ -187,21 +187,21 @@ void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
     {
         if (m_test == NONE)
         {
-            if (btn_start->isVisible() == true)
+            if (btn_start->isVisible())
                 slot_btnStart_Clicked();
         }
         else if (m_test == EXPLORATE)
         {
-            if (btn_know->isVisible() == true)
+            if (btn_know->isVisible())
                 slot_btnKnow_Clicked();
-            else if (btn_next->isVisible() == true)
+            else if (btn_next->isVisible())
                 slot_btnNext_Clicked();
         }
         else if (m_test == RECALL)
         {
-            if (btn_submit->isVisible() == true)
+            if (btn_submit->isVisible())
                 slot_btnSubmit_Clicked();
-            else if (btn_next->isVisible() == true)
+            else if (btn_next->isVisible())
                 slot_btnNext_Clicked();
         }
     }
@@ -209,14 +209,14 @@ void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
     {
         if (m_test == EXPLORATE)
         {
-            if (btn_notKnow->isVisible() == true)
+            if (btn_notKnow->isVisible())
                 slot_btnNotKnow_Clicked();
-            else if (btn_forever->isVisible() == true)
+            else if (btn_forever->isVisible())
                 slot_btnForever_Clicked();
         }
         else if (m_test == RECALL)
         {
-            if (btn_forever->isVisible() == true)
+            if (btn_forever->isVisible())
                 slot_btnForever_Clicked();
         }
     }
@@ -242,21 +242,21 @@ void WordMemorizeWidget::recoveryInterface()
 void WordMemorizeWidget::updateWordStatistics()
 {
     int num1 = 0, num2 = 0, num3 = 0;
-    if (radioBtn_range[0]->isChecked() == false && radioBtn_range[1]->isChecked() == false && radioBtn_range[2]->isChecked() == false &&
-        radioBtn_range[3]->isChecked() == false && radioBtn_forever->isChecked() == false)
+    if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
+        !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
     {
         num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, MAX_TIMES, false);
         num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, MAX_TIMES, true);
     }
     else
     {
-        if (radioBtn_range[0]->isChecked() == true)
+        if (radioBtn_range[0]->isChecked())
             num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, 5, radioBtn_forever->isChecked());
-        if (radioBtn_range[1]->isChecked() == true)
+        if (radioBtn_range[1]->isChecked())
             num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(6, 9, radioBtn_forever->isChecked());
-        if (radioBtn_range[2]->isChecked() == true)
+        if (radioBtn_range[2]->isChecked())
             num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(10, 99, radioBtn_forever->isChecked());
-        if (radioBtn_range[3]->isChecked() == true)
+        if (radioBtn_range[3]->isChecked())
             num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
     }
     num2 = p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, false);
@@ -281,7 +281,7 @@ void WordMemorizeWidget::loadJsonRect()
     QString path = WTool::getWordMemorizeWidgetJsonPath();
     bool ok;
     QtJson::JsonObject result = QtJson::parse(WTool::readFileInfo(path), ok).toMap();
-    if (ok == false)
+    if (!ok)
     {
         DEBUG << "open json file " + path + " failed";
         return;
@@ -413,15 +413,15 @@ void WordMemorizeWidget::testListInit()
     int size = m_testList.size();
     for (int i = 0; i < size; i++)
     {
-        if (radioBtn_test[0]->isChecked() == true)
+        if (radioBtn_test[0]->isChecked())
         {
             m_testList[i].m_isPass[0] = false;
         }
-        if (radioBtn_test[1]->isChecked() == true)
+        if (radioBtn_test[1]->isChecked())
         {
             m_testList[i].m_isPass[1] = false;
         }
-//        if (radioBtn_test[2]->isChecked() == true)
+//        if (radioBtn_test[2]->isChecked())
 //        {
 //            m_testList.at(i).m_isPass[2] = false;
 //        }
@@ -432,7 +432,7 @@ void WordMemorizeWidget::loadTestInfo()
 {
     lineEdit_input->clear();
     chooseTestWord();
-    if (p_wordAdmin->getWordInfo(m_testList.at(m_curIndex).m_info.m_name, &m_word) == true)
+    if (p_wordAdmin->getWordInfo(m_testList.at(m_curIndex).m_info.m_name, &m_word))
     {
         setMode(MEMORY);
 
@@ -440,7 +440,7 @@ void WordMemorizeWidget::loadTestInfo()
         m_test = -1;
         for (int i = 0; i < 3; i++)
         {
-            if (m_testList.at(m_curIndex).m_isPass[i] == false)
+            if (!m_testList.at(m_curIndex).m_isPass[i])
             {
                 m_test++;
                 if (m_test == r)
@@ -507,7 +507,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
 {
     QString name = m_word.m_name;
     QString tmp;
-    if (m_word.m_isPhrase == true)
+    if (m_word.m_isPhrase)
         label_input->setText("请输入正确的词组：");
     else
         label_input->setText("请输入正确的单词：");
@@ -519,7 +519,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_phoneticSymbol->setText(m_word.m_phoneticSymbol);
     }
     int i = 0;
-    if (m_word.m_adj_Chinese.isEmpty() == false)
+    if (!m_word.m_adj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -527,7 +527,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_adj_English.isEmpty() == false)
+    if (!m_word.m_adj_English.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -535,7 +535,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_adv_Chinese.isEmpty() == false)
+    if (!m_word.m_adv_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -543,7 +543,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_adv_English.isEmpty() == false)
+    if (!m_word.m_adv_English.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -552,9 +552,9 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         i++;
     }
     if (m_word.m_vt_Chinese == m_word.m_vi_Chinese && m_word.m_vt_English == m_word.m_vi_English &&
-        (m_word.m_vt_Chinese.isEmpty() == false || m_word.m_vt_English.isEmpty() == false))
+        (!m_word.m_vt_Chinese.isEmpty() || !m_word.m_vt_English.isEmpty()))
     {
-        if (m_word.m_vt_Chinese.isEmpty() == false)
+        if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -562,7 +562,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
             i++;
         }
-        if (m_word.m_vt_English.isEmpty() == false)
+        if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -573,7 +573,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
     }
     else
     {
-        if (m_word.m_vt_Chinese.isEmpty() == false)
+        if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -581,7 +581,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
             i++;
         }
-        if (m_word.m_vt_English.isEmpty() == false)
+        if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -589,7 +589,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
             i++;
         }
-        if (m_word.m_vi_Chinese.isEmpty() == false)
+        if (!m_word.m_vi_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -597,7 +597,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
             i++;
         }
-        if (m_word.m_vi_English.isEmpty() == false)
+        if (!m_word.m_vi_English.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
             copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -606,23 +606,23 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             i++;
         }
     }
-    if (m_word.m_pastTense.isEmpty() == false || m_word.m_pastParticiple.isEmpty() == false ||
-        m_word.m_presentParticiple.isEmpty() == false || m_word.m_thirdPersonSingular.isEmpty() == false)
+    if (!m_word.m_pastTense.isEmpty() || !m_word.m_pastParticiple.isEmpty() ||
+        !m_word.m_presentParticiple.isEmpty() || !m_word.m_thirdPersonSingular.isEmpty())
     {
         copyLabel_property[i]->setText("变形");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
-        if (m_word.m_pastTense.isEmpty() == false)
+        if (!m_word.m_pastTense.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  过去式: " + m_word.m_pastTense);
-        if (m_word.m_pastParticiple.isEmpty() == false)
+        if (!m_word.m_pastParticiple.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  过去分词: " + m_word.m_pastParticiple);
-        if (m_word.m_presentParticiple.isEmpty() == false)
+        if (!m_word.m_presentParticiple.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  现在分词: " + m_word.m_presentParticiple);
-        if (m_word.m_thirdPersonSingular.isEmpty() == false)
+        if (!m_word.m_thirdPersonSingular.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  第三人称单数: " + m_word.m_thirdPersonSingular);
         copyLabel_explain[i]->setText(copyLabel_explain[i]->text().trimmed());
         i++;
     }
-    if (m_word.m_noun_Chinese.isEmpty() == false)
+    if (!m_word.m_noun_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -630,7 +630,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_noun_English.isEmpty() == false)
+    if (!m_word.m_noun_English.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -638,7 +638,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_prep_Chinese.isEmpty() == false)
+    if (!m_word.m_prep_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -646,7 +646,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_prep_English.isEmpty() == false)
+    if (!m_word.m_prep_English.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -654,7 +654,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_conj_Chinese.isEmpty() == false)
+    if (!m_word.m_conj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -662,7 +662,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_conj_English.isEmpty() == false)
+    if (!m_word.m_conj_English.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -670,7 +670,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_pron_Chinese.isEmpty() == false)
+    if (!m_word.m_pron_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -678,7 +678,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_pron_English.isEmpty() == false)
+    if (!m_word.m_pron_English.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -686,7 +686,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_art_Chinese.isEmpty() == false)
+    if (!m_word.m_art_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -694,7 +694,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
         i++;
     }
-    if (m_word.m_art_English.isEmpty() == false)
+    if (!m_word.m_art_English.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
         copyLabel_property[i]->setAlignment(Qt::AlignCenter);
@@ -703,14 +703,14 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         i++;
     }
     m_propertyNum = i;
-    if (m_word.m_exampleSentence[0].isEmpty() == false || m_word.m_exampleSentence[1].isEmpty() == false ||
-        m_word.m_exampleSentence[2].isEmpty() == false || m_word.m_exampleSentence[3].isEmpty() == false ||
-        m_word.m_exampleSentence[4].isEmpty() == false || m_word.m_exampleSentence[5].isEmpty() == false)
+    if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
+        !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
+        !m_word.m_exampleSentence[4].isEmpty() || !m_word.m_exampleSentence[5].isEmpty())
     {
         copyLabel_exampleSentence->setText("例句：");
         for (i = 0; i < 6; i++)
         {
-            if (m_word.m_exampleSentence[i].isEmpty() == false)
+            if (!m_word.m_exampleSentence[i].isEmpty())
             {
                 copyLabel_example[i]->setText(QString("%1. %2").arg(i + 1).arg(m_word.m_exampleSentence[i]));
             }
@@ -721,7 +721,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             }
         }
     }
-    if (m_word.m_synonym.isEmpty() == false)
+    if (!m_word.m_synonym.isEmpty())
     {
         copyLabel_synonym->setText("同义词：");
         QStringList list = m_word.m_synonym.split(';');
@@ -734,7 +734,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         }
         m_synonymNum = i;
     }
-    if (m_word.m_antonym.isEmpty() == false)
+    if (!m_word.m_antonym.isEmpty())
     {
         copyLabel_antonym->setText("反义词：");
         QStringList list = m_word.m_antonym.split(';');
@@ -764,7 +764,7 @@ void WordMemorizeWidget::setViewPosition_14()
     int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
     copyLabel_word->setGeometry(x, y, len, h);
 
-    if (copyLabel_phoneticSymbol->text().isEmpty() == false)
+    if (!copyLabel_phoneticSymbol->text().isEmpty())
     {
         len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
         x = copyLabel_word->x() + copyLabel_word->width() + 16;
@@ -790,7 +790,7 @@ void WordMemorizeWidget::setViewPosition_14()
         copyLabel_explain[i]->setGeometry(x, y, len, h);
     }
 
-    if (copyLabel_exampleSentence->text().isEmpty() == false)
+    if (!copyLabel_exampleSentence->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -812,7 +812,7 @@ void WordMemorizeWidget::setViewPosition_14()
         }
     }
 
-    if (copyLabel_synonym->text().isEmpty() == false)
+    if (!copyLabel_synonym->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -831,7 +831,7 @@ void WordMemorizeWidget::setViewPosition_14()
         }
     }
 
-    if (copyLabel_antonym->text().isEmpty() == false)
+    if (!copyLabel_antonym->text().isEmpty())
     {
         x = 8, y += h + 16;
         h = 39;
@@ -860,7 +860,7 @@ void WordMemorizeWidget::setViewPosition_15()
     int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
     copyLabel_word->setGeometry(x, y, len, h);
 
-    if (copyLabel_phoneticSymbol->text().isEmpty() == false)
+    if (!copyLabel_phoneticSymbol->text().isEmpty())
     {
         len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
         x = copyLabel_word->x() + copyLabel_word->width() + 20;
@@ -886,7 +886,7 @@ void WordMemorizeWidget::setViewPosition_15()
         copyLabel_explain[i]->setGeometry(x, y, len, h);
     }
 
-    if (copyLabel_exampleSentence->text().isEmpty() == false)
+    if (!copyLabel_exampleSentence->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -908,7 +908,7 @@ void WordMemorizeWidget::setViewPosition_15()
         }
     }
 
-    if (copyLabel_synonym->text().isEmpty() == false)
+    if (!copyLabel_synonym->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -927,7 +927,7 @@ void WordMemorizeWidget::setViewPosition_15()
         }
     }
 
-    if (copyLabel_antonym->text().isEmpty() == false)
+    if (!copyLabel_antonym->text().isEmpty())
     {
         x = 10, y += h + 20;
         h = 44;
@@ -954,29 +954,29 @@ void WordMemorizeWidget::showWordInfo(bool showWord)
 {
     scrollArea->show();
     widget_start->show();
-    if (showWord == true)
+    if (showWord)
     {
         copyLabel_word->show();
-        if (copyLabel_phoneticSymbol->text().isEmpty() == false)
+        if (!copyLabel_phoneticSymbol->text().isEmpty())
             copyLabel_phoneticSymbol->show();
-        if (copyLabel_exampleSentence->text().isEmpty() == false)
+        if (!copyLabel_exampleSentence->text().isEmpty())
             copyLabel_exampleSentence->show();
         for (int i = 0; i < m_exampleNum; i++)
             copyLabel_example[i]->show();
 
-        if (copyLabel_synonym->text().isEmpty() == false)
+        if (!copyLabel_synonym->text().isEmpty())
             copyLabel_synonym->show();
         for (int i = 0; i < m_synonymNum; i++)
             linkLabel_synonym[i]->show();
 
-        if (copyLabel_antonym->text().isEmpty() == false)
+        if (!copyLabel_antonym->text().isEmpty())
             copyLabel_antonym->show();
         for (int i = 0; i < m_antonymNum; i++)
             linkLabel_antonym[i]->show();
     }
     for (int i = 0; i < m_propertyNum; i++)
     {
-        if (showWord == true || copyLabel_property[i]->text() != "变形")
+        if (showWord || copyLabel_property[i]->text() != "变形")
         {
             copyLabel_property[i]->show();
             copyLabel_explain[i]->show();
@@ -1018,7 +1018,7 @@ void WordMemorizeWidget::chooseStrategy2()
             for (int i = 0; i < 10; i++)
             {
                 int r = WTool::rand(0, m_testNum - 1);
-                if (m_nameList.contains(m_testList.at(r).m_info.m_name) == true)
+                if (m_nameList.contains(m_testList.at(r).m_info.m_name))
                 {
                     do
                     {
@@ -1067,20 +1067,20 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
 {
     m_testList.clear();
     m_nameList.clear();
-    if (radioBtn_range[0]->isChecked() == false && radioBtn_range[1]->isChecked() == false && radioBtn_range[2]->isChecked() == false &&
-        radioBtn_range[3]->isChecked() == false && radioBtn_forever->isChecked() == false)
+    if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
+        !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
     {
         m_testList = p_wordAdmin->getAllWordCanMemorizeList();
     }
     else
     {
-        if (radioBtn_range[0]->isChecked() == true)
+        if (radioBtn_range[0]->isChecked())
             m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(0, 5, radioBtn_forever->isChecked());
-        if (radioBtn_range[1]->isChecked() == true)
+        if (radioBtn_range[1]->isChecked())
             m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(6, 9, radioBtn_forever->isChecked());
-        if (radioBtn_range[2]->isChecked() == true)
+        if (radioBtn_range[2]->isChecked())
             m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(10, 99, radioBtn_forever->isChecked());
-        if (radioBtn_range[3]->isChecked() == true)
+        if (radioBtn_range[3]->isChecked())
             m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
     }
     if (m_testList.size() > 0)
@@ -1089,7 +1089,7 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
         m_testModeNum = 0;
         for (int i = 0; i < 3; i++)
         {
-            if (radioBtn_test[i]->isChecked() == true)
+            if (radioBtn_test[i]->isChecked())
                 m_testModeNum++;
         }
         if (m_testModeNum > 0)
@@ -1121,7 +1121,7 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
     showWordInfo(true);
 
     m_testList[m_curIndex].m_isPass[m_test] = true;
-    if (m_testList[m_curIndex].isPass() == true)
+    if (m_testList[m_curIndex].isPass())
     {
         m_lastWord = "";
         m_word.m_times++;
@@ -1278,7 +1278,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
     if (lineEdit_input->text() == m_word.m_name)
     {
         m_testList[m_curIndex].m_isPass[m_test] = true;
-        if (m_testList[m_curIndex].isPass() == true)
+        if (m_testList[m_curIndex].isPass())
         {
             m_lastWord = "";
             m_word.m_times++;
@@ -1362,7 +1362,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
 
 void WordMemorizeWidget::slot_wordCanMemorize(QString name)
 {
-    if (name.isEmpty() == true || name == WORD_NAME_UNDEFINED)
+    if (name.isEmpty() || name == WORD_NAME_UNDEFINED)
         return;
     for (int i = 0; i < m_testList.count(); i++)
     {
@@ -1371,7 +1371,7 @@ void WordMemorizeWidget::slot_wordCanMemorize(QString name)
     }
 
     WordTest test;
-    if (p_wordAdmin->getWordBriefInfo(name, &test.m_info) == true)
+    if (p_wordAdmin->getWordBriefInfo(name, &test.m_info))
     {
         int times = test.m_info.m_times;
         if ((test.m_info.m_remember > 0) != radioBtn_forever->isChecked() ||
@@ -1382,15 +1382,15 @@ void WordMemorizeWidget::slot_wordCanMemorize(QString name)
         {
             return;
         }
-        if (radioBtn_test[0]->isChecked() == true)
+        if (radioBtn_test[0]->isChecked())
         {
             test.m_isPass[0] = false;
         }
-        if (radioBtn_test[1]->isChecked() == true)
+        if (radioBtn_test[1]->isChecked())
         {
             test.m_isPass[1] = false;
         }
-//        if (radioBtn_test[2]->isChecked() == true)
+//        if (radioBtn_test[2]->isChecked())
 //        {
 //            testm_isPass[2] = false;
 //        }

@@ -145,23 +145,23 @@ void WordLibraryWidget::loadStyleSheet()
 void WordLibraryWidget::slot_btnSearch_clicked()
 {
     m_wordList.clear();
-    if (radioBtn_range[0]->isChecked() == false && radioBtn_range[1]->isChecked() == false && radioBtn_range[2]->isChecked() == false &&
-        radioBtn_range[3]->isChecked() == false && radioBtn_forever->isChecked() == false)
+    if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
+        !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
     {
         m_wordList = p_wordAdmin->getAllWordList();
     }
     else
     {
-        if (radioBtn_range[0]->isChecked() == true)
+        if (radioBtn_range[0]->isChecked())
             m_wordList += p_wordAdmin->getWordListFromTimes(0, 5, radioBtn_forever->isChecked());
-        if (radioBtn_range[1]->isChecked() == true)
+        if (radioBtn_range[1]->isChecked())
             m_wordList += p_wordAdmin->getWordListFromTimes(6, 9, radioBtn_forever->isChecked());
-        if (radioBtn_range[2]->isChecked() == true)
+        if (radioBtn_range[2]->isChecked())
             m_wordList += p_wordAdmin->getWordListFromTimes(10, 99, radioBtn_forever->isChecked());
-        if (radioBtn_range[3]->isChecked() == true)
+        if (radioBtn_range[3]->isChecked())
             m_wordList += p_wordAdmin->getWordListFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
     }
-    if (lineEdit_search->text().isEmpty() == false)
+    if (!lineEdit_search->text().isEmpty())
     {
         m_wordList = WTool::filterWordFromList(m_wordList, lineEdit_search->text(), combox_search->currentText());
     }
@@ -187,7 +187,7 @@ void WordLibraryWidget::slot_radioButtonClicked()
 
 void WordLibraryWidget::slot_wordTimeDecline(QString name)
 {
-    if (m_wordList.contains(name) == true)
+    if (m_wordList.contains(name))
     {
         updateWordList();
     }
@@ -196,7 +196,7 @@ void WordLibraryWidget::slot_wordTimeDecline(QString name)
 
 void WordLibraryWidget::slot_wordTimeIncrease(QString name)
 {
-    if (m_wordList.contains(name) == true)
+    if (m_wordList.contains(name))
     {
         updateWordList();
     }

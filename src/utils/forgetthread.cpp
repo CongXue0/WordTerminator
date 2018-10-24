@@ -48,7 +48,7 @@ void ForgetThread::run()
                         if (p_wordAdmin->updateWord(m_infoList.at(i).m_name, "Times",
                             QString::number(m_infoList.at(i).m_times), "ModifyTime",
                             m_infoList.at(i).m_modifyTime.toString(TIMEFORMAT), "RememberState",
-                            QString::number(m_infoList[i].m_remember)) == true)
+                            QString::number(m_infoList[i].m_remember)))
                         {
                             DEBUG << m_infoList.at(i).m_name << " forget times";
                             emit wordTimeDeclineSignal(m_infoList.at(i).m_name);
@@ -69,7 +69,7 @@ void ForgetThread::slot_wordTimeIncrease(QString name)
 {
     DEBUG << name << " slot_wordTimeIncrease";
     m_mutex.lock();
-    if (m_nameList.contains(name) == true)
+    if (m_nameList.contains(name))
     {
         int index = m_nameList.indexOf(name);
         m_nameList.removeAt(index);

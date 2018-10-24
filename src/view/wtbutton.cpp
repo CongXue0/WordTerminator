@@ -24,7 +24,7 @@ void WTButton::setActiveText(QString activeTxt)
     if (m_activeTxt == activeTxt)
         return;
     m_activeTxt = activeTxt;
-    if (this->isChecked() == true && m_activeTxt.isEmpty() == false)
+    if (this->isChecked() && !m_activeTxt.isEmpty())
         this->setText(m_activeTxt);
 }
 
@@ -33,7 +33,7 @@ void WTButton::setInactiveText(QString inactiveTxt)
     if (m_inactiveTxt == inactiveTxt)
         return;
     m_inactiveTxt = inactiveTxt;
-    if (this->isChecked() == false && m_inactiveTxt.isEmpty() == false)
+    if (!this->isChecked() && !m_inactiveTxt.isEmpty())
         this->setText(m_inactiveTxt);
 }
 
@@ -42,7 +42,7 @@ void WTButton::setActiveTip(QString activeTip)
     if (m_activeTip == activeTip)
         return;
     m_activeTip = activeTip;
-    if (this->isChecked() == true && m_activeTip.isEmpty() == false)
+    if (this->isChecked() && !m_activeTip.isEmpty())
         this->setToolTip(m_activeTip);
 }
 
@@ -51,7 +51,7 @@ void WTButton::setInactiveTip(QString inactiveTip)
     if (m_inactiveTip == inactiveTip)
         return;
     m_inactiveTip = inactiveTip;
-    if (this->isChecked() == false && m_inactiveTip.isEmpty() == false)
+    if (!this->isChecked() && !m_inactiveTip.isEmpty())
         this->setToolTip(m_inactiveTip);
 }
 
@@ -74,16 +74,16 @@ void WTButton::slot_buttonStateChanged(int status)
 {
     if (status == 0)
     {
-        if (m_inactiveTxt.isEmpty() == false)
+        if (!m_inactiveTxt.isEmpty())
             this->setText(m_inactiveTxt);
-        if (m_inactiveTip.isEmpty() == false)
+        if (!m_inactiveTip.isEmpty())
             this->setToolTip(m_inactiveTip);
     }
     else if (status == 2)
     {
-        if (m_activeTxt.isEmpty() == false)
+        if (!m_activeTxt.isEmpty())
             this->setText(m_activeTxt);
-        if (m_activeTip.isEmpty() == false)
+        if (!m_activeTip.isEmpty())
             this->setToolTip(m_activeTip);
     }
 }

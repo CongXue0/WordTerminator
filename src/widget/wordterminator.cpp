@@ -143,7 +143,7 @@ WordTerminator::~WordTerminator()
 
 void WordTerminator::showEvent(QShowEvent *)
 {
-    if (m_first == true)
+    if (m_first)
     {
         QSize size = this->size();
         this->setFixedSize(size);//固定窗口大小
@@ -163,8 +163,7 @@ void WordTerminator::showEvent(QShowEvent *)
 
 void WordTerminator::closeEvent(QCloseEvent *event)
 {
-    if (QMessageBox::question(this, "question", "is close WT?", QMessageBox::Yes, QMessageBox::No) ==
-        QMessageBox::Yes)
+    if (QMessageBox::question(this, "question", "is close WT?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
     {
         p_forgetThread->stop();
         p_forgetThread->wait();
@@ -236,7 +235,7 @@ void WordTerminator::exportWord(QString msg)
         QString("/word(%1-%2)%3_%4.txt").arg(left).arg(right).arg(rem)
         .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd"));
     QFile file(fileName);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QMessageBox::warning(this, "file write", "can't open", QMessageBox::Yes);
     }
@@ -262,9 +261,9 @@ void WordTerminator::exportWord(QString msg)
         {
             dialog.setValue(i);
             QCoreApplication::processEvents();
-            if (dialog.wasCanceled() == true)
+            if (dialog.wasCanceled())
                 break;
-            if (p_wordAdmin->getWordInfo(list.at(i), &wordInfo) == true)
+            if (p_wordAdmin->getWordInfo(list.at(i), &wordInfo))
             {
                 if (i == count - 1)
                     in << wordInfo.toText();
@@ -298,7 +297,7 @@ void WordTerminator::slot_btnExport_pressed()
     bool ok = false;
     QString text = QInputDialog::getText(this, "Export words", "Please input range, such as 0,9,0",
         QLineEdit::Normal, "0,9,0", &ok);
-    if (ok == true)
+    if (ok)
     {
         if (text != "all")
         {
@@ -335,7 +334,7 @@ void WordTerminator::slot_wtbuttonPressed()
         {
             bool ret = false;
             emit stopWordMemorizeSignal(&ret);
-            if (ret == false)
+            if (!ret)
                 return;
         }
         break;
@@ -399,7 +398,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
             else if (info == "show word")
             {
                 wordShow->recoveryInterface();
-                if (wordShow->loadWordInfo(value) == true)
+                if (wordShow->loadWordInfo(value))
                 {
                     pushWidgetIndex(Widget_WordShow);
                     stackedWidget->setCurrentIndex(Widget_WordShow);
@@ -440,7 +439,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
                 if (topWidgetIndex() == Widget_WordShow)
                 {
                     wordShow->recoveryInterface();
-                    if (wordShow->loadWordInfo(value) == true)
+                    if (wordShow->loadWordInfo(value))
                     {
                         stackedWidget->setCurrentIndex(Widget_WordShow);
                     }
@@ -489,7 +488,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
             {
                 wordCreate->setCreateMode(WordCreateWidget::MODIFY);
                 wordCreate->recoveryInterface();
-                if (wordCreate->loadWordInfo(value) == true)
+                if (wordCreate->loadWordInfo(value))
                 {
                     pushWidgetIndex(Widget_WordCreate);
                     stackedWidget->setCurrentIndex(Widget_WordCreate);

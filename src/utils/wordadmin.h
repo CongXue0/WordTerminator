@@ -90,7 +90,7 @@ public:
         int j = 0;
         for (int i = 0; i < 3; i++)
         {
-            if (m_isPass[i] == false)
+            if (!m_isPass[i])
                 j++;
         }
         return j;

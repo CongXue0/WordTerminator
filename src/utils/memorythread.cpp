@@ -57,7 +57,7 @@ void MemoryThread::run()
 void MemoryThread::slot_wordTimeIncrease(QString name)
 {
     m_mutex.lock();
-    if (m_nameList.contains(name) == true)
+    if (m_nameList.contains(name))
     {
         int index = m_nameList.indexOf(name);
         m_nameList.removeAt(index);

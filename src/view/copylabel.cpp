@@ -23,7 +23,7 @@ void CopyLabel::mousePressEvent(QMouseEvent *e)
 
 void CopyLabel::focusOutEvent(QFocusEvent *e)
 {
-    if (m_selectFlag != true)
+    if (!m_selectFlag)
     {
         this->moveCursor(QTextCursor::End);
     }
