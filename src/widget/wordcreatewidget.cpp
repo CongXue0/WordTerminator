@@ -30,10 +30,6 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) : QWidget(parent)
     label_phoneticSymbol->setObjectName("label_phoneticSymbol");
     label_phoneticSymbol->setText("音标");
 
-    label_voice = new QLabel(widget);
-    label_voice->setObjectName("label_voice");
-    label_voice->setText("语音文件名");
-
     label_adj_Chinese = new QLabel(widget);
     label_adj_Chinese->setObjectName("label_adj_Chinese");
     label_adj_Chinese->setText("(中文)adj.");
@@ -127,9 +123,6 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) : QWidget(parent)
 
     lineEdit_phoneticSymbol = new QLineEdit(widget);
     lineEdit_phoneticSymbol->setObjectName("lineEdit_phoneticSymbol");
-
-    lineEdit_voice = new QLineEdit(widget);
-    lineEdit_voice->setObjectName("lineEdit_voice");
 
     lineEdit_adj_Chinese = new QLineEdit(widget);
     lineEdit_adj_Chinese->setObjectName("lineEdit_adj_Chinese");
@@ -236,7 +229,6 @@ void WordCreateWidget::recoveryInterface()
     else if (m_mode == MODIFY)
         lineEdit_word->setReadOnly(true);
     lineEdit_phoneticSymbol->clear();
-    lineEdit_voice->clear();
     lineEdit_adj_Chinese->clear();
     lineEdit_adj_English->clear();
     lineEdit_adv_Chinese->clear();
@@ -281,7 +273,6 @@ bool WordCreateWidget::loadWordInfo(QString name)
         m_times = word.m_times;
         m_remember = word.m_remember;
         lineEdit_phoneticSymbol->setText(word.m_phoneticSymbol);
-        lineEdit_voice->setText(word.m_voiceFile);
         lineEdit_adj_Chinese->setText(word.m_adj_Chinese);
         lineEdit_adj_English->setText(word.m_adj_English);
         lineEdit_adv_Chinese->setText(word.m_adv_Chinese);
@@ -426,7 +417,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     }
     wordInfo.m_isPhrase = checkBox_phrase->isChecked();
     wordInfo.m_phoneticSymbol = lineEdit_phoneticSymbol->text();
-    wordInfo.m_voiceFile = lineEdit_voice->text();
+    wordInfo.m_voiceFile = "";
     wordInfo.m_adj_Chinese = lineEdit_adj_Chinese->text();
     wordInfo.m_adj_English = lineEdit_adj_English->text();
     wordInfo.m_adv_Chinese = lineEdit_adv_Chinese->text();

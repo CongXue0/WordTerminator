@@ -103,7 +103,7 @@ private:
     QLabel *label_input;
     QLabel *label_line;
 
-    QRadioButton *radioBtn_test[3];
+    QRadioButton *radioBtn_test[2];
     QRadioButton *radioBtn_range[4];
     QRadioButton *radioBtn_forever;
 

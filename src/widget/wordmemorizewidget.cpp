@@ -59,11 +59,6 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
     radioBtn_test[1]->setText("英文回想");
     radioBtn_test[1]->setChecked(true);
     radioBtn_test[1]->setAutoExclusive(false);
-    radioBtn_test[2] = new QRadioButton(label_bg_welcome);
-    radioBtn_test[2]->setObjectName("radioBtn_test3");
-    radioBtn_test[2]->setText("听写电台");
-    radioBtn_test[2]->setChecked(false);
-    radioBtn_test[2]->setAutoExclusive(false);
 
     radioBtn_range[0] = new QRadioButton(label_bg_welcome);
     radioBtn_range[0]->setObjectName("radioBtn_range1");
@@ -350,7 +345,6 @@ void WordMemorizeWidget::setMode(int mode)
         label_statistics->show();
         radioBtn_test[0]->show();
         radioBtn_test[1]->show();
-        radioBtn_test[2]->show();
         radioBtn_range[0]->show();
         radioBtn_range[1]->show();
         radioBtn_range[2]->show();
@@ -363,7 +357,6 @@ void WordMemorizeWidget::setMode(int mode)
         label_statistics->hide();
         radioBtn_test[0]->hide();
         radioBtn_test[1]->hide();
-        radioBtn_test[2]->hide();
         radioBtn_range[0]->hide();
         radioBtn_range[1]->hide();
         radioBtn_range[2]->hide();
@@ -421,10 +414,6 @@ void WordMemorizeWidget::testListInit()
         {
             m_testList[i].m_isPass[1] = false;
         }
-//        if (radioBtn_test[2]->isChecked())
-//        {
-//            m_testList.at(i).m_isPass[2] = false;
-//        }
     }
 }
 
@@ -1087,7 +1076,7 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
     {
         p_memThread->start();
         m_testModeNum = 0;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             if (radioBtn_test[i]->isChecked())
                 m_testModeNum++;
@@ -1390,10 +1379,6 @@ void WordMemorizeWidget::slot_wordCanMemorize(QString name)
         {
             test.m_isPass[1] = false;
         }
-//        if (radioBtn_test[2]->isChecked())
-//        {
-//            testm_isPass[2] = false;
-//        }
         m_mutex.lock();
         m_testList.append(test);
         m_testNum++;

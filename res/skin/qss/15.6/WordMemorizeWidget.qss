@@ -47,13 +47,11 @@ QRadioButton::indicator{
 	height:50px;
 }
 QRadioButton#radioBtn_test1::indicator::unchecked,
-QRadioButton#radioBtn_test2::indicator::unchecked,
-QRadioButton#radioBtn_test3::indicator::unchecked{
+QRadioButton#radioBtn_test2::indicator::unchecked{
 	image:url(skin/picture/15.6/check3_inactive.png);
 }
 QRadioButton#radioBtn_test1::indicator::checked,
-QRadioButton#radioBtn_test2::indicator::checked,
-QRadioButton#radioBtn_test3::indicator::checked{
+QRadioButton#radioBtn_test2::indicator::checked{
 	image:url(skin/picture/15.6/check3_active.png);
 }
 QRadioButton#radioBtn_test1{
@@ -61,9 +59,6 @@ QRadioButton#radioBtn_test1{
 }
 QRadioButton#radioBtn_test2{
 	qproperty-geometry:rect(177 185 254 50);
-}
-QRadioButton#radioBtn_test3{
-	qproperty-geometry:rect(177 255 254 50);
 }
 QRadioButton#radioBtn_range1::indicator::unchecked,
 QRadioButton#radioBtn_range2::indicator::unchecked,

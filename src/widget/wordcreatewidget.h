@@ -50,7 +50,6 @@ private:
 
     QLabel *label_word;
     QLabel *label_phoneticSymbol;
-    QLabel *label_voice;
     QLabel *label_adj_Chinese;
     QLabel *label_adj_English;
     QLabel *label_adv_Chinese;
@@ -79,7 +78,6 @@ private:
 
     QLineEdit *lineEdit_word;
     QLineEdit *lineEdit_phoneticSymbol;
-    QLineEdit *lineEdit_voice;
     QLineEdit *lineEdit_adj_Chinese;
     QLineEdit *lineEdit_adj_English;
     QLineEdit *lineEdit_adv_Chinese;

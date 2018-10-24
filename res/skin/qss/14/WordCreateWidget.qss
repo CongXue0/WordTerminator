@@ -16,7 +16,6 @@ QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
 /***********QLabel***********/
 QLabel#label_word,
 QLabel#label_phoneticSymbol,
-QLabel#label_voice,
 QLabel#label_adj_Chinese,
 QLabel#label_adj_English,
 QLabel#label_adv_Chinese,
@@ -52,10 +51,6 @@ QLabel#label_word{
 }
 QLabel#label_phoneticSymbol{
 	qproperty-geometry:rect(8 128 48 40);
-	color:#666666;
-}
-QLabel#label_voice{
-	qproperty-geometry:rect(308 128 116 40);
 	color:#666666;
 }
 QLabel#label_adj_Chinese{
@@ -162,7 +157,6 @@ QLabel#label_antonym{
 /**********QLineEdit**********/
 QLineEdit#lineEdit_word,
 QLineEdit#lineEdit_phoneticSymbol,
-QLineEdit#lineEdit_voice,
 QLineEdit#lineEdit_adj_Chinese,
 QLineEdit#lineEdit_adj_English,
 QLineEdit#lineEdit_adv_Chinese,
@@ -195,9 +189,6 @@ QLineEdit#lineEdit_word{
 }
 QLineEdit#lineEdit_phoneticSymbol{
 	qproperty-geometry:rect(60 128 240 40);
-}
-QLineEdit#lineEdit_voice{
-	qproperty-geometry:rect(428 128 207 40);
 }
 QLineEdit#lineEdit_adj_Chinese{
 	qproperty-geometry:rect(114 184 521 40);

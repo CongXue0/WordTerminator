@@ -74,21 +74,17 @@ public:
     {
         m_isPass[0] = true;
         m_isPass[1] = true;
-        m_isPass[2] = true;
-//        m_isPass[3] = true;
-//        m_isPass[4] = true;
     }
 
     bool isPass() const
     {
-        return m_isPass[0] == true && m_isPass[1] == true && m_isPass[2] == true;// &&
-//            m_isPass[3] == true && m_isPass[4] == true;
+        return m_isPass[0] && m_isPass[1];
     }
 
     int notPassNum() const
     {
         int j = 0;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             if (!m_isPass[i])
                 j++;
@@ -97,7 +93,7 @@ public:
     }
 
     BriefWordInfo m_info;
-    bool m_isPass[3];
+    bool m_isPass[2];
 };
 
 class WordAdmin : public QObject
