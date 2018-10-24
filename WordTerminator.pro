@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     src/utils/forgetthread.cpp \
     src/widget/wordmemorizewidget.cpp \
     src/utils/memorythread.cpp \
-    src/utils/json.cpp
+    src/utils/json.cpp \
+    src/utils/global.cpp
 
 HEADERS  += src/widget/wordterminator.h \
     src/utils/wtool.h \
@@ -54,6 +55,7 @@ HEADERS  += src/widget/wordterminator.h \
     src/utils/forgetthread.h \
     src/widget/wordmemorizewidget.h \
     src/utils/memorythread.h \
-    src/utils/json.h
+    src/utils/json.h \
+    src/utils/global.h
 
 FORMS    += src/widget/wordterminator.ui

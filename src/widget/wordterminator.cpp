@@ -14,6 +14,7 @@
 #include <QProgressDialog>
 #include <QTextCodec>
 #include <QStandardPaths>
+#include "global.h"
 
 extern WordAdmin *p_wordAdmin;
 extern ForgetThread *p_forgetThread;
@@ -26,6 +27,9 @@ WordTerminator::WordTerminator(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint |
         Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
+
+    Global::setXmlPath(WTool::getConfigPath());
+    Global::load();
 
     WTool::memoryConfigInit();
     if (p_wordAdmin == NULL)

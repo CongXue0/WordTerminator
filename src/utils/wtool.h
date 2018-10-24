@@ -3,11 +3,13 @@
 #include <QString>
 #include <QRect>
 #include <QFont>
-
+#include <QCoreApplication>
+#include <QDebug>
 
 #define DECLINE_NUM 10
 #define BOOLSTR(a) ((a == true) ? "true" : "false")
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
+#define APPPATH QCoreApplication::applicationDirPath()
 #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split('\\').last()).arg(__FUNCTION__).arg(__LINE__)
 
 class WTool
@@ -60,7 +62,9 @@ public:
     static QString getWordShowWidgetQss();
     static QString getWordMemorizeWidgetQss();
 
+    /* 重要路径 */
     static QString getWordMemorizeWidgetJsonPath();
+    static QString getConfigPath();
 
 private:
     static int leastForeverTimes;

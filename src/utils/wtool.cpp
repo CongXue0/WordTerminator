@@ -1,7 +1,5 @@
 #include "wtool.h"
 #include <QFile>
-#include <QDebug>
-#include <QCoreApplication>
 #include <QDir>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -45,7 +43,7 @@ int WTool::divide(int a, int b)
 
 QString WTool::getWordDBFilePath()
 {
-    return QCoreApplication::applicationDirPath() + QString("/user/db/word.db");
+    return APPPATH + QString("/user/db/word.db");
 }
 
 int WTool::rand(int a, int b)
@@ -434,7 +432,7 @@ QString WTool::shieldWord(QString txt, QString word)
 
 void WTool::memoryConfigInit()
 {
-    QString path = QCoreApplication::applicationDirPath() + "/user/config/memory.json";
+    QString path = APPPATH + "/user/config/memory.json";
     Json json;
     if (json.read(path) == false)
     {
@@ -546,8 +544,7 @@ QString WTool::getWordTerminatorQss()
     QString info;
     QString screenSize = getScreenSize();
     QString relPath = QString("skin/qss/%1/WordTerminator.qss").arg(screenSize);
-    QString absPath = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordTerminator.qss").arg(screenSize);
+    QString absPath = APPPATH + QString("/skin/qss/%1/WordTerminator.qss").arg(screenSize);
     readFileInfo(relPath, absPath, info);
     return info;
 }
@@ -557,8 +554,7 @@ QString WTool::getWordLibraryWidgetQss()
     QString info;
     QString screenSize = getScreenSize();
     QString relPath = QString("skin/qss/%1/WordLibraryWidget.qss").arg(screenSize);
-    QString absPath = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordLibraryWidget.qss").arg(screenSize);
+    QString absPath = APPPATH + QString("/skin/qss/%1/WordLibraryWidget.qss").arg(screenSize);
     readFileInfo(relPath, absPath, info);
     return info;
 }
@@ -568,8 +564,7 @@ QString WTool::getWordCreateWidgetQss()
     QString info;
     QString screenSize = getScreenSize();
     QString relPath = QString("skin/qss/%1/WordCreateWidget.qss").arg(screenSize);
-    QString absPath = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordCreateWidget.qss").arg(screenSize);
+    QString absPath = APPPATH + QString("/skin/qss/%1/WordCreateWidget.qss").arg(screenSize);
     readFileInfo(relPath, absPath, info);
     return info;
 }
@@ -579,8 +574,7 @@ QString WTool::getWordShowWidgetQss()
     QString info;
     QString screenSize = getScreenSize();
     QString relPath = QString("skin/qss/%1/WordShowWidget.qss").arg(screenSize);
-    QString absPath = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordShowWidget.qss").arg(screenSize);
+    QString absPath = APPPATH + QString("/skin/qss/%1/WordShowWidget.qss").arg(screenSize);
     readFileInfo(relPath, absPath, info);
     return info;
 }
@@ -590,8 +584,7 @@ QString WTool::getWordMemorizeWidgetQss()
     QString info;
     QString screenSize = getScreenSize();
     QString relPath = QString("skin/qss/%1/WordMemorizeWidget.qss").arg(screenSize);
-    QString absPath = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordMemorizeWidget.qss").arg(screenSize);
+    QString absPath = APPPATH + QString("/skin/qss/%1/WordMemorizeWidget.qss").arg(screenSize);
     readFileInfo(relPath, absPath, info);
     return info;
 }
@@ -599,7 +592,11 @@ QString WTool::getWordMemorizeWidgetQss()
 QString WTool::getWordMemorizeWidgetJsonPath()
 {
     QString screenSize = getScreenSize();
-    QString path = QCoreApplication::applicationDirPath() +
-        QString("/skin/qss/%1/WordMemorizeWidget.json").arg(screenSize);
+    QString path = APPPATH + QString("/skin/qss/%1/WordMemorizeWidget.json").arg(screenSize);
     return path;
+}
+
+QString WTool::getConfigPath()
+{
+    return APPPATH + "/user/config/config.xml";
 }
