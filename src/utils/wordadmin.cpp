@@ -14,22 +14,24 @@ void BriefWordInfo::init()
 {
     m_name = WORD_NAME_UNDEFINED;
     m_times = -1;
+    m_groupid = 0;
     m_remember = 0;
     m_isPhrase = false;
 }
 
 QString BriefWordInfo::toString()
 {
-    return QString("name:%1, times:%2, modify:%3, remember:%4").arg(m_name)
-        .arg(m_times).arg(m_modifyTime.toString(TIMEFORMAT)).arg(m_remember);
+    return QString("name:%1, times:%2, modify:%3, groupid:%4, remember:%5").arg(m_name)
+        .arg(m_times).arg(m_modifyTime.toString(TIMEFORMAT)).arg(m_groupid).arg(m_remember);
 }
 
 void WordInfo::init()
 {
     m_name = WORD_NAME_UNDEFINED;
     m_times = -1;
+    m_groupid = 0;
     m_remember = 0;
-    m_isPhrase = false;;
+    m_isPhrase = false;
     m_phoneticSymbol = "";
     m_voiceFile = "";
     m_adj_Chinese = "";
@@ -272,9 +274,9 @@ bool WordAdmin::insertWord(WordInfo *word)
     QString sql = QString("insert into WordLibrary values(\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", "
         "\"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\", \"%13\", \"%14\", \"%15\", \"%16\", \"%17\", \"%18\", \"%19\", "
         "\"%20\", \"%21\", \"%22\", \"%23\", \"%24\", \"%25\", \"%26\", \"%27\", \"%28\", \"%29\", \"%30\", \"%31\", "
-        "\"%32\", \"%33\", \"%34\", \"%35\", \"%36\", \"%37\")")
-        .arg(word->m_name).arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_remember)
-        .arg(((word->m_isPhrase == true) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
+        "\"%32\", \"%33\", \"%34\", \"%35\", \"%36\", \"%37\", \"%38\")")
+        .arg(word->m_name).arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid)
+        .arg(word->m_remember).arg(((word->m_isPhrase == true) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
         .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
         .arg(word->m_vt_Chinese).arg(word->m_vt_English).arg(word->m_vi_Chinese).arg(word->m_vi_English)
         .arg(word->m_pastTense).arg(word->m_pastParticiple).arg(word->m_presentParticiple)
@@ -295,6 +297,7 @@ bool WordAdmin::insertWord(WordInfo *word)
         m_wordLib[j].m_name = word->m_name;
         m_wordLib[j].m_times = word->m_times;
         m_wordLib[j].m_modifyTime = word->m_modifyTime;
+        m_wordLib[j].m_groupid = word->m_groupid;
         m_wordLib[j].m_remember = word->m_remember;
         m_wordLib[j].m_isPhrase = word->m_isPhrase;
         m_mutex.unlock();
@@ -314,15 +317,15 @@ bool WordAdmin::updateWord(WordInfo *word)
         if (m_wordLib[i].m_name == word->m_name)
         {
             QSqlQuery query;
-            QString sql = QString("update WordLibrary set Times=\"%1\", ModifyTime=\"%2\", RememberState=\"%3\", IsPhrase=\"%4\", "
-                "PhoneticSymbol=\"%5\", VoiceFile=\"%6\", Adj_Chinese=\"%7\", Adj_English=\"%8\", Adv_Chinese=\"%9\", "
-                "Adv_English=\"%10\", Vt_Chinese=\"%11\", Vt_English=\"%12\", Vi_Chinese=\"%13\", Vi_English=\"%14\", "
-                "PastTense=\"%15\", PastParticiple=\"%16\", PresentParticiple=\"%17\", ThirdPersonSingular=\"%18\", "
-                "Noun_Chinese=\"%19\", Noun_English=\"%20\", Prep_Chinese=\"%21\", Prep_English=\"%22\", Conj_Chinese=\"%23\", "
-                "Conj_English=\"%24\", Pron_Chinese=\"%25\", Pron_English=\"%26\", Art_Chinese=\"%27\", Art_English=\"%28\", "
-                "ExampleSentence1=\"%29\", ExampleSentence2=\"%30\", ExampleSentence3=\"%31\", ExampleSentence4=\"%32\", "
-                "ExampleSentence5=\"%33\", ExampleSentence6=\"%34\", Synonym=\"%35\", Antonym=\"%36\" where Name=\"%37\"")
-                .arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_remember)
+            QString sql = QString("update WordLibrary set Times=\"%1\", ModifyTime=\"%2\", Groupid=\"%3\",RememberState=\"%4\", "
+                "IsPhrase=\"%5\", PhoneticSymbol=\"%6\", VoiceFile=\"%7\", Adj_Chinese=\"%8\", Adj_English=\"%9\", Adv_Chinese=\"%10\", "
+                "Adv_English=\"%11\", Vt_Chinese=\"%12\", Vt_English=\"%13\", Vi_Chinese=\"%14\", Vi_English=\"%15\", "
+                "PastTense=\"%16\", PastParticiple=\"%17\", PresentParticiple=\"%18\", ThirdPersonSingular=\"%19\", "
+                "Noun_Chinese=\"%20\", Noun_English=\"%21\", Prep_Chinese=\"%22\", Prep_English=\"%23\", Conj_Chinese=\"%24\", "
+                "Conj_English=\"%25\", Pron_Chinese=\"%26\", Pron_English=\"%27\", Art_Chinese=\"%28\", Art_English=\"%29\", "
+                "ExampleSentence1=\"%30\", ExampleSentence2=\"%31\", ExampleSentence3=\"%32\", ExampleSentence4=\"%33\", "
+                "ExampleSentence5=\"%34\", ExampleSentence6=\"%35\", Synonym=\"%36\", Antonym=\"%37\" where Name=\"%38\"")
+                .arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid).arg(word->m_remember)
                 .arg(((word->m_isPhrase == true) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
                 .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
                 .arg(word->m_vt_Chinese).arg(word->m_vt_English).arg(word->m_vi_Chinese).arg(word->m_vi_English)
@@ -337,6 +340,7 @@ bool WordAdmin::updateWord(WordInfo *word)
             {
                 m_wordLib[i].m_times = word->m_times;
                 m_wordLib[i].m_modifyTime = word->m_modifyTime;
+                m_wordLib[i].m_groupid = word->m_groupid;
                 m_wordLib[i].m_remember = word->m_remember;
                 m_wordLib[i].m_isPhrase = word->m_isPhrase;
                 m_mutex.unlock();
@@ -368,6 +372,8 @@ bool WordAdmin::updateWord(QString name, QString field, QString value)
                     m_wordLib[i].m_times = value.toInt();
                 else if (field == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value, TIMEFORMAT);
+                else if (field == "Groupid")
+                    m_wordLib[i].m_groupid = value.toInt();
                 else if (field == "RememberState")
                     m_wordLib[i].m_remember = value.toInt();
                 else if (field == "IsPhrase")
@@ -399,6 +405,8 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
                     m_wordLib[i].m_times = value1.toInt();
                 else if (field1 == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value1, TIMEFORMAT);
+                else if (field1 == "Groupid")
+                    m_wordLib[i].m_groupid = value1.toInt();
                 else if (field1 == "RememberState")
                     m_wordLib[i].m_remember = value1.toInt();
                 else if (field1 == "IsPhrase")
@@ -408,6 +416,8 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
                     m_wordLib[i].m_times = value2.toInt();
                 else if (field2 == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value2, TIMEFORMAT);
+                else if (field2 == "Groupid")
+                    m_wordLib[i].m_groupid = value2.toInt();
                 else if (field2 == "RememberState")
                     m_wordLib[i].m_remember = value2.toInt();
                 else if (field2 == "IsPhrase")
@@ -440,6 +450,8 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
                     m_wordLib[i].m_times = value1.toInt();
                 else if (field1 == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value1, TIMEFORMAT);
+                else if (field1 == "Groupid")
+                    m_wordLib[i].m_groupid = value1.toInt();
                 else if (field1 == "RememberState")
                     m_wordLib[i].m_remember = value1.toInt();
                 else if (field1 == "IsPhrase")
@@ -449,6 +461,8 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
                     m_wordLib[i].m_times = value2.toInt();
                 else if (field2 == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value2, TIMEFORMAT);
+                else if (field2 == "Groupid")
+                    m_wordLib[i].m_groupid = value2.toInt();
                 else if (field2 == "RememberState")
                     m_wordLib[i].m_remember = value2.toInt();
                 else if (field2 == "IsPhrase")
@@ -458,6 +472,8 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
                     m_wordLib[i].m_times = value3.toInt();
                 else if (field3 == "ModifyTime")
                     m_wordLib[i].m_modifyTime = QDateTime::fromString(value3, TIMEFORMAT);
+                else if (field3 == "Groupid")
+                    m_wordLib[i].m_groupid = value3.toInt();
                 else if (field3 == "RememberState")
                     m_wordLib[i].m_remember = value3.toInt();
                 else if (field3 == "IsPhrase")
@@ -590,8 +606,7 @@ bool WordAdmin::getMutexStatus()
 
 bool WordAdmin::wordCanMemorize(int remState, QDateTime modifyTime)
 {
-    if ((remState == -1 || remState == 2) ||
-        (modifyTime.secsTo(QDateTime::currentDateTime()) >= WTool::getMemoryInterval()))
+    if ((remState == -1 || remState == 2) || modifyTime.secsTo(QDateTime::currentDateTime()) >= WTool::getMemoryInterval())
         return true;
     else
         return false;
@@ -813,6 +828,7 @@ WordAdmin::WordAdmin(QObject *parent) : QObject(parent)
 
 void WordAdmin::initDB()
 {
+    //Name,Times,ModifyTime,Groupid,RememberState,IsPhrase,PhoneticSymbol,VoiceFile,Adj_Chinese,Adj_English,Adv_Chinese,Adv_English,Vt_Chinese,Vt_English,Vi_Chinese,Vi_English,PastTense,PastParticiple,PresentParticiple,ThirdPersonSingular,Noun_Chinese,Noun_English,Prep_Chinese,Prep_English,Conj_Chinese,Conj_English,Pron_Chinese,Pron_English,Art_Chinese,Art_English,ExampleSentence1,ExampleSentence2,ExampleSentence3,ExampleSentence4,ExampleSentence5,ExampleSentence6,Synonym,Antonym
     m_mutex.lockForWrite();
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(WTool::getWordDBFilePath());
@@ -824,44 +840,45 @@ void WordAdmin::initDB()
         {
             QString sql = QString("CREATE TABLE WordLibrary(%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, "
                 "%11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, "
-                "%28, %29, %30, %31, %32, %33, %34, %35, %36, %37)")
+                "%28, %29, %30, %31, %32, %33, %34, %35, %36, %37, %38)")
                 .arg("[Name] nvarchar")                 //1
                 .arg("[Times] integer")                 //2
                 .arg("[ModifyTime] nvarchar")           //3
-                .arg("[RememberState] integer")         //4
-                .arg("[IsPhrase] integer")              //5
-                .arg("[PhoneticSymbol] nvarchar")       //6
-                .arg("[VoiceFile] nvarchar")            //7
-                .arg("[Adj_Chinese] nvarchar")          //8
-                .arg("[Adj_English] nvarchar")          //9
-                .arg("[Adv_Chinese] nvarchar")          //10
-                .arg("[Adv_English] nvarchar")          //11
-                .arg("[Vt_Chinese] nvarchar")           //12
-                .arg("[Vt_English] nvarchar")           //13
-                .arg("[Vi_Chinese] nvarchar")           //14
-                .arg("[Vi_English] nvarchar")           //15
-                .arg("[PastTense] nvarchar")            //16
-                .arg("[PastParticiple] nvarchar")       //17
-                .arg("[PresentParticiple] nvarchar")    //18
-                .arg("[ThirdPersonSingular] nvarchar")  //19
-                .arg("[Noun_Chinese] nvarchar")         //20
-                .arg("[Noun_English] nvarchar")         //21
-                .arg("[Prep_Chinese] nvarchar")         //22
-                .arg("[Prep_English] nvarchar")         //23
-                .arg("[Conj_Chinese] nvarchar")         //24
-                .arg("[Conj_English] nvarchar")         //25
-                .arg("[Pron_Chinese] nvarchar")         //26
-                .arg("[Pron_English] nvarchar")         //27
-                .arg("[Art_Chinese] nvarchar")          //28
-                .arg("[Art_English] nvarchar")          //29
-                .arg("[ExampleSentence1] nvarchar")     //30
-                .arg("[ExampleSentence2] nvarchar")     //31
-                .arg("[ExampleSentence3] nvarchar")     //32
-                .arg("[ExampleSentence4] nvarchar")     //33
-                .arg("[ExampleSentence5] nvarchar")     //34
-                .arg("[ExampleSentence6] nvarchar")     //35
-                .arg("[Synonym] nvarchar")              //36
-                .arg("[Antonym] nvarchar");             //37
+                .arg("[Groupid] integer")               //4
+                .arg("[RememberState] integer")         //5
+                .arg("[IsPhrase] integer")              //6
+                .arg("[PhoneticSymbol] nvarchar")       //7
+                .arg("[VoiceFile] nvarchar")            //8
+                .arg("[Adj_Chinese] nvarchar")          //9
+                .arg("[Adj_English] nvarchar")          //10
+                .arg("[Adv_Chinese] nvarchar")          //11
+                .arg("[Adv_English] nvarchar")          //12
+                .arg("[Vt_Chinese] nvarchar")           //13
+                .arg("[Vt_English] nvarchar")           //14
+                .arg("[Vi_Chinese] nvarchar")           //15
+                .arg("[Vi_English] nvarchar")           //16
+                .arg("[PastTense] nvarchar")            //17
+                .arg("[PastParticiple] nvarchar")       //18
+                .arg("[PresentParticiple] nvarchar")    //19
+                .arg("[ThirdPersonSingular] nvarchar")  //20
+                .arg("[Noun_Chinese] nvarchar")         //21
+                .arg("[Noun_English] nvarchar")         //22
+                .arg("[Prep_Chinese] nvarchar")         //23
+                .arg("[Prep_English] nvarchar")         //24
+                .arg("[Conj_Chinese] nvarchar")         //25
+                .arg("[Conj_English] nvarchar")         //26
+                .arg("[Pron_Chinese] nvarchar")         //27
+                .arg("[Pron_English] nvarchar")         //28
+                .arg("[Art_Chinese] nvarchar")          //29
+                .arg("[Art_English] nvarchar")          //30
+                .arg("[ExampleSentence1] nvarchar")     //31
+                .arg("[ExampleSentence2] nvarchar")     //32
+                .arg("[ExampleSentence3] nvarchar")     //33
+                .arg("[ExampleSentence4] nvarchar")     //34
+                .arg("[ExampleSentence5] nvarchar")     //35
+                .arg("[ExampleSentence6] nvarchar")     //36
+                .arg("[Synonym] nvarchar")              //37
+                .arg("[Antonym] nvarchar");             //38
             QSqlQuery query;
             if (query.exec(sql) == true)
                 DEBUG << "DB init success";
@@ -890,8 +907,9 @@ bool WordAdmin::loadAllWord()
             m_wordLib[i].m_name = query.value(0).toString();
             m_wordLib[i].m_times = query.value(1).toInt();
             m_wordLib[i].m_modifyTime = QDateTime::fromString(query.value(2).toString(), TIMEFORMAT);
-            m_wordLib[i].m_remember = query.value(3).toInt();
-            m_wordLib[i].m_isPhrase = query.value(4).toInt() == 1;
+            m_wordLib[i].m_groupid = query.value(3).toInt();
+            m_wordLib[i].m_remember = query.value(4).toInt();
+            m_wordLib[i].m_isPhrase = query.value(5).toInt() == 1;
             i++;
             if (i >= MAX_WORD_NUM)
                 break;
@@ -922,8 +940,10 @@ int WordAdmin::checkAllWordTimesDecline()
                 "RememberState=\"%3\" where Name=\"%4\"")
                 .arg(m_wordLib[i].m_times).arg(m_wordLib[i].m_modifyTime.toString(TIMEFORMAT))
                 .arg(m_wordLib[i].m_remember).arg(m_wordLib[i].m_name);
-            if (query.exec(sql) == true);
+            if (query.exec(sql) == true)
+            {
 //                DEBUG << m_wordLib[i].m_times << " checktimes change success";
+            }
 //            else
 //                DEBUG << m_wordLib[i].m_times << " checktimes change fail";
         }
@@ -942,40 +962,41 @@ bool WordAdmin::readWordInfo(QString name, WordInfo *word)
             word->m_name = query.value(0).toString();
             word->m_times = query.value(1).toInt();
             word->m_modifyTime = QDateTime::fromString(query.value(2).toString(), TIMEFORMAT);
-            word->m_remember = query.value(3).toInt();
-            word->m_isPhrase = query.value(4).toInt() == 1;
-            word->m_phoneticSymbol = query.value(5).toString();
-            word->m_voiceFile = query.value(6).toString();
-            word->m_adj_Chinese = query.value(7).toString();
-            word->m_adj_English = query.value(8).toString();
-            word->m_adv_Chinese = query.value(9).toString();
-            word->m_adv_English = query.value(10).toString();
-            word->m_vt_Chinese = query.value(11).toString();
-            word->m_vt_English = query.value(12).toString();
-            word->m_vi_Chinese = query.value(13).toString();
-            word->m_vi_English = query.value(14).toString();
-            word->m_pastTense = query.value(15).toString();
-            word->m_pastParticiple = query.value(16).toString();
-            word->m_presentParticiple = query.value(17).toString();
-            word->m_thirdPersonSingular = query.value(18).toString();
-            word->m_noun_Chinese = query.value(19).toString();
-            word->m_noun_English = query.value(20).toString();
-            word->m_prep_Chinese = query.value(21).toString();
-            word->m_prep_English = query.value(22).toString();
-            word->m_conj_Chinese = query.value(23).toString();
-            word->m_conj_English = query.value(24).toString();
-            word->m_pron_Chinese = query.value(25).toString();
-            word->m_pron_English = query.value(26).toString();
-            word->m_art_Chinese = query.value(27).toString();
-            word->m_art_English = query.value(28).toString();
-            word->m_exampleSentence[0] = query.value(29).toString();
-            word->m_exampleSentence[1] = query.value(30).toString();
-            word->m_exampleSentence[2] = query.value(31).toString();
-            word->m_exampleSentence[3] = query.value(32).toString();
-            word->m_exampleSentence[4] = query.value(33).toString();
-            word->m_exampleSentence[5] = query.value(34).toString();
-            word->m_synonym = query.value(35).toString();
-            word->m_antonym = query.value(36).toString();
+            word->m_groupid = query.value(3).toInt();
+            word->m_remember = query.value(4).toInt();
+            word->m_isPhrase = query.value(5).toInt() == 1;
+            word->m_phoneticSymbol = query.value(6).toString();
+            word->m_voiceFile = query.value(7).toString();
+            word->m_adj_Chinese = query.value(8).toString();
+            word->m_adj_English = query.value(9).toString();
+            word->m_adv_Chinese = query.value(10).toString();
+            word->m_adv_English = query.value(11).toString();
+            word->m_vt_Chinese = query.value(12).toString();
+            word->m_vt_English = query.value(13).toString();
+            word->m_vi_Chinese = query.value(14).toString();
+            word->m_vi_English = query.value(15).toString();
+            word->m_pastTense = query.value(16).toString();
+            word->m_pastParticiple = query.value(17).toString();
+            word->m_presentParticiple = query.value(18).toString();
+            word->m_thirdPersonSingular = query.value(19).toString();
+            word->m_noun_Chinese = query.value(20).toString();
+            word->m_noun_English = query.value(21).toString();
+            word->m_prep_Chinese = query.value(22).toString();
+            word->m_prep_English = query.value(23).toString();
+            word->m_conj_Chinese = query.value(24).toString();
+            word->m_conj_English = query.value(25).toString();
+            word->m_pron_Chinese = query.value(26).toString();
+            word->m_pron_English = query.value(27).toString();
+            word->m_art_Chinese = query.value(28).toString();
+            word->m_art_English = query.value(29).toString();
+            word->m_exampleSentence[0] = query.value(30).toString();
+            word->m_exampleSentence[1] = query.value(31).toString();
+            word->m_exampleSentence[2] = query.value(32).toString();
+            word->m_exampleSentence[3] = query.value(33).toString();
+            word->m_exampleSentence[4] = query.value(34).toString();
+            word->m_exampleSentence[5] = query.value(35).toString();
+            word->m_synonym = query.value(36).toString();
+            word->m_antonym = query.value(37).toString();
             return true;
         }
     }

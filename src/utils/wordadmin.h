@@ -19,6 +19,7 @@ public:
     QString m_name;
     int m_times;
     QDateTime m_modifyTime;
+    int m_groupid;
     int m_remember;
     bool m_isPhrase;
 };
@@ -34,6 +35,7 @@ public:
     QString m_name;
     int m_times;
     QDateTime m_modifyTime;
+    int m_groupid;
     int m_remember;
     bool m_isPhrase;
     QString m_phoneticSymbol;
