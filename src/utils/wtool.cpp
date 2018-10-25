@@ -520,6 +520,16 @@ QString WTool::getWordMemorizeWidgetQss()
     return readFileInfo(QString("./skin/qss/%1/WordMemorizeWidget.qss").arg(getScreenSize()));
 }
 
+QString WTool::getWordFunctionWidgetQss()
+{
+    return readFileInfo(QString("./skin/qss/%1/WordFunctionWidget.qss").arg(getScreenSize()));
+}
+
+QString WTool::getWordSettingWidgetQss()
+{
+    return readFileInfo(QString("./skin/qss/%1/WordSettingWidget.qss").arg(getScreenSize()));
+}
+
 QString WTool::getWordMemorizeWidgetJsonPath()
 {
     return QString("./skin/qss/%1/WordMemorizeWidget.json").arg(getScreenSize());

@@ -11,6 +11,8 @@
 #include "wmessage.h"
 #include <QVector>
 #include "wordmemorizewidget.h"
+#include "wordfunctionwidget.h"
+#include "wordsettingwidget.h"
 
 namespace Ui
 {
@@ -24,8 +26,8 @@ class WordTerminator : public QDialog
 public:
     enum VIEW
     {
-        Widget_WordLibrary, Widget_WordCreate, Widget_WordShow, WIdget_WordMemorize,
-        Widget_Setting
+        Widget_WordLibrary, Widget_WordCreate, Widget_WordShow, Widget_WordMemorize,
+        Widget_Function, Widget_Setting
     };
 
     explicit WordTerminator(QWidget *parent = 0);
@@ -64,6 +66,7 @@ private:
     QPushButton *btn_export;
     WTButton *btn_lib;
     WTButton *btn_mem;
+    WTButton *btn_fun;
     WTButton *btn_set;
 
     QStackedWidget *stackedWidget;
@@ -72,6 +75,8 @@ private:
     WordCreateWidget *wordCreate;
     WordShowWidget *wordShow;
     WordMemorizeWidget *wordMemorize;
+    WordFunctionWidget *wordFunc;
+    WordSettingWidget *wordSetting;
 };
 
 #endif // WORDTERMINATOR_H

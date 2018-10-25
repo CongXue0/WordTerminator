@@ -30,23 +30,27 @@ QLabel#label_menubg{
 /**********WTButton**********/
 WTButton#btn_lib,
 WTButton#btn_mem,
+WTButton#btn_fun,
 WTButton#btn_set{
 	font-size:24px;
 	color:#ffffff;
 }
 WTButton#btn_lib:indicator,
 WTButton#btn_mem:indicator,
+WTButton#btn_fun:indicator,
 WTButton#btn_set:indicator{
 	width:40px;
 	height:40px;
 }
 WTButton#btn_lib:hover,
 WTButton#btn_mem:hover,
+WTButton#btn_fun:hover,
 WTButton#btn_set:hover{
 	background:#2f88d5;
 }
 WTButton#btn_lib:checked,
 WTButton#btn_mem:checked,
+WTButton#btn_fun:checked,
 WTButton#btn_set:checked{
 	background:#4595d9;
 }
@@ -64,8 +68,15 @@ WTButton#btn_mem:indicator:checked,
 WTButton#btn_mem:indicator:unchecked{
 	image:url(skin/picture/15.6/memory.png);
 }
-WTButton#btn_set{
+WTButton#btn_fun{
 	qproperty-geometry:rect(0 200 180 40);
+}
+WTButton#btn_fun:indicator:checked,
+WTButton#btn_fun:indicator:unchecked{
+	image:url(skin/picture/15.6/function.png);
+}
+WTButton#btn_set{
+	qproperty-geometry:rect(0 250 180 40);
 }
 WTButton#btn_set:indicator:checked,
 WTButton#btn_set:indicator:unchecked{

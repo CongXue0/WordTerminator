@@ -40,7 +40,9 @@ SOURCES += main.cpp\
     src/widget/wordmemorizewidget.cpp \
     src/utils/memorythread.cpp \
     src/utils/json.cpp \
-    src/utils/global.cpp
+    src/utils/global.cpp \
+    src/widget/wordfunctionwidget.cpp \
+    src/widget/wordsettingwidget.cpp
 
 HEADERS  += src/widget/wordterminator.h \
     src/utils/wtool.h \
@@ -56,6 +58,8 @@ HEADERS  += src/widget/wordterminator.h \
     src/widget/wordmemorizewidget.h \
     src/utils/memorythread.h \
     src/utils/json.h \
-    src/utils/global.h
+    src/utils/global.h \
+    src/widget/wordfunctionwidget.h \
+    src/widget/wordsettingwidget.h
 
 FORMS    += src/widget/wordterminator.ui

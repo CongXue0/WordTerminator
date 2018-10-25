@@ -57,6 +57,8 @@ public:
     static QString getWordCreateWidgetQss();
     static QString getWordShowWidgetQss();
     static QString getWordMemorizeWidgetQss();
+    static QString getWordFunctionWidgetQss();
+    static QString getWordSettingWidgetQss();
 
     /* 重要路径 */
     static QString getWordMemorizeWidgetJsonPath();

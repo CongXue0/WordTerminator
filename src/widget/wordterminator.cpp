@@ -91,6 +91,12 @@ WordTerminator::WordTerminator(QWidget *parent) :
     btn_mem->setAutoExclusive(true);
     connect(btn_mem, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
 
+    btn_fun = new WTButton(label_menubg);
+    btn_fun->setObjectName("btn_fun");
+    btn_fun->setText("其他功能");
+    btn_fun->setAutoExclusive(true);
+    connect(btn_fun, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+
     btn_set = new WTButton(label_menubg);
     btn_set->setObjectName("btn_set");
     btn_set->setText("设置选项");
@@ -132,8 +138,15 @@ WordTerminator::WordTerminator(QWidget *parent) :
     connect(this, SIGNAL(stopWordMemorizeSignal(bool*)), wordMemorize, SLOT(slot_stopWordMemorize(bool*)));
     stackedWidget->addWidget(wordMemorize);
 
-    p_forgetThread->start();
+    wordFunc = new WordFunctionWidget(this);
+    wordFunc->setObjectName("WordFunctionWidget");
+    stackedWidget->addWidget(wordFunc);
 
+    wordSetting = new WordSettingWidget(this);
+    wordSetting->setObjectName("WordSettingWidget");
+    stackedWidget->addWidget(wordSetting);
+
+    p_forgetThread->start();
 }
 
 WordTerminator::~WordTerminator()
@@ -316,9 +329,8 @@ void WordTerminator::slot_wtbuttonPressed()
 {
     QString name = sender()->objectName();
     int index = stackedWidget->currentIndex();
-    if ((name == "btn_lib" && index == Widget_WordLibrary) ||
-        (name == "btn_mem" && index == WIdget_WordMemorize) ||
-        (name == "btn_set" && index == Widget_Setting))
+    if ((name == "btn_lib" && index == Widget_WordLibrary) || (name == "btn_mem" && index == Widget_WordMemorize) ||
+        (name == "btn_fun" && index == Widget_Function) || (name == "btn_set" && index == Widget_Setting))
         return;
 
     switch (index)//先处理
@@ -329,7 +341,7 @@ void WordTerminator::slot_wtbuttonPressed()
         break;
     case Widget_WordShow:
         break;
-    case WIdget_WordMemorize:
+    case Widget_WordMemorize:
         if (wordMemorize->getMode() == WordMemorizeWidget::MEMORY)
         {
             bool ret = false;
@@ -337,6 +349,8 @@ void WordTerminator::slot_wtbuttonPressed()
             if (!ret)
                 return;
         }
+        break;
+    case Widget_Function:
         break;
     case Widget_Setting:
         break;
@@ -346,7 +360,9 @@ void WordTerminator::slot_wtbuttonPressed()
     if (name == "btn_lib")
         index = Widget_WordLibrary;
     else if (name == "btn_mem")
-        index = WIdget_WordMemorize;
+        index = Widget_WordMemorize;
+    else if (name == "btn_fun")
+        index = Widget_Function;
     else if (name == "btn_set")
         index = Widget_Setting;
     switch (index)//后处理
@@ -356,9 +372,11 @@ void WordTerminator::slot_wtbuttonPressed()
         wordLibrary->updateWordList();
         wordLibrary->updateWordStatistics();
         break;
-    case WIdget_WordMemorize:
+    case Widget_WordMemorize:
         wordMemorize->recoveryInterface();
         wordMemorize->updateWordStatistics();
+        break;
+    case Widget_Function:
         break;
     case Widget_Setting:
         break;
@@ -366,13 +384,33 @@ void WordTerminator::slot_wtbuttonPressed()
     pushWidgetIndex(index);
     stackedWidget->setCurrentIndex(index);
 
-    WTButton *btn[3] = {btn_lib, btn_mem, btn_set};
-    for (int i = 0; i < 3; i++)
+    if (name == "btn_lib")
     {
-        if (btn[i]->objectName() == name)
-            btn[i]->setActive(true);
-        else
-            btn[i]->setActive(false);
+        btn_lib->setActive(true);
+        btn_mem->setActive(false);
+        btn_fun->setActive(false);
+        btn_set->setActive(false);
+    }
+    else if (name == "btn_mem")
+    {
+        btn_lib->setActive(false);
+        btn_mem->setActive(true);
+        btn_fun->setActive(false);
+        btn_set->setActive(false);
+    }
+    else if (name == "btn_fun")
+    {
+        btn_lib->setActive(false);
+        btn_mem->setActive(false);
+        btn_fun->setActive(true);
+        btn_set->setActive(false);
+    }
+    else if (name == "btn_set")
+    {
+        btn_lib->setActive(false);
+        btn_mem->setActive(false);
+        btn_fun->setActive(false);
+        btn_set->setActive(true);
     }
 }
 
