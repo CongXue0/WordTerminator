@@ -48,35 +48,9 @@ WordTerminator::WordTerminator(QWidget *parent) :
     label_menubg = new QLabel(this);
     label_menubg->setObjectName("label_menubg");
 
-    btn_refresh = new QPushButton(label_menubg);
-    btn_refresh->setObjectName("btn_boss");
-    btn_refresh->setText("Refresh");
-    if (WTool::getScreenSize() == "14")
-    {
-        btn_refresh->setStyleSheet("QPushButton{font-size:20px;color:#ffffff;"
-            "background:#4595d9;qproperty-geometry:rect(30 8 80 40);}");
-    }
-    else
-    {
-        btn_refresh->setStyleSheet("QPushButton{font-size:24px;color:#ffffff;"
-            "background:#4595d9;qproperty-geometry:rect(40 10 100 50);}");
-    }
-    connect(btn_refresh, SIGNAL(pressed()), this, SLOT(slot_btnRefresh_pressed()));
-
-    btn_export = new QPushButton(label_menubg);
-    btn_export->setObjectName("btn_export");
-    btn_export->setText("Export");
-    if (WTool::getScreenSize() == "14")
-    {
-        btn_export->setStyleSheet("QPushButton{font-size:20px;color:#000000;"
-            "background:#8effff;qproperty-geometry:rect(30 585 80 40);}");
-    }
-    else
-    {
-        btn_export->setStyleSheet("QPushButton{font-size:30px;color:#000000;"
-            "background:#8effff;qproperty-geometry:rect(40 730 100 50);}");
-    }
-    connect(btn_export, SIGNAL(pressed()), this, SLOT(slot_btnExport_pressed()));
+    btn_save = new QPushButton(label_menubg);
+    btn_save->setObjectName("btn_save");
+    connect(btn_save, SIGNAL(clicked()), this, SLOT(slot_saveBtn_clicked()));
 
     btn_lib = new WTButton(label_menubg);
     btn_lib->setObjectName("btn_lib");
@@ -226,102 +200,24 @@ void WordTerminator::clearWidgetIndex()
     m_widgets.clear();
 }
 
-void WordTerminator::exportWord(QString msg)
+void WordTerminator::slot_saveBtn_clicked()
 {
-    QStringList list = msg.split(',');
-    int left = QString(list.at(0)).trimmed().toInt(),
-        right = QString(list.at(1)).trimmed().toInt();
-    int remember = QString(list.at(2)).trimmed().toInt();
-    QString rem;
-    if (remember == 0)
-        rem = "u";
-    else if (remember == 1)
-        rem = "r";
-    else if (remember == 2)
-        rem = "a";
-    else
+    int index = stackedWidget->currentIndex();
+    switch (index)
     {
-        QMessageBox::about(this, "提示", "格式错误");
-        return;
-    }
-    QString fileName = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0) +
-        QString("/word(%1-%2)%3_%4.txt").arg(left).arg(right).arg(rem)
-        .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd"));
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        QMessageBox::warning(this, "file write", "can't open", QMessageBox::Yes);
-    }
-    QTextStream in(&file);
-    QTextCodec *code = QTextCodec::codecForName("utf8");
-    in.setCodec(code);
-
-    if (remember == 0)
-        list = p_wordAdmin->getWordListFromTimes(left, right, false);
-    else if (remember == 1)
-        list = p_wordAdmin->getWordListFromTimes(left, right, true);
-    else if (remember == 2)
-        list = p_wordAdmin->getAllWordList();
-    int count = list.count();
-    if (count > 0)
-    {
-        WordInfo wordInfo;
-        QProgressDialog dialog("单词导出进度", "取消", 0, count, this);
-        dialog.setWindowTitle(tr("单词导出对话框"));
-        dialog.setWindowModality(Qt::WindowModal);
-        dialog.show();
-        for (int i = 0; i < count; i++)
-        {
-            dialog.setValue(i);
-            QCoreApplication::processEvents();
-            if (dialog.wasCanceled())
-                break;
-            if (p_wordAdmin->getWordInfo(list.at(i), &wordInfo))
-            {
-                if (i == count - 1)
-                    in << wordInfo.toText();
-                else
-                    in << wordInfo.toText() + "\n";
-            }
-            else
-            {
-                in << list.at(i) + " " << "get fail\n";
-            }
-        }
-        dialog.setValue(count);
-    }
-    else
-    {
-        in << "没有单词";
-    }
-    QMessageBox::about(this, "提示", "导出单词数 " + QString::number(count));
-    file.close();
-    file.setPermissions(QFile::ReadOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
-}
-
-void WordTerminator::slot_btnRefresh_pressed()
-{
-    int num = p_wordAdmin->resetAllWordRemerber(this);
-    QMessageBox::about(this, "提示", "ok " + QString::number(num));
-}
-
-void WordTerminator::slot_btnExport_pressed()
-{
-    bool ok = false;
-    QString text = QInputDialog::getText(this, "Export words", "Please input range, such as 0,9,0",
-        QLineEdit::Normal, "0,9,0", &ok);
-    if (ok)
-    {
-        if (text != "all")
-        {
-            exportWord(text);
-        }
-        else
-        {
-            exportWord("0,9,0");
-            exportWord("0,50,1");
-            exportWord("100,200,1");
-        }
+    case Widget_WordLibrary:
+        break;
+    case Widget_WordCreate:
+        break;
+    case Widget_WordShow:
+        break;
+    case Widget_WordMemorize:
+        break;
+    case Widget_Function:
+        wordFunc->saveGlobalValue();
+        break;
+    case Widget_Setting:
+        break;
     }
 }
 
@@ -377,6 +273,7 @@ void WordTerminator::slot_wtbuttonPressed()
         wordMemorize->updateWordStatistics();
         break;
     case Widget_Function:
+        wordFunc->reloadGlobalValue();
         break;
     case Widget_Setting:
         break;

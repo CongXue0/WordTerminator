@@ -14,5 +14,5 @@ void WordSettingWidget::recoveryInterface()
 
 void WordSettingWidget::loadStyleSheet()
 {
-     setStyleSheet(WTool::getWordMemorizeWidgetQss());
+     setStyleSheet(WTool::getWordSettingWidgetQss());
 }

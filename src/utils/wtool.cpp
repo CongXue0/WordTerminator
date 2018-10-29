@@ -23,7 +23,7 @@ QRect WTool::getScreenGeometry()
 }
 
 QString WTool::getScreenSize()
-{
+{//x1.24
 //    return "15.6";
 //    return "14";
     int height = getScreenGeometry().height();

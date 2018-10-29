@@ -43,14 +43,12 @@ private:
     void pushWidgetIndex(int index);
     void popWidgetIndex();
     void clearWidgetIndex();
-    void exportWord(QString msg);
 
 signals:
     void stopWordMemorizeSignal(bool *ret);
 
 private slots:
-    void slot_btnRefresh_pressed();
-    void slot_btnExport_pressed();
+    void slot_saveBtn_clicked();
     void slot_wtbuttonPressed();
     void slot_handleMessage(WMessage message);
 
@@ -62,8 +60,8 @@ private:
 
     QLabel *label_menubg;
 
-    QPushButton *btn_refresh;
-    QPushButton *btn_export;
+    QPushButton *btn_save;
+
     WTButton *btn_lib;
     WTButton *btn_mem;
     WTButton *btn_fun;

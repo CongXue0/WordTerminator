@@ -6,11 +6,12 @@
 
 quint32 XmlVar::m_flag = 0;
 
-//XmlVar Global::m_var1;
-//XmlVar Global::m_var2;
-//XmlVar Global::m_var3;
-//XmlVar Global::m_var4;
-//XmlVar Global::m_var5;
+XmlVar Global::m_curScript;
+XmlVar Global::m_script0;
+XmlVar Global::m_script1;
+XmlVar Global::m_script2;
+XmlVar Global::m_script3;
+XmlVar Global::m_script4;
 
 QString Global::m_path;
 
@@ -88,6 +89,7 @@ void Global::load()
         DEBUG << "Error: Cannot read file " << m_path << ": " << file.errorString();
         return;
     }
+    int count = 0;
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNext();
     xmlReader.readNext();
@@ -98,40 +100,57 @@ void Global::load()
         xmlReader.readNext();
         while (!xmlReader.atEnd())
         {
-//            if (xmlReader.name() == "VAR1")
-//            {
-//                m_var1.setValue(xmlReader.readElementText());
-//            }
-//            else if (xmlReader.name() == "VAR2")
-//            {
-//                m_var2.setValue(xmlReader.readElementText());
-//            }
-//            else if (xmlReader.name() == "VAR3")
-//            {
-//                m_var3.setValue(xmlReader.readElementText());
-//            }
-//            else if (xmlReader.name() == "VAR4")
-//            {
-//                m_var4.setValue(xmlReader.readElementText());
-//            }
-//            else if (xmlReader.name() == "VAR5")
-//            {
-//                m_var5.setValue(xmlReader.readElementText());
-//            }
+            if (!xmlReader.name().isEmpty())
+            {
+                count++;
+            }
+            if (xmlReader.name() == "CURSCRIPT")
+            {
+                m_curScript.setValue(xmlReader.readElementText());
+            }
+            else if (xmlReader.name() == "SCRIPT0")
+            {
+                m_script0.setValue(xmlReader.readElementText());
+            }
+            else if (xmlReader.name() == "SCRIPT1")
+            {
+                m_script1.setValue(xmlReader.readElementText());
+            }
+            else if (xmlReader.name() == "SCRIPT2")
+            {
+                m_script2.setValue(xmlReader.readElementText());
+            }
+            else if (xmlReader.name() == "SCRIPT3")
+            {
+                m_script3.setValue(xmlReader.readElementText());
+            }
+            else if (xmlReader.name() == "SCRIPT4")
+            {
+                m_script4.setValue(xmlReader.readElementText());
+            }
             xmlReader.readNext();
             xmlReader.readNext();
         }
     }
-    XmlVar::m_flag = 0;
+    if (count != 6)
+    {
+        XmlVar::m_flag = 1;
+        saveXML();
+    }
+    else
+    {
+        XmlVar::m_flag = 0;
+    }
 }
 
 void Global::reset()
 {
-//    m_var1 = XmlVar("VAR1", "0");
-//    m_var2 = XmlVar("VAR2", "0");
-//    m_var3 = XmlVar("VAR3", "0");
-//    m_var4 = XmlVar("VAR4", "0");
-//    m_var5 = XmlVar("VAR5", "0");
+    m_curScript = XmlVar("CURSCRIPT", "0");
+    m_script0 = XmlVar("SCRIPT0", "0,9,0,0;");
+    m_script1 = XmlVar("SCRIPT1", "");
+    m_script2 = XmlVar("SCRIPT2", "");
+    m_script3 = XmlVar("SCRIPT3", "");
+    m_script4 = XmlVar("SCRIPT4", "");
 }
 
 void Global::saveXML()
@@ -147,11 +166,14 @@ void Global::saveXML()
     xmlWriter.setAutoFormatting(true);
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement("CONFIG");
-//    xmlWriter.writeTextElement(m_var1.m_xmlName, m_var1.m_varValue);
-//    xmlWriter.writeTextElement(m_var2.m_xmlName, m_var2.m_varValue);
-//    xmlWriter.writeTextElement(m_var3.m_xmlName, m_var3.m_varValue);
-//    xmlWriter.writeTextElement(m_var4.m_xmlName, m_var4.m_varValue);
-//    xmlWriter.writeTextElement(m_var5.m_xmlName, m_var5.m_varValue);
+
+    xmlWriter.writeTextElement(m_curScript.m_xmlName, m_curScript.m_varValue);
+    xmlWriter.writeTextElement(m_script0.m_xmlName, m_script0.m_varValue);
+    xmlWriter.writeTextElement(m_script1.m_xmlName, m_script1.m_varValue);
+    xmlWriter.writeTextElement(m_script2.m_xmlName, m_script2.m_varValue);
+    xmlWriter.writeTextElement(m_script3.m_xmlName, m_script3.m_varValue);
+    xmlWriter.writeTextElement(m_script4.m_xmlName, m_script4.m_varValue);
+
     xmlWriter.writeEndElement();
     xmlWriter.writeEndDocument();
     file.close();

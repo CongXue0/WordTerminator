@@ -50,11 +50,12 @@ public:
     static void reset();
     static void saveXML();
 
-//    static XmlVar m_var1;
-//    static XmlVar m_var2;
-//    static XmlVar m_var3;
-//    static XmlVar m_var4;
-//    static XmlVar m_var5;
+    static XmlVar m_curScript; //0-4
+    static XmlVar m_script0;
+    static XmlVar m_script1;
+    static XmlVar m_script2;
+    static XmlVar m_script3;
+    static XmlVar m_script4;
 
 private:
 

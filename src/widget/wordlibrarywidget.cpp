@@ -68,16 +68,6 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
 
     combox_search = new QComboBox(this);
     combox_search->setObjectName("combox_search");
-    if (WTool::getScreenSize() == "14")
-    {
-        combox_search->setStyleSheet("QComboBox{font-size:24px;"
-            "qproperty-geometry:rect(450 310 200 40);}");
-    }
-    else
-    {
-        combox_search->setStyleSheet("QComboBox{font-size:30px;"
-            "qproperty-geometry:rect(556 395 254 50);}");
-    }
     combox_search->insertItem(0, "prefix");
     combox_search->insertItem(1, "suffix");
     combox_search->insertItem(2, "contain");
