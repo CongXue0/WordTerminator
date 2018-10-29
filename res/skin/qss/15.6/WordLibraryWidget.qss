@@ -89,3 +89,22 @@ QRadioButton#radioBtn_range4{
 QRadioButton#radioBtn_forever{
 	qproperty-geometry:rect(556 330 254 50);
 }
+
+/***********QComboBox***********/
+QComboBox#combox_search{
+	qproperty-geometry:rect(556 395 254 50);
+	border:2px solid #b0c4de;
+	background:rgba(255,255,255,0);
+	font-size:30px;
+}
+QComboBox::down-arrow{
+	background:url(skin/picture/15.6/combox_arrow.png) no-repeat;
+	padding:0px;
+	width:40px;
+	height:25px;
+}
+QComboBox::drop-down{
+	border:none;
+	background:rgba(255,255,255,0);
+}
+

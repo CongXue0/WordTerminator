@@ -16,8 +16,9 @@ WordTerminator{
 /**********QScrollArea**********/
 /***********QWidget***********/
 /***********QTextEdit***********/
+/***********QComboBox***********/
 
-QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView{
+QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView,QComboBox{
 	font-family:"Microsoft Yahei";
 }
 
@@ -25,6 +26,18 @@ QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBo
 QLabel#label_menubg{
 	qproperty-geometry:rect(0 0 180 790);
 	background:url(skin/picture/15.6/bg_wt.png);
+}
+
+/**********QPushButton**********/
+QPushButton#btn_save{
+	qproperty-geometry:rect(50 20 80 80);
+	background:url(skin/picture/15.6/save.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_save:hover{
+	background:url(skin/picture/15.6/save_hover.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_save:pressed{
+	background:url(skin/picture/15.6/save.png) 0 center no-repeat rgba(255,255,255,0);
 }
 
 /**********WTButton**********/
@@ -55,28 +68,28 @@ WTButton#btn_set:checked{
 	background:#4595d9;
 }
 WTButton#btn_lib{
-	qproperty-geometry:rect(0 100 180 40);
+	qproperty-geometry:rect(0 120 180 40);
 }
 WTButton#btn_lib:indicator:checked,
 WTButton#btn_lib:indicator:unchecked{
 	image:url(skin/picture/15.6/dictionary.png);
 }
 WTButton#btn_mem{
-	qproperty-geometry:rect(0 150 180 40);
+	qproperty-geometry:rect(0 170 180 40);
 }
 WTButton#btn_mem:indicator:checked,
 WTButton#btn_mem:indicator:unchecked{
 	image:url(skin/picture/15.6/memory.png);
 }
 WTButton#btn_fun{
-	qproperty-geometry:rect(0 200 180 40);
+	qproperty-geometry:rect(0 220 180 40);
 }
 WTButton#btn_fun:indicator:checked,
 WTButton#btn_fun:indicator:unchecked{
 	image:url(skin/picture/15.6/function.png);
 }
 WTButton#btn_set{
-	qproperty-geometry:rect(0 250 180 40);
+	qproperty-geometry:rect(0 270 180 40);
 }
 WTButton#btn_set:indicator:checked,
 WTButton#btn_set:indicator:unchecked{
@@ -87,3 +100,4 @@ WTButton#btn_set:indicator:unchecked{
 QStackedWidget#stackedWidget{
 	qproperty-geometry:rect(180 0 820 790);
 }
+

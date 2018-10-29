@@ -331,3 +331,4 @@ QPushButton#btn_confirm:hover{
 QPushButton#btn_confirm:pressed{
 	background:url(skin/picture/14/hook_pressed.png) 0 center no-repeat rgba(255,255,255,0);
 }
+

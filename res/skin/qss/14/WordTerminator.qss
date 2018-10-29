@@ -16,8 +16,9 @@ WordTerminator{
 /**********QScrollArea**********/
 /***********QWidget***********/
 /***********QTextEdit***********/
+/***********QComboBox***********/
 
-QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView{
+QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView,QComboBox{
 	font-family:"Microsoft Yahei";
 }
 
@@ -25,6 +26,18 @@ QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBo
 QLabel#label_menubg{
 	qproperty-geometry:rect(0 0 140 630);
 	background:url(skin/picture/14/bg_wt.png);
+}
+
+/**********QPushButton**********/
+QPushButton#btn_save{
+	qproperty-geometry:rect(40 20 60 60);
+	background:url(skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_save:hover{
+	background:url(skin/picture/14/save_hover.png) 0 center no-repeat rgba(255,255,255,0);
+}
+QPushButton#btn_save:pressed{
+	background:url(skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
 }
 
 /**********WTButton**********/
@@ -87,3 +100,4 @@ WTButton#btn_set:indicator:unchecked{
 QStackedWidget#stackedWidget{
 	qproperty-geometry:rect(140 0 660 630);
 }
+
