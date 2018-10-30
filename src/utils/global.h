@@ -5,20 +5,23 @@
 #include <qglobal.h>
 #include <QMutex>
 
+#define DECLINE_NUM 10
+#define XMLVARNUM 18
+
 class MemoryVar
 {
 public:
     MemoryVar() {}
-    MemoryVar(QString value) : m_value(value) {}
+    MemoryVar(QString value);
     void setMemValue(const QString &value);
-    void setMemValue(const quint32 &value);
+    void setMemValue(const int &value);
     QString getMemValueStr();
-    quint32 getMemValueInt();
+    int getMemValueInt();
 
 private:
-    QString m_value;
+    QString m_valueStr;
+    int m_valueInt;
     QMutex m_mutex;
-
 };
 
 class XmlVar
@@ -26,16 +29,17 @@ class XmlVar
 public:
     friend class Global;
     XmlVar() {}
-    XmlVar(QString xmlName, QString varValue) : m_xmlName(xmlName), m_varValue(varValue) {}
+    XmlVar(QString xmlName, QString value);
     void setValue(const QString &value);
-    void setValue(const quint32 &value);
+    void setValue(const int &value);
     QString getValueStr();
-    quint32 getValueInt();
+    int getValueInt();
 
 private:
     static quint32 m_flag;
     QString m_xmlName;
-    QString m_varValue;
+    QString m_valueStr;
+    int m_valueInt;
 
 };
 
@@ -50,6 +54,9 @@ public:
     static void reset();
     static void saveXML();
 
+    static XmlVar m_leastForeverTimes;//记忆时可以设为已记忆的最小次数
+    static XmlVar m_memoryInterval;//刚记忆过的单词过多久可以再次记忆(分钟)
+    static XmlVar m_decline_times[DECLINE_NUM];//单词过多久记忆次数下降一次的时间分布
     static XmlVar m_curScript; //0-4
     static XmlVar m_script0;
     static XmlVar m_script1;

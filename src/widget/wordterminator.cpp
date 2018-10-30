@@ -26,14 +26,14 @@ WordTerminator::WordTerminator(QWidget *parent) :
     ui(new Ui::WordTerminator)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint |
-        Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
 
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     QDir::setCurrent(QCoreApplication::applicationDirPath());
+
+    WTool::dirInit();
     Global::init(WTool::getConfigPath());
 
-    WTool::memoryConfigInit();
     if (p_wordAdmin == NULL)
         p_wordAdmin = WordAdmin::getInstance();
     if (p_forgetThread == NULL)
@@ -216,6 +216,7 @@ void WordTerminator::slot_saveBtn_clicked()
         wordFunc->saveGlobalValue();
         break;
     case Widget_Setting:
+        wordSetting->saveGlobalValue();
         break;
     }
 }
@@ -275,6 +276,7 @@ void WordTerminator::slot_wtbuttonPressed()
         wordFunc->reloadGlobalValue();
         break;
     case Widget_Setting:
+        wordSetting->reloadGlobalValue();
         break;
     }
     pushWidgetIndex(index);

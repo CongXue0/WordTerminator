@@ -5,7 +5,6 @@
 #include <QFont>
 #include <QDebug>
 
-#define DECLINE_NUM 10
 #define BOOLSTR(a) ((a == true) ? "true" : "false")
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
 #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split('\\').last()).arg(__FUNCTION__).arg(__LINE__)
@@ -14,6 +13,7 @@ class WTool
 {
 public:
     /* 其他 */
+    static void dirInit();//初始化文件夹
     static QRect getScreenGeometry();
     static QString getScreenSize();
     static int divide(int a, int b);
@@ -23,6 +23,10 @@ public:
 
     /* 文件操作 */
     static QString readFileInfo(QString path);
+    static void appendFileInfo(QString path, QString info);
+    static void writeFileInfo(QString path, QString info);
+    static bool makePath(QString path);
+    static bool makeDir(QString path);
 
     /* QString功能 */
     static int getFontLength(QFont font, QString txt);
@@ -40,11 +44,9 @@ public:
     static QString shieldWord(QString txt, QString word);
 
     /* 遗忘算法 */
-    static void memoryConfigInit();
     static uint getDeclinePeriod(int times);
     static bool memoryDecline(int &times, QDateTime &start, QDateTime end);
     static bool timesCanDecline(int times, QDateTime start, QDateTime end);
-    static int getLeastForeverTimes();
     static uint getMemoryInterval();//second
 
     /* 间断延时 */
@@ -66,9 +68,9 @@ public:
 
 private:
     static QString m_uniStr;
-    static int leastForeverTimes;
-    static uint memoryInterval;//单位 分钟
-    static uint declineArray[DECLINE_NUM];//单位 小时
+//    static int leastForeverTimes;
+//    static uint memoryInterval;//单位 分钟
+//    static uint declineArray[DECLINE_NUM];//单位 小时
 
 };
 

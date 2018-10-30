@@ -6,6 +6,9 @@
 
 quint32 XmlVar::m_flag = 0;
 
+XmlVar Global::m_leastForeverTimes;
+XmlVar Global::m_memoryInterval;
+XmlVar Global::m_decline_times[10];
 XmlVar Global::m_curScript;
 XmlVar Global::m_script0;
 XmlVar Global::m_script1;
@@ -16,56 +19,73 @@ XmlVar Global::m_script4;
 QString Global::m_path;
 QVector<XmlVar *> Global::m_varList;
 
+MemoryVar::MemoryVar(QString value)
+{
+    m_valueStr = value;
+    m_valueInt = value.toInt();
+}
+
 void MemoryVar::setMemValue(const QString &value)
 {
     m_mutex.lock();
-    m_value = value;
+    m_valueStr = value;
+    m_valueInt = value.toInt();
     m_mutex.unlock();
 }
 
-void MemoryVar::setMemValue(const quint32 &value)
+void MemoryVar::setMemValue(const int &value)
 {
     m_mutex.lock();
-    m_value = QString::number(value);
+    m_valueStr = QString::number(value);
+    m_valueInt = value;
     m_mutex.unlock();
 }
 
 QString MemoryVar::getMemValueStr()
 {
-    return m_value;
+    return m_valueStr;
 }
 
-quint32 MemoryVar::getMemValueInt()
+int MemoryVar::getMemValueInt()
 {
-    return m_value.toUInt();
+    return m_valueInt;
+}
+
+XmlVar::XmlVar(QString xmlName, QString value)
+{
+    m_xmlName = xmlName;
+    m_valueStr = value;
+    m_valueInt = value.toInt();
 }
 
 void XmlVar::setValue(const QString &value)
 {
-    if (m_varValue != value)
+    if (m_valueStr != value)
     {
         m_flag++;
-        m_varValue = value;
+        m_valueStr = value;
+        m_valueInt = value.toInt();
     }
 }
 
-void XmlVar::setValue(const quint32 &value)
+void XmlVar::setValue(const int &value)
 {
-    if (m_varValue != QString::number(value))
+    if (m_valueStr != QString::number(value))
     {
         m_flag++;
-        m_varValue = QString::number(value);
+        m_valueStr = QString::number(value);
+        m_valueInt = value;
     }
 }
 
 QString XmlVar::getValueStr()
 {
-    return m_varValue;
+    return m_valueStr;
 }
 
-quint32 XmlVar::getValueInt()
+int XmlVar::getValueInt()
 {
-    return m_varValue.toUInt();
+    return m_valueInt;
 }
 
 void Global::init(const QString &configPath)
@@ -74,6 +94,18 @@ void Global::init(const QString &configPath)
 
     reset();
 
+    m_varList.append(&m_leastForeverTimes);
+    m_varList.append(&m_memoryInterval);
+    m_varList.append(&m_decline_times[0]);
+    m_varList.append(&m_decline_times[1]);
+    m_varList.append(&m_decline_times[2]);
+    m_varList.append(&m_decline_times[3]);
+    m_varList.append(&m_decline_times[4]);
+    m_varList.append(&m_decline_times[5]);
+    m_varList.append(&m_decline_times[6]);
+    m_varList.append(&m_decline_times[7]);
+    m_varList.append(&m_decline_times[8]);
+    m_varList.append(&m_decline_times[9]);
     m_varList.append(&m_curScript);
     m_varList.append(&m_script0);
     m_varList.append(&m_script1);
@@ -103,7 +135,6 @@ void Global::load()
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNext();
     xmlReader.readNext();
-    DEBUG<<xmlReader.name();
     if (xmlReader.name() == "CONFIG")
     {
         xmlReader.readNext();
@@ -123,7 +154,7 @@ void Global::load()
             xmlReader.readNext();
         }
     }
-    if (count != 6)
+    if (count != XMLVARNUM)
     {
         XmlVar::m_flag = 1;
         saveXML();
@@ -136,6 +167,18 @@ void Global::load()
 
 void Global::reset()
 {
+    m_leastForeverTimes = XmlVar("LEASTFOREVERTIMES", "1");
+    m_memoryInterval = XmlVar("MEMORYINTERVAL", "360");
+    m_decline_times[0] = XmlVar("DECLINETIMES0", "48");
+    m_decline_times[1] = XmlVar("DECLINETIMES1", "52");
+    m_decline_times[2] = XmlVar("DECLINETIMES2", "56");
+    m_decline_times[3] = XmlVar("DECLINETIMES3", "60");
+    m_decline_times[4] = XmlVar("DECLINETIMES4", "64");
+    m_decline_times[5] = XmlVar("DECLINETIMES5", "72");
+    m_decline_times[6] = XmlVar("DECLINETIMES6", "80");
+    m_decline_times[7] = XmlVar("DECLINETIMES7", "88");
+    m_decline_times[8] = XmlVar("DECLINETIMES8", "96");
+    m_decline_times[9] = XmlVar("DECLINETIMES9", "104");
     m_curScript = XmlVar("CURSCRIPT", "0");
     m_script0 = XmlVar("SCRIPT0", "0,9,0,0;");
     m_script1 = XmlVar("SCRIPT1", "");
@@ -160,7 +203,7 @@ void Global::saveXML()
 
     for (int i = 0; i < m_varList.count(); i++)
     {
-        xmlWriter.writeTextElement(m_varList[i]->m_xmlName, m_varList[i]->m_varValue);
+        xmlWriter.writeTextElement(m_varList[i]->m_xmlName, m_varList[i]->m_valueStr);
     }
 
     xmlWriter.writeEndElement();

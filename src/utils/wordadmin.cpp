@@ -6,6 +6,7 @@
 #include "wtool.h"
 #include <QProgressDialog>
 #include <QCoreApplication>
+#include <QFile>
 
 BriefWordInfo WordAdmin::m_wordLib[MAX_WORD_NUM] = {0};
 WordAdmin *WordAdmin::m_wordAdmin = NULL;
@@ -828,6 +829,10 @@ WordAdmin::WordAdmin(QObject *parent) : QObject(parent)
 void WordAdmin::initDB()
 {
     //Name,Times,ModifyTime,Groupid,RememberState,IsPhrase,PhoneticSymbol,VoiceFile,Adj_Chinese,Adj_English,Adv_Chinese,Adv_English,Vt_Chinese,Vt_English,Vi_Chinese,Vi_English,PastTense,PastParticiple,PresentParticiple,ThirdPersonSingular,Noun_Chinese,Noun_English,Prep_Chinese,Prep_English,Conj_Chinese,Conj_English,Pron_Chinese,Pron_English,Art_Chinese,Art_English,ExampleSentence1,ExampleSentence2,ExampleSentence3,ExampleSentence4,ExampleSentence5,ExampleSentence6,Synonym,Antonym
+    if (!QFile(WTool::getWordDBFilePath()).exists())
+    {
+        WTool::writeFileInfo(WTool::getWordDBFilePath(), "");
+    }
     m_mutex.lockForWrite();
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(WTool::getWordDBFilePath());

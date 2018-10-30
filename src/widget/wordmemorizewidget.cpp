@@ -5,6 +5,7 @@
 #include "json.h"
 #include "memorythread.h"
 #include <QKeyEvent>
+#include "global.h"
 
 extern WordAdmin *p_wordAdmin;
 extern MemoryThread *p_memThread;
@@ -1114,7 +1115,7 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
     {
         m_lastWord = "";
         m_word.m_times++;
-        if (m_word.m_times >= WTool::getLeastForeverTimes() && m_word.m_remember <= 0)
+        if (m_word.m_times >= Global::m_leastForeverTimes.getValueInt() && m_word.m_remember <= 0)
         {
             btn_forever->setGeometry(rect_explorate_left);
             btn_forever->show();
@@ -1271,7 +1272,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
         {
             m_lastWord = "";
             m_word.m_times++;
-            if (m_word.m_times >= WTool::getLeastForeverTimes() && m_word.m_remember <= 0)
+            if (m_word.m_times >= Global::m_leastForeverTimes.getValueInt() && m_word.m_remember <= 0)
             {
                 btn_forever->setGeometry(rect_recall_left);
                 btn_forever->show();

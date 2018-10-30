@@ -9,13 +9,19 @@
 #include <QThread>
 #include "json.h"
 #include "wordadmin.h"
+#include "global.h"
+#include <QTextCodec>
 
 QString WTool::m_uniStr = QString(QString("？！。，：、（）·").unicode());
-int WTool::leastForeverTimes = 0;
-uint WTool::memoryInterval = 0;
-uint WTool::declineArray[DECLINE_NUM] = {0};
 
 extern WordAdmin *p_wordAdmin;
+
+void WTool::dirInit()
+{
+    WTool::makeDir("./user");
+    WTool::makeDir("./user/config");
+    WTool::makeDir("./user/db");
+}
 
 QRect WTool::getScreenGeometry()
 {
@@ -74,6 +80,54 @@ QString WTool::readFileInfo(QString path)
         }
     }
     return info;
+}
+
+void WTool::appendFileInfo(QString path, QString info)
+{
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+    {
+        if (!info.isEmpty())
+        {
+            QTextStream in(&file);
+            in.setCodec(QTextCodec::codecForName("utf8"));
+            in << info;
+        }
+        file.close();
+    }
+}
+
+void WTool::writeFileInfo(QString path, QString info)
+{
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        if (!info.isEmpty())
+        {
+            QTextStream in(&file);
+            in.setCodec(QTextCodec::codecForName("utf8"));
+            in << info;
+        }
+        file.close();
+    }
+}
+
+bool WTool::makePath(QString path)
+{
+    QDir dir;
+    if (!dir.exists(path))
+    {
+        return dir.mkpath(path);
+    }
+}
+
+bool WTool::makeDir(QString path)
+{
+    QDir dir;
+    if (!dir.exists(path))
+    {
+        return dir.mkdir(path);
+    }
 }
 
 int WTool::getFontLength(QFont font, QString txt)
@@ -385,38 +439,14 @@ QString WTool::shieldWord(QString txt, QString word)
     return txt;
 }
 
-void WTool::memoryConfigInit()
-{
-    QString path = "./user/config/memory.json";
-    bool ok;
-    QtJson::JsonObject result = QtJson::parse(readFileInfo(path), ok).toMap();
-    if (!ok)
-    {
-        DEBUG << "memoryConfig fail";
-        return;
-    }
-
-    leastForeverTimes = result["leastForeverTimes"].toInt();
-
-    memoryInterval = result["memoryInterval"].toInt();
-
-    QtJson::JsonObject tmp = result["decline"].toMap();
-    for (int i = 0; i < 10; i++)
-    {
-        declineArray[i] = tmp[QString::number(i + 1)].toInt();
-        DEBUG << declineArray[i];
-    }
-    DEBUG << "memoryConfig success";
-}
-
 uint WTool::getDeclinePeriod(int times)
 {
     if (times <= 0)
         times = 1;
     if (times <= DECLINE_NUM)
-        return declineArray[times - 1];
+        return Global::m_decline_times[times - 1].getValueInt();
     else
-        return declineArray[DECLINE_NUM - 1] + 24 * (times - DECLINE_NUM);
+        return Global::m_decline_times[DECLINE_NUM - 1].getValueInt() + 24 * (times - DECLINE_NUM);
 }
 
 bool WTool::memoryDecline(int &times, QDateTime &start, QDateTime end)
@@ -455,14 +485,9 @@ bool WTool::timesCanDecline(int times, QDateTime start, QDateTime end)
         return false;
 }
 
-int WTool::getLeastForeverTimes()
-{
-    return leastForeverTimes;
-}
-
 uint WTool::getMemoryInterval()//second
 {
-    return memoryInterval * 60;
+    return Global::m_memoryInterval.getValueInt() * 60;
 }
 
 void WTool::mDelay(uint msec, uint period, bool *isRun)
