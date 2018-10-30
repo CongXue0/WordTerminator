@@ -885,9 +885,20 @@ void WordAdmin::initDB()
                 .arg("[Antonym] nvarchar");             //38
             QSqlQuery query;
             if (query.exec(sql))
+            {
                 DEBUG << "DB init success";
+                if (query.exec("create index index_word on WordLibrary(Name);"))
+                {
+                    DEBUG << "index init success";
+                }
+                else
+                {
+                    DEBUG << "index init fail";
+                }
+            }
             else
                 DEBUG << "DB init fail";
+
         }
     }
     else
