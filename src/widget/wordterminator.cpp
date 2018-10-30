@@ -31,8 +31,7 @@ WordTerminator::WordTerminator(QWidget *parent) :
 
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     QDir::setCurrent(QCoreApplication::applicationDirPath());
-    Global::setXmlPath(WTool::getConfigPath());
-    Global::load();
+    Global::init(WTool::getConfigPath());
 
     WTool::memoryConfigInit();
     if (p_wordAdmin == NULL)

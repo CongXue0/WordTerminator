@@ -14,6 +14,7 @@ XmlVar Global::m_script3;
 XmlVar Global::m_script4;
 
 QString Global::m_path;
+QVector<XmlVar *> Global::m_varList;
 
 void MemoryVar::setMemValue(const QString &value)
 {
@@ -67,15 +68,24 @@ quint32 XmlVar::getValueInt()
     return m_varValue.toUInt();
 }
 
-void Global::setXmlPath(const QString &path)
+void Global::init(const QString &configPath)
 {
-    m_path = path;
+    m_path = configPath;
+
+    reset();
+
+    m_varList.append(&m_curScript);
+    m_varList.append(&m_script0);
+    m_varList.append(&m_script1);
+    m_varList.append(&m_script2);
+    m_varList.append(&m_script3);
+    m_varList.append(&m_script4);
+
+    load();
 }
 
 void Global::load()
 {
-    reset();
-
     QFile file(m_path);
     if (!file.exists())
     {
@@ -100,33 +110,14 @@ void Global::load()
         xmlReader.readNext();
         while (!xmlReader.atEnd())
         {
-            if (!xmlReader.name().isEmpty())
+            for (int i = 0; i < m_varList.count(); i++)
             {
-                count++;
-            }
-            if (xmlReader.name() == "CURSCRIPT")
-            {
-                m_curScript.setValue(xmlReader.readElementText());
-            }
-            else if (xmlReader.name() == "SCRIPT0")
-            {
-                m_script0.setValue(xmlReader.readElementText());
-            }
-            else if (xmlReader.name() == "SCRIPT1")
-            {
-                m_script1.setValue(xmlReader.readElementText());
-            }
-            else if (xmlReader.name() == "SCRIPT2")
-            {
-                m_script2.setValue(xmlReader.readElementText());
-            }
-            else if (xmlReader.name() == "SCRIPT3")
-            {
-                m_script3.setValue(xmlReader.readElementText());
-            }
-            else if (xmlReader.name() == "SCRIPT4")
-            {
-                m_script4.setValue(xmlReader.readElementText());
+                if (xmlReader.name() == m_varList[i]->m_xmlName)
+                {
+                    m_varList[i]->setValue(xmlReader.readElementText());
+                    count++;
+                    break;
+                }
             }
             xmlReader.readNext();
             xmlReader.readNext();
@@ -167,12 +158,10 @@ void Global::saveXML()
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement("CONFIG");
 
-    xmlWriter.writeTextElement(m_curScript.m_xmlName, m_curScript.m_varValue);
-    xmlWriter.writeTextElement(m_script0.m_xmlName, m_script0.m_varValue);
-    xmlWriter.writeTextElement(m_script1.m_xmlName, m_script1.m_varValue);
-    xmlWriter.writeTextElement(m_script2.m_xmlName, m_script2.m_varValue);
-    xmlWriter.writeTextElement(m_script3.m_xmlName, m_script3.m_varValue);
-    xmlWriter.writeTextElement(m_script4.m_xmlName, m_script4.m_varValue);
+    for (int i = 0; i < m_varList.count(); i++)
+    {
+        xmlWriter.writeTextElement(m_varList[i]->m_xmlName, m_varList[i]->m_varValue);
+    }
 
     xmlWriter.writeEndElement();
     xmlWriter.writeEndDocument();

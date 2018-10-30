@@ -45,7 +45,7 @@ private:
     Global() {}
 
 public:
-    static void setXmlPath(const QString &path);
+    static void init(const QString &configPath);
     static void load();
     static void reset();
     static void saveXML();
@@ -62,6 +62,7 @@ private:
 
 private:
     static QString m_path;
+    static QVector<XmlVar *> m_varList;
 
 };
 
