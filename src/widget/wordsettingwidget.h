@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QPushButton>
 
 class WordSettingWidget : public QWidget
 {
@@ -18,6 +19,9 @@ public:
 
 private:
     void loadStyleSheet();
+
+private slots:
+    void slot_btnReset_clicked();
 
 private:
     QTabWidget *tabWidget;
@@ -60,6 +64,8 @@ private:
     QLineEdit *lineEdit_groupName[21];
 
     QComboBox *combox_memLevel;
+
+    QPushButton *btn_reset;
 
 };
 

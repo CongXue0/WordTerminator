@@ -122,6 +122,11 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     combox_memLevel->insertItem(0, "简单");
     combox_memLevel->insertItem(1, "困难");
 
+    btn_reset = new QPushButton(widget_help);
+    btn_reset->setObjectName("btn_reset");
+    btn_reset->setText("恢复默认");
+    connect(btn_reset, SIGNAL(clicked()), this, SLOT(slot_btnReset_clicked()));
+
     QValidator *v1 = new QIntValidator(1, 99, this);
     lineEdit_leastFoTi->setValidator(v1);
     lineEdit_memInterval->setValidator(v2);
@@ -275,5 +280,14 @@ void WordSettingWidget::saveGlobalValue()
 
 void WordSettingWidget::loadStyleSheet()
 {
-     setStyleSheet(WTool::getWordSettingWidgetQss());
+    setStyleSheet(WTool::getWordSettingWidgetQss());
+}
+
+void WordSettingWidget::slot_btnReset_clicked()
+{
+    if (QMessageBox::question(this, "question", "Are you sure to reset all configs?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    {
+        Global::reset();
+        Global::saveXML();
+    }
 }
