@@ -6,7 +6,7 @@
 #include <QMutex>
 
 #define DECLINE_NUM 10
-#define XMLVARNUM 18
+#define XMLVARNUM 49
 
 class MemoryVar
 {
@@ -73,6 +73,7 @@ public:
     static XmlVar m_script2;
     static XmlVar m_script3;
     static XmlVar m_script4;
+    static XmlVar m_groupName[21];
 
 private:
 

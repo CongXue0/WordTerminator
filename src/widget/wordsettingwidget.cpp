@@ -75,6 +75,12 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     label_timesSet2 = new QLabel(widget_libSet);
     label_timesSet2->setObjectName("label_timesSet2");
     label_timesSet2->setText("次数设置2：");
+    for (int i = 0; i < 21; i++)
+    {
+        label_group[i] = new QLabel(widget_groupSet);
+        label_group[i]->setObjectName(QString("label_group%1").arg(i));
+        label_group[i]->setText(QString("组%1名称：").arg(i));
+    }
 
     QValidator *v2 = new QIntValidator(1, 10000, this);
     lineEdit_leastFoTi = new QLineEdit(widget_forgetSet);
@@ -105,6 +111,11 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     lineEdit_timesSet1->setObjectName("lineEdit_timesSet1");
     lineEdit_timesSet2 = new QLineEdit(widget_libSet);
     lineEdit_timesSet2->setObjectName("lineEdit_timesSet2");
+    for (int i = 0; i < 21; i++)
+    {
+        lineEdit_groupName[i] = new QLineEdit(widget_groupSet);
+        lineEdit_groupName[i]->setObjectName(QString("lineEdit_group%1Name").arg(i));
+    }
 
     combox_memLevel = new QComboBox(widget_forgetSet);
     combox_memLevel->setObjectName("combox_memLevel");
@@ -150,6 +161,10 @@ void WordSettingWidget::reloadGlobalValue()
     lineEdit_range4Left->setText(Global::m_range4Left.getValueStr());
     lineEdit_timesSet1->setText(Global::m_timesSet1.getValueStr());
     lineEdit_timesSet2->setText(Global::m_timesSet2.getValueStr());
+    for (int i = 0; i < 21; i++)
+    {
+        lineEdit_groupName[i]->setText(Global::m_groupName[i].getValueStr());
+    }
 }
 
 void WordSettingWidget::saveGlobalValue()
@@ -205,6 +220,10 @@ void WordSettingWidget::saveGlobalValue()
     {
         lineEdit_timesSet2->setText("0");
     }
+    for (int i = 0; i < 21; i++)
+    {
+        lineEdit_groupName[i]->setText(lineEdit_groupName[i]->text().trimmed());
+    }
     QString tmp;
     if (lineEdit_range1Left->text().toInt() > lineEdit_range1Right->text().toInt())
     {
@@ -246,6 +265,10 @@ void WordSettingWidget::saveGlobalValue()
     Global::m_range4Left.setValue(lineEdit_range4Left->text());
     Global::m_timesSet1.setValue(lineEdit_timesSet1->text());
     Global::m_timesSet2.setValue(lineEdit_timesSet2->text());
+    for (int i = 0; i < 21; i++)
+    {
+        Global::m_groupName[i].setValue(lineEdit_groupName[i]->text());
+    }
 
     Global::saveXML();
 }

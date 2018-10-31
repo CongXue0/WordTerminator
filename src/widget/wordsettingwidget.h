@@ -43,6 +43,7 @@ private:
     QLabel *label_range4_plus;
     QLabel *label_timesSet1;
     QLabel *label_timesSet2;
+    QLabel *label_group[21];
 
     QLineEdit *lineEdit_leastFoTi;
     QLineEdit *lineEdit_memInterval;
@@ -56,6 +57,7 @@ private:
     QLineEdit *lineEdit_range4Left;
     QLineEdit *lineEdit_timesSet1;
     QLineEdit *lineEdit_timesSet2;
+    QLineEdit *lineEdit_groupName[21];
 
     QComboBox *combox_memLevel;
 

@@ -25,6 +25,7 @@ XmlVar Global::m_script1;
 XmlVar Global::m_script2;
 XmlVar Global::m_script3;
 XmlVar Global::m_script4;
+XmlVar Global::m_groupName[21];
 
 QString Global::m_path;
 QVector<XmlVar *> Global::m_varList;
@@ -132,6 +133,27 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_script2);
     m_varList.append(&m_script3);
     m_varList.append(&m_script4);
+    m_varList.append(&m_groupName[0]);
+    m_varList.append(&m_groupName[1]);
+    m_varList.append(&m_groupName[2]);
+    m_varList.append(&m_groupName[3]);
+    m_varList.append(&m_groupName[4]);
+    m_varList.append(&m_groupName[5]);
+    m_varList.append(&m_groupName[6]);
+    m_varList.append(&m_groupName[7]);
+    m_varList.append(&m_groupName[8]);
+    m_varList.append(&m_groupName[9]);
+    m_varList.append(&m_groupName[10]);
+    m_varList.append(&m_groupName[11]);
+    m_varList.append(&m_groupName[12]);
+    m_varList.append(&m_groupName[13]);
+    m_varList.append(&m_groupName[14]);
+    m_varList.append(&m_groupName[15]);
+    m_varList.append(&m_groupName[16]);
+    m_varList.append(&m_groupName[17]);
+    m_varList.append(&m_groupName[18]);
+    m_varList.append(&m_groupName[19]);
+    m_varList.append(&m_groupName[20]);
 
     load();
 }
@@ -215,6 +237,27 @@ void Global::reset()
     m_script2 = XmlVar("SCRIPT2", "");
     m_script3 = XmlVar("SCRIPT3", "");
     m_script4 = XmlVar("SCRIPT4", "");
+    m_groupName[0] = XmlVar("GROUP0NAME", "default");
+    m_groupName[1] = XmlVar("GROUP1NAME", "");
+    m_groupName[2] = XmlVar("GROUP2NAME", "");
+    m_groupName[3] = XmlVar("GROUP3NAME", "");
+    m_groupName[4] = XmlVar("GROUP4NAME", "");
+    m_groupName[5] = XmlVar("GROUP5NAME", "");
+    m_groupName[6] = XmlVar("GROUP6NAME", "");
+    m_groupName[7] = XmlVar("GROUP7NAME", "");
+    m_groupName[8] = XmlVar("GROUP8NAME", "");
+    m_groupName[9] = XmlVar("GROUP9NAME", "");
+    m_groupName[10] = XmlVar("GROUP10NAME", "");
+    m_groupName[11] = XmlVar("GROUP11NAME", "");
+    m_groupName[12] = XmlVar("GROUP12NAME", "");
+    m_groupName[13] = XmlVar("GROUP13NAME", "");
+    m_groupName[14] = XmlVar("GROUP14NAME", "");
+    m_groupName[15] = XmlVar("GROUP15NAME", "");
+    m_groupName[16] = XmlVar("GROUP16NAME", "");
+    m_groupName[17] = XmlVar("GROUP17NAME", "");
+    m_groupName[18] = XmlVar("GROUP18NAME", "");
+    m_groupName[19] = XmlVar("GROUP19NAME", "");
+    m_groupName[20] = XmlVar("GROUP20NAME", "");
 }
 
 void Global::saveXML()
