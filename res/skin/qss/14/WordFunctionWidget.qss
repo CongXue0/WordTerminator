@@ -4,6 +4,7 @@ QLabel#label_bg_func{
 	background:url(skin/picture/14/bg_func.png);
 }
 QLabel#label_refresh,
+QLabel#label_exportRule,
 QLabel#label_export{
 	font-size:28px;
 	color:#666666;
@@ -12,15 +13,19 @@ QLabel#label_export{
 QLabel#label_refresh{
 	qproperty-geometry:rect(16 8 340 40);
 }
+QLabel#label_exportRule{
+	qproperty-geometry:rect(16 64 628 130);
+	font-size:22px;
+}
 QLabel#label_export{
-	qproperty-geometry:rect(16 110 240 40);
+	qproperty-geometry:rect(16 240 240 40);
 }
 QLabel#line1{
 	qproperty-geometry:rect(16 56 628 1);
 	background:#708090;
 }
 QLabel#line2{
-	qproperty-geometry:rect(16 158 628 1);
+	qproperty-geometry:rect(16 288 628 1);
 	background:#708090;
 }
 
@@ -32,7 +37,7 @@ QPushButton#btn_refresh{
 	color:#ffffff;
 }
 QPushButton#btn_export{
-	qproperty-geometry:rect(221 110 80 40);
+	qproperty-geometry:rect(221 240 80 40);
 	background:#8effff;
 	font-size:24px;
 	color:#666666;
@@ -40,7 +45,7 @@ QPushButton#btn_export{
 
 /***********QComboBox***********/
 QComboBox#combox_script{
-	qproperty-geometry:rect(16 64 110 40);
+	qproperty-geometry:rect(16 194 110 40);
 	border:2px solid #b0c4de;
 	background:rgba(255,255,255,0);
 	color:#666666;
@@ -59,7 +64,7 @@ QComboBox::drop-down{
 
 /**********QLineEdit**********/
 QLineEdit#lineEdit_script{
-	qproperty-geometry:rect(134 64 510 40);
+	qproperty-geometry:rect(134 194 510 40);
 	font-size:28px;
 }
 
