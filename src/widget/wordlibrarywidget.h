@@ -18,6 +18,7 @@ public:
     explicit WordLibraryWidget(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
     void recoveryInterface();
+    void reloadGlobalValue();
     void clearSearch();
     void updateWordList();
     void updateWordStatistics();

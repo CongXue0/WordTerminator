@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include "wordadmin.h"
+#include "global.h"
 
 extern WordAdmin *p_wordAdmin;
 
@@ -12,13 +13,6 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     label_bg->setObjectName("label_bg");
     label_statistics = new QLabel(this);
     label_statistics->setObjectName("label_statistics");
-    label_statistics->setText(QString("statistics:\n"
-        "0~5 : \n"
-        "6~9 : \n"
-        "10~99 : \n"
-        "100+ : \n"
-        "normal: \n"
-        "forever: "));
 
     lineEdit_search = new QLineEdit(this);
     lineEdit_search->setObjectName("lineEdit_search");
@@ -42,22 +36,18 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
 
     radioBtn_range[0] = new QRadioButton(this);
     radioBtn_range[0]->setObjectName("radioBtn_range1");
-    radioBtn_range[0]->setText("times 0~5");
     radioBtn_range[0]->setAutoExclusive(false);
     connect(radioBtn_range[0], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[1] = new QRadioButton(this);
     radioBtn_range[1]->setObjectName("radioBtn_range2");
-    radioBtn_range[1]->setText("times 6~9");
     radioBtn_range[1]->setAutoExclusive(false);
     connect(radioBtn_range[1], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[2] = new QRadioButton(this);
     radioBtn_range[2]->setObjectName("radioBtn_range3");
-    radioBtn_range[2]->setText("times 10~99");
     radioBtn_range[2]->setAutoExclusive(false);
     connect(radioBtn_range[2], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[3] = new QRadioButton(this);
     radioBtn_range[3]->setObjectName("radioBtn_range4");
-    radioBtn_range[3]->setText("times 100+");
     radioBtn_range[3]->setAutoExclusive(false);
     connect(radioBtn_range[3], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_forever = new QRadioButton(this);
@@ -73,6 +63,7 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     combox_search->insertItem(2, "contain");
     combox_search->insertItem(3, "interpretation");
 
+    reloadGlobalValue();
     loadStyleSheet();
     updateWordList();
     updateWordStatistics();
@@ -99,13 +90,23 @@ void WordLibraryWidget::recoveryInterface()
     radioBtn_range[1]->setChecked(false);
     radioBtn_range[2]->setChecked(false);
     radioBtn_range[3]->setChecked(false);
+}
+
+void WordLibraryWidget::reloadGlobalValue()
+{
     label_statistics->setText(QString("statistics:\n"
-        "0~5 : \n"
-        "6~9 : \n"
-        "10~99 : \n"
-        "100+ : \n"
+        "%1~%2 : \n"
+        "%3~%4 : \n"
+        "%5~%6 : \n"
+        "%7+ : \n"
         "normal: \n"
-        "forever: "));
+        "forever: ").arg(Global::m_range1Left.getValueInt()).arg(Global::m_range1Right.getValueInt())
+        .arg(Global::m_range2Left.getValueInt()).arg(Global::m_range2Right.getValueInt())
+        .arg(Global::m_range3Left.getValueInt()).arg(Global::m_range3Right.getValueInt()).arg(Global::m_range4Left.getValueInt()));
+    radioBtn_range[0]->setText(QString("times %1~%2").arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
+    radioBtn_range[1]->setText(QString("times %1~%2").arg(Global::m_range2Left.getValueStr()).arg(Global::m_range2Right.getValueStr()));
+    radioBtn_range[2]->setText(QString("times %1~%2").arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
+    radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
 }
 
 void WordLibraryWidget::clearSearch()
@@ -121,9 +122,14 @@ void WordLibraryWidget::updateWordList()
 void WordLibraryWidget::updateWordStatistics()
 {
     bool rem = radioBtn_forever->isChecked();
-    label_statistics->setText(QString("statistics:\n0~5 : %1\n6~9 : %2\n10~99 : %3\n100+ : %4\nnormal: %5\nforever: %6")
-        .arg(p_wordAdmin->getWordNumFromTimes(0, 5, rem)).arg(p_wordAdmin->getWordNumFromTimes(6, 9, rem))
-        .arg(p_wordAdmin->getWordNumFromTimes(10, 99, rem)).arg(p_wordAdmin->getWordNumFromTimes(100, MAX_TIMES, rem))
+    label_statistics->setText(QString("statistics:\n%1~%2 : %8\n%3~%4 : %9\n%5~%6 : %10\n%7+ : %11\nnormal: %12\nforever: %13")
+        .arg(Global::m_range1Left.getValueInt()).arg(Global::m_range1Right.getValueInt())
+        .arg(Global::m_range2Left.getValueInt()).arg(Global::m_range2Right.getValueInt())
+        .arg(Global::m_range3Left.getValueInt()).arg(Global::m_range3Right.getValueInt()).arg(Global::m_range4Left.getValueInt())
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, rem))
         .arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, false)).arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, true)));
 }
 
@@ -143,13 +149,13 @@ void WordLibraryWidget::slot_btnSearch_clicked()
     else
     {
         if (radioBtn_range[0]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(0, 5, radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[1]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(6, 9, radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[2]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(10, 99, radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[3]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, radioBtn_forever->isChecked());
     }
     if (!lineEdit_search->text().isEmpty())
     {

@@ -57,6 +57,16 @@ public:
     static XmlVar m_leastForeverTimes;//记忆时可以设为已记忆的最小次数
     static XmlVar m_memoryInterval;//刚记忆过的单词过多久可以再次记忆(分钟)
     static XmlVar m_decline_times[DECLINE_NUM];//单词过多久记忆次数下降一次的时间分布
+    static XmlVar m_memoryLevel;//0 简单，1 困难
+    static XmlVar m_range1Left;
+    static XmlVar m_range1Right;
+    static XmlVar m_range2Left;
+    static XmlVar m_range2Right;
+    static XmlVar m_range3Left;
+    static XmlVar m_range3Right;
+    static XmlVar m_range4Left;
+    static XmlVar m_timesSet1;
+    static XmlVar m_timesSet2;
     static XmlVar m_curScript; //0-4
     static XmlVar m_script0;
     static XmlVar m_script1;

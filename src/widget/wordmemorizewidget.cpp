@@ -23,7 +23,6 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
     m_pastNum = 0;
     m_curIndex = -1;
     m_lastWord = "";
-    m_testStrategy = STRATEGY2;
     if (WTool::getScreenSize() == "14")
         m_spacing = 8;
     else if (WTool::getScreenSize() == "15.6")
@@ -63,25 +62,21 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
 
     radioBtn_range[0] = new QRadioButton(label_bg_welcome);
     radioBtn_range[0]->setObjectName("radioBtn_range1");
-    radioBtn_range[0]->setText("times 0~5");
     radioBtn_range[0]->setChecked(true);
     radioBtn_range[0]->setAutoExclusive(false);
     connect(radioBtn_range[0], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[1] = new QRadioButton(label_bg_welcome);
     radioBtn_range[1]->setObjectName("radioBtn_range2");
-    radioBtn_range[1]->setText("times 6~9");
     radioBtn_range[1]->setChecked(true);
     radioBtn_range[1]->setAutoExclusive(false);
     connect(radioBtn_range[1], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[2] = new QRadioButton(label_bg_welcome);
     radioBtn_range[2]->setObjectName("radioBtn_range3");
-    radioBtn_range[2]->setText("times 10~99");
     radioBtn_range[2]->setChecked(false);
     radioBtn_range[2]->setAutoExclusive(false);
     connect(radioBtn_range[2], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
     radioBtn_range[3] = new QRadioButton(label_bg_welcome);
     radioBtn_range[3]->setObjectName("radioBtn_range4");
-    radioBtn_range[3]->setText("times 100+");
     radioBtn_range[3]->setChecked(false);
     radioBtn_range[3]->setAutoExclusive(false);
     connect(radioBtn_range[3], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
@@ -173,6 +168,7 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
     lineEdit_input = new QLineEdit(label_bg_start);
     lineEdit_input->setObjectName("lineEdit_input");
 
+    reloadGlobalValue();
     loadStyleSheet();
     loadJsonRect();
 }
@@ -235,6 +231,14 @@ void WordMemorizeWidget::recoveryInterface()
     this->setFocus();
 }
 
+void WordMemorizeWidget::reloadGlobalValue()
+{
+    radioBtn_range[0]->setText(QString("times %1~%2").arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
+    radioBtn_range[1]->setText(QString("times %1~%2").arg(Global::m_range2Left.getValueStr()).arg(Global::m_range2Right.getValueStr()));
+    radioBtn_range[2]->setText(QString("times %1~%2").arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
+    radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
+}
+
 void WordMemorizeWidget::updateWordStatistics()
 {
     int num1 = 0, num2 = 0, num3 = 0;
@@ -247,13 +251,13 @@ void WordMemorizeWidget::updateWordStatistics()
     else
     {
         if (radioBtn_range[0]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, 5, radioBtn_forever->isChecked());
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[1]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(6, 9, radioBtn_forever->isChecked());
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[2]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(10, 99, radioBtn_forever->isChecked());
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[3]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, radioBtn_forever->isChecked());
     }
     num2 = p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, false);
     num3 = p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, true);
@@ -976,30 +980,21 @@ void WordMemorizeWidget::showWordInfo(bool showWord)
 
 void WordMemorizeWidget::chooseTestWord()
 {
-    switch (m_testStrategy)
+    switch (Global::m_memoryLevel.getValueInt())
     {
-    case STRATEGY1:
-        chooseStrategy1();
+    case STRATEGY0:
+        chooseStrategy_level0();
         break;
-    case STRATEGY2:
-        chooseStrategy2();
+    case STRATEGY1:
+        chooseStrategy_level1();
         break;
     default:
-        chooseStrategy1();
+        chooseStrategy_level0();
         break;
     }
 }
 
-void WordMemorizeWidget::chooseStrategy1()
-{
-    int lastIndex = p_wordAdmin->searchWordTestList(m_testList, m_lastWord);
-    do
-    {
-        m_curIndex = WTool::rand(0, m_testNum - 1);
-    } while (lastIndex == m_curIndex && m_testNum > 1);
-}
-
-void WordMemorizeWidget::chooseStrategy2()
+void WordMemorizeWidget::chooseStrategy_level0()
 {
     if (m_nameList.count() == 0)
     {
@@ -1048,6 +1043,15 @@ void WordMemorizeWidget::chooseStrategy2()
     }
 }
 
+void WordMemorizeWidget::chooseStrategy_level1()
+{
+    int lastIndex = p_wordAdmin->searchWordTestList(m_testList, m_lastWord);
+    do
+    {
+        m_curIndex = WTool::rand(0, m_testNum - 1);
+    } while (lastIndex == m_curIndex && m_testNum > 1);
+}
+
 void WordMemorizeWidget::slot_radioButtonClicked()
 {
     this->updateWordStatistics();
@@ -1065,13 +1069,13 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
     else
     {
         if (radioBtn_range[0]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(0, 5, radioBtn_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[1]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(6, 9, radioBtn_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[2]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(10, 99, radioBtn_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), radioBtn_forever->isChecked());
         if (radioBtn_range[3]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(100, MAX_TIMES, radioBtn_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, radioBtn_forever->isChecked());
     }
     if (m_testList.size() > 0)
     {
@@ -1365,10 +1369,10 @@ void WordMemorizeWidget::slot_wordCanMemorize(QString name)
     {
         int times = test.m_info.m_times;
         if ((test.m_info.m_remember > 0) != radioBtn_forever->isChecked() ||
-            ((radioBtn_range[0]->isChecked() == true && (times < 0 || times > 5)) &&
-            (radioBtn_range[1]->isChecked() == true && (times < 6 || times > 9)) &&
-            (radioBtn_range[2]->isChecked() == true && (times < 10 || times > 99)) &&
-            (radioBtn_range[3]->isChecked() == true && (times < 100 || times > MAX_TIMES))))
+            ((radioBtn_range[0]->isChecked() == true && (times < Global::m_range1Left.getValueInt() || times > Global::m_range1Right.getValueInt())) &&
+            (radioBtn_range[1]->isChecked() == true && (times < Global::m_range2Left.getValueInt() || times > Global::m_range2Right.getValueInt())) &&
+            (radioBtn_range[2]->isChecked() == true && (times < Global::m_range3Left.getValueInt() || times > Global::m_range3Right.getValueInt())) &&
+            (radioBtn_range[3]->isChecked() == true && (times < Global::m_range4Left.getValueInt() || times > MAX_TIMES))))
         {
             return;
         }

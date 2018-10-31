@@ -264,11 +264,13 @@ void WordTerminator::slot_wtbuttonPressed()
     switch (index)//后处理
     {
     case Widget_WordLibrary:
+        wordLibrary->reloadGlobalValue();
         wordLibrary->clearSearch();
         wordLibrary->updateWordList();
         wordLibrary->updateWordStatistics();
         break;
     case Widget_WordMemorize:
+        wordMemorize->reloadGlobalValue();
         wordMemorize->recoveryInterface();
         wordMemorize->updateWordStatistics();
         break;

@@ -25,12 +25,13 @@ public:
     };
     enum TEST_STRATEGY
     {
-        STRATEGY1, STRATEGY2
+        STRATEGY0, STRATEGY1
     };
 
     explicit WordMemorizeWidget(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
     void recoveryInterface();
+    void reloadGlobalValue();
     void updateWordStatistics();
     int getMode();
 
@@ -47,8 +48,8 @@ private:
     void setViewPosition_15();
     void showWordInfo(bool showWord = true);
     void chooseTestWord();
-    void chooseStrategy1();
-    void chooseStrategy2();
+    void chooseStrategy_level0();
+    void chooseStrategy_level1();
 
 signals:
     void wordTimeIncreaseSignal(QString name);
@@ -78,7 +79,6 @@ private:
     int m_pastNum;
     int m_curIndex;
     QString m_lastWord;
-    TEST_STRATEGY m_testStrategy;
     int m_spacing;
 
     QList<WordTest> m_testList;

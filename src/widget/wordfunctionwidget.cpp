@@ -20,6 +20,10 @@ WordFunctionWidget::WordFunctionWidget(QWidget *parent) : QWidget(parent)
     label_refresh = new QLabel(label_bg_func);
     label_refresh->setObjectName("label_refresh");
     label_refresh->setText("使所有单词可以再次记忆");
+    label_exportRule = new QLabel(label_bg_func);
+    label_exportRule->setObjectName("label_exportRule");
+    label_exportRule->setWordWrap(true);
+    label_exportRule->setText("导出规则： <次数1>,<次数2>,<组号>,<记忆状态>; 为一次导出语句，一个方案里可以有多个导出语句。 次数1、次数2为导出的次数范围， 全为-1表示全部次数。 组号为-1表示所有组。 记忆状态：0为未记住， 1为已记住， -1为全部状态。");
     label_export = new QLabel(label_bg_func);
     label_export->setObjectName("label_export");
     label_export->setText("导出单词到桌面");
@@ -137,7 +141,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
         list = p_wordAdmin->getWordListFromTimes(left, right, false);
     else if (remember == 1)
         list = p_wordAdmin->getWordListFromTimes(left, right, true);
-    else if (remember == 2)
+    else if (remember == -1)
         list = p_wordAdmin->getAllWordList();
     int count = list.count();
     if (count > 0)

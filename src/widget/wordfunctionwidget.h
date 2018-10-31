@@ -29,6 +29,7 @@ private slots:
 private:
     QLabel *label_bg_func;
     QLabel *label_refresh;
+    QLabel *label_exportRule;
     QLabel *label_export;
     QLabel *line1;
     QLabel *line2;

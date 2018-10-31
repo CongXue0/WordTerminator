@@ -5,6 +5,7 @@
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QKeyEvent>
+#include "global.h"
 
 extern WordAdmin *p_wordAdmin;
 
@@ -27,13 +28,9 @@ WordShowWidget::WordShowWidget(QWidget *parent) : QWidget(parent)
     connect(btn_return, SIGNAL(clicked()), this, SLOT(slot_btnReturn_Clicked()));
     btn_mid = new QPushButton(widget_topBar);
     btn_mid->setObjectName("btn_mid");
-    btn_mid->setToolTip("Set times 10");
-    btn_mid->setText("10");
     connect(btn_mid, SIGNAL(clicked()), this, SLOT(slot_btnMid_Clicked()));
     btn_max = new QPushButton(widget_topBar);
     btn_max->setObjectName("btn_max");
-    btn_max->setToolTip("Add times 100");
-    btn_max->setText("100");
     connect(btn_max, SIGNAL(clicked()), this, SLOT(slot_btnMax_Clicked()));
     btn_add = new QPushButton(widget_topBar);
     btn_add->setObjectName("btn_add");
@@ -133,6 +130,11 @@ void WordShowWidget::keyPressEvent(QKeyEvent *event)
 
 void WordShowWidget::recoveryInterface()
 {
+    btn_mid->setToolTip(QString("Set times %1").arg(Global::m_timesSet1.getValueStr()));
+    btn_mid->setText(Global::m_timesSet1.getValueStr());
+    btn_max->setToolTip(QString("Set times %1").arg(Global::m_timesSet2.getValueStr()));
+    btn_max->setText(Global::m_timesSet2.getValueStr());
+
     m_propertyNum = 0;
     m_exampleNum = 0;
     m_synonymNum = 0;

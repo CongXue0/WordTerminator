@@ -898,7 +898,6 @@ void WordAdmin::initDB()
             }
             else
                 DEBUG << "DB init fail";
-
         }
     }
     else
