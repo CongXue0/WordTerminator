@@ -43,7 +43,7 @@ QString WTool::getScreenSize()
         return "14";
 }
 
-int WTool::divide(int a, int b)
+int WTool::divide(const int &a, const int &b)
 {
     return a / b + ((a % b > 0) ? 1 : 0);
 }
@@ -53,7 +53,7 @@ QString WTool::getWordDBFilePath()
     return QString("./user/db/word.db");
 }
 
-int WTool::rand(int a, int b)
+int WTool::rand(const int &a, const int &b)
 {
     if (a == b)
         return a;
@@ -78,7 +78,7 @@ QStringList WTool::getGroupList()
     return list;
 }
 
-int WTool::getGroupNo(QString groupName)
+int WTool::getGroupNo(const QString &groupName)
 {
     if (groupName == ALL_GROUP)
     {
@@ -94,7 +94,7 @@ int WTool::getGroupNo(QString groupName)
     return -1;
 }
 
-QString WTool::readFileInfo(QString path)
+QString WTool::readFileInfo(const QString &path)
 {
     QString info;
     QFile file(path);
@@ -111,7 +111,7 @@ QString WTool::readFileInfo(QString path)
     return info;
 }
 
-void WTool::appendFileInfo(QString path, QString info)
+void WTool::appendFileInfo(const QString &path, const QString &info)
 {
     QFile file(path);
     if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
@@ -126,7 +126,7 @@ void WTool::appendFileInfo(QString path, QString info)
     }
 }
 
-void WTool::writeFileInfo(QString path, QString info)
+void WTool::writeFileInfo(const QString &path, const QString &info)
 {
     QFile file(path);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -141,7 +141,7 @@ void WTool::writeFileInfo(QString path, QString info)
     }
 }
 
-bool WTool::makePath(QString path)
+bool WTool::makePath(const QString &path)
 {
     QDir dir;
     if (!dir.exists(path))
@@ -151,7 +151,7 @@ bool WTool::makePath(QString path)
     return true;
 }
 
-bool WTool::makeDir(QString path)
+bool WTool::makeDir(const QString &path)
 {
     QDir dir;
     if (!dir.exists(path))
@@ -161,7 +161,7 @@ bool WTool::makeDir(QString path)
     return true;
 }
 
-int WTool::getFontLength(QFont font, QString txt)
+int WTool::getFontLength(const QFont &font, const QString &txt)
 {
     return QFontMetrics(font).width(txt);
 }
@@ -217,7 +217,7 @@ int WTool::getTextLineNumber(QFont font, QString txt, int lineWidth)
     return num;
 }
 
-int WTool::getWordBorder(QString txt, int start, bool leftToRight)
+int WTool::getWordBorder(const QString &txt, const int &start, const bool &leftToRight)
 {
     int len = txt.length();
     if (len <= 0 || start < 0 || start > len || (start == 0 && !leftToRight) || (start == len && leftToRight))
@@ -252,7 +252,7 @@ int WTool::getWordBorder(QString txt, int start, bool leftToRight)
     return k;
 }
 
-int WTool::skipChar(QString txt, int start, char ch, bool leftToRight)
+int WTool::skipChar(const QString &txt, const int &start, const char &ch, const bool &leftToRight)
 {
     int len = txt.length();
     if (len <= 0 || start < 0 || start > len || (start == 0 && !leftToRight) || (start == len && leftToRight))
@@ -309,7 +309,7 @@ QString WTool::arrangeWord(QString word, char sp)
     return word;
 }
 
-bool WTool::isSpace(QString txt)
+bool WTool::isSpace(const QString &txt)
 {
     if (txt.isEmpty())
         return true;
@@ -326,7 +326,7 @@ bool WTool::isSpace(QString txt)
     return flag;
 }
 
-bool WTool::isLetter(QString txt, char fl)
+bool WTool::isLetter(const QString &txt, char fl)
 {
     int len = txt.length();
     bool flag = true;
@@ -343,7 +343,7 @@ bool WTool::isLetter(QString txt, char fl)
     return flag;
 }
 
-bool WTool::isLanguage(QString txt, char fl)
+bool WTool::isLanguage(const QString &txt, char fl)
 {
     int len = txt.length();
     bool flag = true;
@@ -360,7 +360,7 @@ bool WTool::isLanguage(QString txt, char fl)
     return flag;
 }
 
-bool WTool::isEnglishSentence(QString txt, char fl)
+bool WTool::isEnglishSentence(const QString &txt, char fl)
 {
     int len = txt.length();
     bool flag = true;
@@ -400,7 +400,7 @@ bool WTool::isWritting(const QString &txt)
     return flag;
 }
 
-bool WTool::isChineseChar(QChar ch)
+bool WTool::isChineseChar(const QChar &ch)
 {
     ushort uni = ch.unicode();
     if (uni >= 0x4E00 && uni <= 0x9FA5)

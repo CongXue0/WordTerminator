@@ -16,13 +16,13 @@ WMessage::~WMessage()
     m_list.clear();
 }
 
-void WMessage::insertMessage(int index, QString info, QString value)
+void WMessage::insertMessage(const int &index, const QString &info, const QString &value)
 {
     m_list.insert(index * 2, info);
     m_list.insert(index * 2 + 1, value);
 }
 
-void WMessage::getMessage(int index, QString &info, QString &value)
+void WMessage::getMessage(const int &index, QString &info, QString &value)
 {
     if (index >= getMessageNum())
     {

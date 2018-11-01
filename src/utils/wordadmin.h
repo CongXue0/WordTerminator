@@ -102,19 +102,18 @@ class WordAdmin : public QObject
 public:
     static WordAdmin *getInstance();
     int getCurrentWordNum();
-    bool getWordInfo(QString name, WordInfo *word, int *offset = NULL);
+    bool getWordInfo(const QString &name, WordInfo *word, int *offset = NULL);
     bool insertWord(WordInfo *word);
     bool updateWord(WordInfo *word);
-    bool updateWord(QString name, QString field, QString value);
-    bool updateWord(QString name, QString field1, QString value1, QString field2, QString value2);
-    bool updateWord(QString name, QString field1, QString value1, QString field2, QString value2, QString field3, QString value3);
-//    bool changeTimes(QString name, int times);
-    bool deleteWord(QString name);
+    bool updateWord(const QString &name, const QString &field, const QString &value);
+    bool updateWord(const QString &name, const QString &field1, const QString &value1, const QString &field2, const QString &value2);
+    bool updateWord(const QString &name, const QString &field1, const QString &value1, const QString &field2, const QString &value2, const QString &field3, const QString &value3);
+    bool deleteWord(const QString &name);
     int resetAllWordRemerber(QWidget *parent);
-    bool isWordExist(QString name, int *offset = NULL);
-    bool getWordBriefInfo(QString name, BriefWordInfo *word, int *offset = NULL);
+    bool isWordExist(const QString &name, int *offset = NULL);
+    bool getWordBriefInfo(const QString &name, BriefWordInfo *word, int *offset = NULL);
     bool getMutexStatus();
-    static bool wordCanMemorize(int remState, QDateTime modifyTime);
+    static bool wordCanMemorize(const int &remState, const QDateTime &modifyTime);
 
 
     /* 查找从 t1~t2 学习次数的单词 */
@@ -131,13 +130,12 @@ public:
     /* 索引查找 */
     int searchWordTestList(const QList<WordTest> &list, const QString &name);
 
-
 private:
     explicit WordAdmin(QObject *parent = 0);
     void initDB();
     bool loadAllWord();
     int checkAllWordTimesDecline();//返回受影响的单词数
-    bool readWordInfo(QString name, WordInfo *word);
+    bool readWordInfo(const QString &name, WordInfo *word);
 
 private:
     static BriefWordInfo m_wordLib[MAX_WORD_NUM];

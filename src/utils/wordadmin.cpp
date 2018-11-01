@@ -226,7 +226,7 @@ int WordAdmin::getCurrentWordNum()
     return m_currentNum;
 }
 
-bool WordAdmin::getWordInfo(QString name, WordInfo *word, int *offset)
+bool WordAdmin::getWordInfo(const QString &name, WordInfo *word, int *offset)
 {
     if (name == WORD_NAME_UNDEFINED)
         return false;
@@ -355,7 +355,7 @@ bool WordAdmin::updateWord(WordInfo *word)
     return false;
 }
 
-bool WordAdmin::updateWord(QString name, QString field, QString value)
+bool WordAdmin::updateWord(const QString &name, const QString &field, const QString &value)
 {
     if (name == WORD_NAME_UNDEFINED || field == "Name")
         return false;
@@ -388,7 +388,7 @@ bool WordAdmin::updateWord(QString name, QString field, QString value)
     return false;
 }
 
-bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString field2, QString value2)
+bool WordAdmin::updateWord(const QString &name, const QString &field1, const QString &value1, const QString &field2, const QString &value2)
 {
     if (name == WORD_NAME_UNDEFINED || field1 == "Name" || field2 == "Name" || field1 == field2)
         return false;
@@ -432,7 +432,7 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
     return false;
 }
 
-bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString field2, QString value2, QString field3, QString value3)
+bool WordAdmin::updateWord(const QString &name, const QString &field1, const QString &value1, const QString &field2, const QString &value2, const QString &field3, const QString &value3)
 {
     if (name == WORD_NAME_UNDEFINED || field1 == "Name" || field2 == "Name" || field3 == "Name" ||
         field1 == field2 || field2 == field3 || field1 == field3)
@@ -489,39 +489,7 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
     return false;
 }
 
-//bool WordAdmin::changeTimes(QString name, int times)
-//{
-//    if (name == WORD_NAME_UNDEFINED)
-//        return false;
-//    m_mutex.lockForWrite();
-//    for (int i = 0; i < m_currentTop; i++)
-//    {
-//        if (m_wordLib[i].m_name == name)
-//        {
-//            if (m_wordLib[i].m_times == times)
-//            {
-//                m_mutex.unlock();
-//                return false;
-//            }
-//            int r = m_wordLib[i].m_remember;
-//            r = (r > 0 ? 2 : -1);
-//            QSqlQuery query;
-//            QString sql = QString("update WordLibrary set Times=\"%1\",RememberState=\"%2\" where Name=\"%3\"")
-//                .arg(times).arg(r).arg(name);
-//            if (query.exec(sql))
-//            {
-//                m_wordLib[i].m_times = times;
-//                m_wordLib[i].m_remember = r;
-//                m_mutex.unlock();
-//                return true;
-//            }
-//        }
-//    }
-//    m_mutex.unlock();
-//    return false;
-//}
-
-bool WordAdmin::deleteWord(QString name)
+bool WordAdmin::deleteWord(const QString &name)
 {
     if (name == WORD_NAME_UNDEFINED)
         return false;
@@ -583,7 +551,7 @@ int WordAdmin::resetAllWordRemerber(QWidget *parent)
     return num;
 }
 
-bool WordAdmin::isWordExist(QString name, int *offset)
+bool WordAdmin::isWordExist(const QString &name, int *offset)
 {
     if (name == WORD_NAME_UNDEFINED)
         return false;
@@ -604,7 +572,7 @@ bool WordAdmin::isWordExist(QString name, int *offset)
     return false;
 }
 
-bool WordAdmin::getWordBriefInfo(QString name, BriefWordInfo *word, int *offset)
+bool WordAdmin::getWordBriefInfo(const QString &name, BriefWordInfo *word, int *offset)
 {
     if (name == WORD_NAME_UNDEFINED)
         return false;
@@ -637,7 +605,7 @@ bool WordAdmin::getMutexStatus()
     return ret;
 }
 
-bool WordAdmin::wordCanMemorize(int remState, QDateTime modifyTime)
+bool WordAdmin::wordCanMemorize(const int &remState, const QDateTime &modifyTime)
 {
     if ((remState == -1 || remState == 2) || modifyTime.secsTo(QDateTime::currentDateTime()) >= WTool::getMemoryInterval())
         return true;
@@ -1092,7 +1060,7 @@ int WordAdmin::checkAllWordTimesDecline()
     return num;
 }
 
-bool WordAdmin::readWordInfo(QString name, WordInfo *word)
+bool WordAdmin::readWordInfo(const QString &name, WordInfo *word)
 {
     QSqlQuery query;
     QString sql = QString("select * from WordLibrary where Name=\"%1\"").arg(name);
