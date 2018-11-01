@@ -10,6 +10,7 @@
 #include <QRadioButton>
 #include "wmessage.h"
 #include <QComboBox>
+#include "wtool.h"
 
 class WordLibraryWidget : public QWidget
 {
@@ -19,6 +20,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void recoveryInterface();
     void reloadGlobalValue();
+    void setReloadFlag(bool flag);
     void clearSearch();
     void updateWordList();
     void updateWordStatistics();
@@ -36,10 +38,14 @@ private slots:
     void slot_btnCreate_clicked();
     void slot_itemDoubleClicked(QModelIndex index);
     void slot_radioButtonClicked();
+    void slot_comboxGroup_currentIndexChanged(int index);
     void slot_wordTimeDecline(QString name);
     void slot_wordTimeIncrease(QString name);
 
 private:
+    bool m_reloadFlag;
+    int m_curGroupId;
+
     QLabel *label_bg;
     QLabel *label_statistics;
 
@@ -55,6 +61,7 @@ private:
     QRadioButton *radioBtn_range[4];
     QRadioButton *radioBtn_forever;
 
+    QComboBox *combox_group;
     QComboBox *combox_search;
 
 };

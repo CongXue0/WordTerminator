@@ -5,6 +5,7 @@
 #include <wordadmin.h>
 #include <QKeyEvent>
 #include <QScrollBar>
+#include "global.h"
 
 extern WordAdmin *p_wordAdmin;
 
@@ -25,6 +26,10 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) : QWidget(parent)
     label_word = new QLabel(widget);
     label_word->setObjectName("label_word");
     label_word->setText("单词或词组");
+
+    label_group = new QLabel(widget);
+    label_group->setObjectName("label_group");
+    label_group->setText("组：");
 
     label_phoneticSymbol = new QLabel(widget);
     label_phoneticSymbol->setObjectName("label_phoneticSymbol");
@@ -188,6 +193,10 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) : QWidget(parent)
     checkBox_phrase->setObjectName("checkBox_phrase");
     checkBox_phrase->setText("是否是词组");
 
+    //QComboBox
+    combox_group = new QComboBox(widget);
+    combox_group->setObjectName("combox_group");
+
     //QTextEdit
     for(int i = 0; i < 6; i++)
     {
@@ -204,8 +213,9 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) : QWidget(parent)
     btn_confirm->setObjectName("btn_confirm");
     connect(btn_confirm, SIGNAL(clicked()), this, SLOT(slot_btnConfirm_clicked()));
 
+    m_reloadFlag = true;
+    reloadGlobalValue();
     loadStyleSheet();
-
 }
 
 void WordCreateWidget::keyPressEvent(QKeyEvent *event)
@@ -259,6 +269,27 @@ void WordCreateWidget::recoveryInterface()
     lineEdit_word->setFocus();
 }
 
+void WordCreateWidget::reloadGlobalValue()
+{
+    if (m_reloadFlag)
+    {
+        m_reloadFlag = false;
+        combox_group->clear();
+        m_groupList.clear();
+        m_groupList = WTool::getGroupList();
+        for (int i = 0; i < m_groupList.count(); i++)
+        {
+            combox_group->insertItem(i, m_groupList.at(i));
+        }
+        combox_group->setCurrentIndex(0);
+    }
+}
+
+void WordCreateWidget::setReloadFlag(bool flag)
+{
+    m_reloadFlag = flag;
+}
+
 void WordCreateWidget::setCreateMode(WordCreateWidget::CREATE_MODE mode)
 {
     m_mode = mode;
@@ -298,6 +329,14 @@ bool WordCreateWidget::loadWordInfo(QString name)
         lineEdit_synonym->setText(word.m_synonym);
         lineEdit_antonym->setText(word.m_antonym);
         checkBox_phrase->setChecked(word.m_isPhrase);
+        for (int i = 0; i < m_groupList.count(); i++)
+        {
+            if (Global::m_groupName[word.m_groupid].getValueStr() == m_groupList.at(i))
+            {
+                combox_group->setCurrentIndex(i);
+                break;
+            }
+        }
         for(int i = 0; i < 6; i++)
             textEdit_exampleSentence[i]->setText(word.m_exampleSentence[i]);
         return true;
@@ -366,7 +405,7 @@ QString WordCreateWidget::inputCheck()
         info.append("同义词输入错误\n");
     if (!WTool::isLetter(lineEdit_antonym->text(), ';'))
         info.append("反义词输入错误\n");
-    if (!info.isEmpty() && info.at(info.length() - 1) == '\n');
+    if (!info.isEmpty() && info.at(info.length() - 1) == '\n')
         info = info.mid(0, info.length() - 1);
     return info;
 }

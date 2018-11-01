@@ -1,5 +1,4 @@
 #include "wordlibrarywidget.h"
-#include "wtool.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include "wordadmin.h"
@@ -56,6 +55,8 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     radioBtn_forever->setAutoExclusive(false);
     connect(radioBtn_forever, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
 
+    combox_group = new QComboBox(this);
+    combox_group->setObjectName("combox_group");
     combox_search = new QComboBox(this);
     combox_search->setObjectName("combox_search");
     combox_search->insertItem(0, "prefix");
@@ -63,6 +64,7 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     combox_search->insertItem(2, "contain");
     combox_search->insertItem(3, "interpretation");
 
+    m_reloadFlag = true;
     reloadGlobalValue();
     loadStyleSheet();
     updateWordList();
@@ -94,19 +96,44 @@ void WordLibraryWidget::recoveryInterface()
 
 void WordLibraryWidget::reloadGlobalValue()
 {
-    label_statistics->setText(QString("statistics:\n"
-        "%1~%2 : \n"
-        "%3~%4 : \n"
-        "%5~%6 : \n"
-        "%7+ : \n"
-        "normal: \n"
-        "forever: ").arg(Global::m_range1Left.getValueInt()).arg(Global::m_range1Right.getValueInt())
-        .arg(Global::m_range2Left.getValueInt()).arg(Global::m_range2Right.getValueInt())
-        .arg(Global::m_range3Left.getValueInt()).arg(Global::m_range3Right.getValueInt()).arg(Global::m_range4Left.getValueInt()));
-    radioBtn_range[0]->setText(QString("times %1~%2").arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
-    radioBtn_range[1]->setText(QString("times %1~%2").arg(Global::m_range2Left.getValueStr()).arg(Global::m_range2Right.getValueStr()));
-    radioBtn_range[2]->setText(QString("times %1~%2").arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
-    radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
+    if (m_reloadFlag)
+    {
+        m_reloadFlag = false;
+        disconnect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+        combox_group->clear();
+        combox_group->addItem(ALL_GROUP);
+        QStringList list = WTool::getGroupList();
+        for (int i = 0; i < list.count(); i++)
+        {
+            combox_group->addItem(list.at(i));
+        }
+        combox_group->setCurrentIndex(1);
+        connect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+        m_curGroupId = 0;
+
+        label_statistics->setText(QString("statistics:\n"
+            "%1~%2 : \n"
+            "%3~%4 : \n"
+            "%5~%6 : \n"
+            "%7+ : \n"
+            "normal: \n"
+            "forever: ").arg(Global::m_range1Left.getValueInt()).arg(Global::m_range1Right.getValueInt())
+            .arg(Global::m_range2Left.getValueInt()).arg(Global::m_range2Right.getValueInt())
+            .arg(Global::m_range3Left.getValueInt()).arg(Global::m_range3Right.getValueInt())
+            .arg(Global::m_range4Left.getValueInt()));
+        radioBtn_range[0]->setText(QString("times %1~%2")
+            .arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
+        radioBtn_range[1]->setText(QString("times %1~%2")
+            .arg(Global::m_range2Left.getValueStr()).arg(Global::m_range2Right.getValueStr()));
+        radioBtn_range[2]->setText(QString("times %1~%2")
+            .arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
+        radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
+    }
+}
+
+void WordLibraryWidget::setReloadFlag(bool flag)
+{
+    m_reloadFlag = flag;
 }
 
 void WordLibraryWidget::clearSearch()
@@ -126,11 +153,11 @@ void WordLibraryWidget::updateWordStatistics()
         .arg(Global::m_range1Left.getValueInt()).arg(Global::m_range1Right.getValueInt())
         .arg(Global::m_range2Left.getValueInt()).arg(Global::m_range2Right.getValueInt())
         .arg(Global::m_range3Left.getValueInt()).arg(Global::m_range3Right.getValueInt()).arg(Global::m_range4Left.getValueInt())
-        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), rem))
-        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), rem))
-        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), rem))
-        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, rem))
-        .arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, false)).arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, true)));
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, rem))
+        .arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, m_curGroupId, false)).arg(p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, m_curGroupId, true)));
 }
 
 void WordLibraryWidget::loadStyleSheet()
@@ -144,18 +171,18 @@ void WordLibraryWidget::slot_btnSearch_clicked()
     if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
         !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
     {
-        m_wordList = p_wordAdmin->getAllWordList();
+        m_wordList = p_wordAdmin->getAllWordList(m_curGroupId);
     }
     else
     {
         if (radioBtn_range[0]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
         if (radioBtn_range[1]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
         if (radioBtn_range[2]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
         if (radioBtn_range[3]->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, radioBtn_forever->isChecked());
+            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, radioBtn_forever->isChecked());
     }
     if (!lineEdit_search->text().isEmpty())
     {
@@ -177,6 +204,14 @@ void WordLibraryWidget::slot_itemDoubleClicked(QModelIndex index)
 
 void WordLibraryWidget::slot_radioButtonClicked()
 {
+    updateWordList();
+    updateWordStatistics();
+}
+
+void WordLibraryWidget::slot_comboxGroup_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    m_curGroupId = WTool::getGroupNo(combox_group->currentText());
     updateWordList();
     updateWordStatistics();
 }

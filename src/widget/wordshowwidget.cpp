@@ -6,8 +6,10 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 #include "global.h"
+#include "wordterminator.h"
 
 extern WordAdmin *p_wordAdmin;
+extern WordTerminator *p_wordTerm;
 
 WordShowWidget::WordShowWidget(QWidget *parent) : QWidget(parent)
 {
@@ -26,6 +28,9 @@ WordShowWidget::WordShowWidget(QWidget *parent) : QWidget(parent)
     btn_return->setObjectName("btn_return");
     btn_return->setToolTip("Return");
     connect(btn_return, SIGNAL(clicked()), this, SLOT(slot_btnReturn_Clicked()));
+    btn_min = new QPushButton(widget_topBar);
+    btn_min->setObjectName("btn_min");
+    connect(btn_min, SIGNAL(clicked()), this, SLOT(slot_btnMin_Clicked()));
     btn_mid = new QPushButton(widget_topBar);
     btn_mid->setObjectName("btn_mid");
     connect(btn_mid, SIGNAL(clicked()), this, SLOT(slot_btnMid_Clicked()));
@@ -55,6 +60,9 @@ WordShowWidget::WordShowWidget(QWidget *parent) : QWidget(parent)
     wbtn_isRemember->setActiveTip("set to not forever");
     wbtn_isRemember->setInactiveTip("set to forever");
     connect(wbtn_isRemember, SIGNAL(clicked(bool)), this, SLOT(slot_wbtnRemember_Clicked(bool)));
+
+    combox_group = new QComboBox(widget_topBar);
+    combox_group->setObjectName("combox_group");
 
     scrollArea = new QScrollArea(this);
     scrollArea->setObjectName("scrollArea");
@@ -117,6 +125,8 @@ WordShowWidget::WordShowWidget(QWidget *parent) : QWidget(parent)
         linkLabel_antonym[i]->hide();
     }
 
+    m_reloadFlag = true;
+    reloadGlobalValue();
     loadStyleSheet();
 }
 
@@ -130,10 +140,12 @@ void WordShowWidget::keyPressEvent(QKeyEvent *event)
 
 void WordShowWidget::recoveryInterface()
 {
-    btn_mid->setToolTip(QString("Set times %1").arg(Global::m_timesSet1.getValueStr()));
-    btn_mid->setText(Global::m_timesSet1.getValueStr());
-    btn_max->setToolTip(QString("Set times %1").arg(Global::m_timesSet2.getValueStr()));
-    btn_max->setText(Global::m_timesSet2.getValueStr());
+    btn_min->setToolTip(QString("Set times %1").arg(Global::m_timesSet1.getValueStr()));
+    btn_min->setText(Global::m_timesSet1.getValueStr());
+    btn_mid->setToolTip(QString("Set times %1").arg(Global::m_timesSet2.getValueStr()));
+    btn_mid->setText(Global::m_timesSet2.getValueStr());
+    btn_max->setToolTip(QString("Set times %1").arg(Global::m_timesSet3.getValueStr()));
+    btn_max->setText(Global::m_timesSet3.getValueStr());
 
     m_propertyNum = 0;
     m_exampleNum = 0;
@@ -171,6 +183,27 @@ void WordShowWidget::recoveryInterface()
     }
 }
 
+void WordShowWidget::reloadGlobalValue()
+{
+    if (m_reloadFlag)
+    {
+        m_reloadFlag = false;
+        disconnect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+        combox_group->clear();
+        m_groupList = WTool::getGroupList();
+        for (int i = 0; i < m_groupList.count(); i++)
+        {
+            combox_group->insertItem(i, m_groupList.at(i));
+        }
+        connect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+    }
+}
+
+void WordShowWidget::setReloadFlag(bool flag)
+{
+    m_reloadFlag = flag;
+}
+
 bool WordShowWidget::loadWordInfo(QString name)
 {
     if (p_wordAdmin->getWordInfo(name, &m_word))
@@ -191,6 +224,14 @@ void WordShowWidget::loadStyleSheet()
 void WordShowWidget::setWordInfo()
 {
     copyLabel_word->setText(m_word.m_name);
+    for (int i = 0; i < m_groupList.count(); i++)
+    {
+        if (Global::m_groupName[m_word.m_groupid].getValueStr() == m_groupList.at(i))
+        {
+            combox_group->setCurrentIndex(i);
+            break;
+        }
+    }
     if (!m_word.m_phoneticSymbol.isEmpty())
     {
         copyLabel_phoneticSymbol->setText(m_word.m_phoneticSymbol);
@@ -665,59 +706,49 @@ void WordShowWidget::setViewPosition_15()
     widget_show->setGeometry(0, 0, 820, y);
 }
 
+void WordShowWidget::setWordTimes(int times)
+{
+    if (m_word.m_times != times)
+    {
+        m_word.m_times = times;
+        m_word.m_modifyTime = QDateTime::currentDateTime();
+        m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
+        if (p_wordAdmin->updateWord(&m_word))
+        {
+            copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
+            if (m_screenSize == "14")
+            {
+                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
+                copyLabel_times->setGeometry(635 - len, 12, len, 39);
+            }
+            else if (m_screenSize == "15.6")
+            {
+                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
+                copyLabel_times->setGeometry(790 - len, 15, len, 44);
+            }
+            emit wordTimeIncreaseSignal(m_word.m_name);
+        }
+    }
+}
+
 void WordShowWidget::slot_btnReturn_Clicked()
 {
     emit sendMessageSignal(WMessage("return", ""));
 }
 
+void WordShowWidget::slot_btnMin_Clicked()
+{
+    setWordTimes(Global::m_timesSet1.getValueInt());
+}
+
 void WordShowWidget::slot_btnMid_Clicked()
 {
-    if (m_word.m_times != 10)
-    {
-        m_word.m_times = 10;
-        m_word.m_modifyTime = QDateTime::currentDateTime();
-        m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-        if (p_wordAdmin->updateWord(&m_word))
-        {
-            copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
-            if (m_screenSize == "14")
-            {
-                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
-                copyLabel_times->setGeometry(635 - len, 12, len, 39);
-            }
-            else if (m_screenSize == "15.6")
-            {
-                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
-                copyLabel_times->setGeometry(790 - len, 15, len, 44);
-            }
-            emit wordTimeIncreaseSignal(m_word.m_name);
-        }
-    }
+    setWordTimes(Global::m_timesSet2.getValueInt());
 }
 
 void WordShowWidget::slot_btnMax_Clicked()
 {
-    if (m_word.m_times != 100)
-    {
-        m_word.m_times = 100;
-        m_word.m_modifyTime = QDateTime::currentDateTime();
-        m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-        if (p_wordAdmin->updateWord(&m_word))
-        {
-            copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
-            if (m_screenSize == "14")
-            {
-                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
-                copyLabel_times->setGeometry(635 - len, 12, len, 39);
-            }
-            else if (m_screenSize == "15.6")
-            {
-                int len = WTool::getFontLength(copyLabel_times->font(), copyLabel_times->text()) + 8;
-                copyLabel_times->setGeometry(790 - len, 15, len, 44);
-            }
-            emit wordTimeIncreaseSignal(m_word.m_name);
-        }
-    }
+    setWordTimes(Global::m_timesSet3.getValueInt());
 }
 
 void WordShowWidget::slot_btnAdd_Clicked()
@@ -789,9 +820,21 @@ void WordShowWidget::slot_wbtnRemember_Clicked(bool active)
         QMessageBox::about(this, "提示", "设为记住失败");
 }
 
+void WordShowWidget::slot_comboxGroup_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if (p_wordTerm != NULL && p_wordTerm->getCurrentWidgetIndex() == WordTerminator::Widget_WordShow)
+    {
+        m_word.m_groupid = WTool::getGroupNo(combox_group->currentText());
+        m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
+        p_wordAdmin->updateWord(m_word.m_name, "Groupid", QString::number(m_word.m_groupid),
+            "RememberState", QString::number(m_word.m_remember));
+    }
+}
+
 void WordShowWidget::slot_wordLinkPressed()
 {
-    //    DEBUG << sender()->objectName() << " pressed";
+//    DEBUG << sender()->objectName() << " pressed";
 }
 
 void WordShowWidget::slot_wordTimeDecline(QString name)

@@ -10,6 +10,8 @@
 #include "wordadmin.h"
 #include <QLineEdit>
 #include "linklabel.h"
+#include <QComboBox>
+#include "wtool.h"
 
 class WordMemorizeWidget : public QWidget
 {
@@ -32,6 +34,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void recoveryInterface();
     void reloadGlobalValue();
+    void setReloadFlag(bool flag);
     void updateWordStatistics();
     int getMode();
 
@@ -56,6 +59,7 @@ signals:
 
 private slots:
     void slot_radioButtonClicked();
+    void slot_comboxGroup_currentIndexChanged(int index);
     void slot_btnStart_Clicked();
     void slot_btnKnow_Clicked();
     void slot_btnNotKnow_Clicked();
@@ -80,6 +84,9 @@ private:
     int m_curIndex;
     QString m_lastWord;
     int m_spacing;
+
+    bool m_reloadFlag;
+    int m_curGroupId;
 
     QList<WordTest> m_testList;
     QStringList m_nameList;
@@ -106,6 +113,8 @@ private:
     QRadioButton *radioBtn_test[2];
     QRadioButton *radioBtn_range[4];
     QRadioButton *radioBtn_forever;
+
+    QComboBox *combox_group;
 
     QPushButton *btn_start;
     QPushButton *btn_know;

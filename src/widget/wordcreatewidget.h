@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include "wmessage.h"
 #include <QMutex>
+#include <QComboBox>
 
 class WordCreateWidget : public QWidget
 {
@@ -23,10 +24,10 @@ public:
     explicit WordCreateWidget(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
     void recoveryInterface();
+    void reloadGlobalValue();
+    void setReloadFlag(bool flag);
     void setCreateMode(CREATE_MODE mode);
     bool loadWordInfo(QString name);
-
-public slots:
 
 private:
     void loadStyleSheet();
@@ -41,14 +42,17 @@ private slots:
     void slot_btnConfirm_clicked();
 
 private:
+    bool m_reloadFlag;
     int m_mode;
     int m_times;
     int m_remember;
+    QStringList m_groupList;
 
     QScrollArea *scrollArea;
     QWidget *widget;
 
     QLabel *label_word;
+    QLabel *label_group;
     QLabel *label_phoneticSymbol;
     QLabel *label_adj_Chinese;
     QLabel *label_adj_English;
@@ -105,10 +109,13 @@ private:
 
     QCheckBox *checkBox_phrase;
 
+    QComboBox *combox_group;
+
     QTextEdit *textEdit_exampleSentence[6];
 
     QPushButton *btn_cancel;
     QPushButton *btn_confirm;
+
 };
 
 #endif // WORDCREATEWIDGET_H

@@ -52,7 +52,7 @@ public:
     static void init(const QString &configPath);
     static void load();
     static void reset();
-    static void saveXML();
+    static bool saveXML(bool force = false);
 
     static XmlVar m_leastForeverTimes;//记忆时可以设为已记忆的最小次数
     static XmlVar m_memoryInterval;//刚记忆过的单词过多久可以再次记忆(分钟)
@@ -67,6 +67,7 @@ public:
     static XmlVar m_range4Left;
     static XmlVar m_timesSet1;
     static XmlVar m_timesSet2;
+    static XmlVar m_timesSet3;
     static XmlVar m_curScript; //0-4
     static XmlVar m_script0;
     static XmlVar m_script1;

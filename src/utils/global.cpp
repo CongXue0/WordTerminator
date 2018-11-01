@@ -19,6 +19,7 @@ XmlVar Global::m_range3Right;
 XmlVar Global::m_range4Left;
 XmlVar Global::m_timesSet1;
 XmlVar Global::m_timesSet2;
+XmlVar Global::m_timesSet3;
 XmlVar Global::m_curScript;
 XmlVar Global::m_script0;
 XmlVar Global::m_script1;
@@ -127,6 +128,7 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_range4Left);
     m_varList.append(&m_timesSet1);
     m_varList.append(&m_timesSet2);
+    m_varList.append(&m_timesSet3);
     m_varList.append(&m_curScript);
     m_varList.append(&m_script0);
     m_varList.append(&m_script1);
@@ -164,8 +166,7 @@ void Global::load()
     if (!file.exists())
     {
         DEBUG << m_path << " is not existed.";
-        XmlVar::m_flag = 1;
-        saveXML();
+        saveXML(true);
         return;
     }
     if (!file.open(QFile::ReadOnly | QFile::Text))
@@ -198,8 +199,7 @@ void Global::load()
     }
     if (count != XMLVARNUM)
     {
-        XmlVar::m_flag = 1;
-        saveXML();
+        saveXML(true);
     }
     else
     {
@@ -231,6 +231,7 @@ void Global::reset()
     m_range4Left = XmlVar("RANGE4LEFT", "100");
     m_timesSet1 = XmlVar("TIMESSET1", "10");
     m_timesSet2 = XmlVar("TIMESSET2", "100");
+    m_timesSet3 = XmlVar("TIMESSET3", "200");
     m_curScript = XmlVar("CURSCRIPT", "0");
     m_script0 = XmlVar("SCRIPT0", "0,9,0,0;");
     m_script1 = XmlVar("SCRIPT1", "");
@@ -260,11 +261,11 @@ void Global::reset()
     m_groupName[20] = XmlVar("GROUP20NAME", "");
 }
 
-void Global::saveXML()
+bool Global::saveXML(bool force)
 {
-    if (XmlVar::m_flag == 0)
+    if (XmlVar::m_flag == 0 && force == false)
     {
-        return;
+        return false;
     }
 
     QFile file(m_path);
@@ -284,4 +285,5 @@ void Global::saveXML()
     file.close();
 
     XmlVar::m_flag = 0;
+    return true;
 }

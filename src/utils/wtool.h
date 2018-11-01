@@ -9,6 +9,14 @@
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
 #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split('\\').last()).arg(__FUNCTION__).arg(__LINE__)
 
+#define ALL_GROUP ("all group")
+
+typedef struct
+{
+    int m_groupId;
+    QString m_groupName;
+} GROUPINFO;
+
 class WTool
 {
 public:
@@ -20,6 +28,10 @@ public:
     static QString getWordDBFilePath();
     static int rand(int a, int b);//得到一个 [a, b] 范围内的随机数
     static QDateTime getCurDateTimeMinus(uint sec);
+
+    /* 组相关 */
+    static QStringList getGroupList();
+    static int getGroupNo(QString groupName);
 
     /* 文件操作 */
     static QString readFileInfo(QString path);

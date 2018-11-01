@@ -125,7 +125,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
         return;
     }
     QString fileName = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0) +
-        QString("/word(%1-%2)%3_%4.txt").arg(left).arg(right).arg(rem)
+        QString("/word(%1-%2)g%3_%4_%5.txt").arg(left).arg(right).arg((group == -1) ? "a" : QString::number(group)).arg(rem)
         .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd"));
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -138,11 +138,11 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
 
     QStringList list;
     if (remember == 0)
-        list = p_wordAdmin->getWordListFromTimes(left, right, false);
+        list = p_wordAdmin->getWordListFromTimes(left, right, group, false);
     else if (remember == 1)
-        list = p_wordAdmin->getWordListFromTimes(left, right, true);
+        list = p_wordAdmin->getWordListFromTimes(left, right, group, true);
     else if (remember == -1)
-        list = p_wordAdmin->getAllWordList();
+        list = p_wordAdmin->getAllWordList(group);
     int count = list.count();
     if (count > 0)
     {

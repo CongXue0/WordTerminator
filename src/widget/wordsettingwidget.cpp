@@ -75,6 +75,9 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     label_timesSet2 = new QLabel(widget_libSet);
     label_timesSet2->setObjectName("label_timesSet2");
     label_timesSet2->setText("次数设置2：");
+    label_timesSet3 = new QLabel(widget_libSet);
+    label_timesSet3->setObjectName("label_timesSet3");
+    label_timesSet3->setText("次数设置3：");
     for (int i = 0; i < 21; i++)
     {
         label_group[i] = new QLabel(widget_groupSet);
@@ -111,6 +114,8 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     lineEdit_timesSet1->setObjectName("lineEdit_timesSet1");
     lineEdit_timesSet2 = new QLineEdit(widget_libSet);
     lineEdit_timesSet2->setObjectName("lineEdit_timesSet2");
+    lineEdit_timesSet3 = new QLineEdit(widget_libSet);
+    lineEdit_timesSet3->setObjectName("lineEdit_timesSet3");
     for (int i = 0; i < 21; i++)
     {
         lineEdit_groupName[i] = new QLineEdit(widget_groupSet);
@@ -139,6 +144,7 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) : QWidget(parent)
     lineEdit_range4Left->setValidator(v2);
     lineEdit_timesSet1->setValidator(v2);
     lineEdit_timesSet2->setValidator(v2);
+    lineEdit_timesSet3->setValidator(v2);
 
     reloadGlobalValue();
     loadStyleSheet();
@@ -166,6 +172,7 @@ void WordSettingWidget::reloadGlobalValue()
     lineEdit_range4Left->setText(Global::m_range4Left.getValueStr());
     lineEdit_timesSet1->setText(Global::m_timesSet1.getValueStr());
     lineEdit_timesSet2->setText(Global::m_timesSet2.getValueStr());
+    lineEdit_timesSet3->setText(Global::m_timesSet3.getValueStr());
     for (int i = 0; i < 21; i++)
     {
         lineEdit_groupName[i]->setText(Global::m_groupName[i].getValueStr());
@@ -225,9 +232,17 @@ void WordSettingWidget::saveGlobalValue()
     {
         lineEdit_timesSet2->setText("0");
     }
+    if (lineEdit_timesSet3->text().toInt() < 0)
+    {
+        lineEdit_timesSet3->setText("0");
+    }
     for (int i = 0; i < 21; i++)
     {
         lineEdit_groupName[i]->setText(lineEdit_groupName[i]->text().trimmed());
+    }
+    if (lineEdit_groupName[0]->text().isEmpty())
+    {
+        lineEdit_groupName[0]->setText("default");
     }
     QString tmp;
     if (lineEdit_range1Left->text().toInt() > lineEdit_range1Right->text().toInt())
@@ -270,12 +285,16 @@ void WordSettingWidget::saveGlobalValue()
     Global::m_range4Left.setValue(lineEdit_range4Left->text());
     Global::m_timesSet1.setValue(lineEdit_timesSet1->text());
     Global::m_timesSet2.setValue(lineEdit_timesSet2->text());
+    Global::m_timesSet3.setValue(lineEdit_timesSet3->text());
     for (int i = 0; i < 21; i++)
     {
         Global::m_groupName[i].setValue(lineEdit_groupName[i]->text());
     }
 
-    Global::saveXML();
+    if (Global::saveXML())
+    {
+        emit sendMessageSignal(WMessage("set reload flag", "true"));
+    }
 }
 
 void WordSettingWidget::loadStyleSheet()
@@ -288,6 +307,7 @@ void WordSettingWidget::slot_btnReset_clicked()
     if (QMessageBox::question(this, "question", "Are you sure to reset all configs?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
     {
         Global::reset();
-        Global::saveXML();
+        Global::saveXML(true);
+        emit sendMessageSignal(WMessage("set reload flag", "true"));
     }
 }

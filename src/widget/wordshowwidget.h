@@ -9,6 +9,7 @@
 #include "linklabel.h"
 #include "wordadmin.h"
 #include "wmessage.h"
+#include <QComboBox>
 
 class WordShowWidget : public QWidget
 {
@@ -18,6 +19,8 @@ public:
     void keyPressEvent(QKeyEvent *event);
 
     void recoveryInterface();
+    void reloadGlobalValue();
+    void setReloadFlag(bool flag);
     bool loadWordInfo(QString name);
 
 private:
@@ -26,6 +29,7 @@ private:
     void setViewPosition();
     void setViewPosition_14();
     void setViewPosition_15();
+    void setWordTimes(int times);
 
 signals:
     void sendMessageSignal(WMessage message);
@@ -33,6 +37,7 @@ signals:
 
 private slots:
     void slot_btnReturn_Clicked();
+    void slot_btnMin_Clicked();
     void slot_btnMid_Clicked();
     void slot_btnMax_Clicked();
     void slot_btnAdd_Clicked();
@@ -40,6 +45,7 @@ private slots:
     void slot_btnEdit_Clicked();
     void slot_btnReset_Clicked();
     void slot_wbtnRemember_Clicked(bool active);
+    void slot_comboxGroup_currentIndexChanged(int index);
     void slot_wordLinkPressed();
     void slot_wordTimeDecline(QString name);
     void slot_wordTimeIncrease(QString name);
@@ -52,10 +58,15 @@ private:
     int m_synonymNum;
     int m_antonymNum;
 
+    QStringList m_groupList;
+
+    bool m_reloadFlag;
+
     QWidget *widget_topBar;
     QWidget *widget_show;
 
     QPushButton *btn_return;
+    QPushButton *btn_min;
     QPushButton *btn_mid;
     QPushButton *btn_max;
     QPushButton *btn_add;
@@ -64,6 +75,8 @@ private:
     QPushButton *btn_reset;
 
     WTButton *wbtn_isRemember;
+
+    QComboBox *combox_group;
 
     QScrollArea *scrollArea;
 

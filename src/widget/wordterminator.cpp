@@ -117,6 +117,7 @@ WordTerminator::WordTerminator(QWidget *parent) :
 
     wordSetting = new WordSettingWidget(this);
     wordSetting->setObjectName("WordSettingWidget");
+    connect(wordSetting, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
     stackedWidget->addWidget(wordSetting);
 
     p_forgetThread->start();
@@ -336,6 +337,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
             else if (info == "show word")
             {
                 wordShow->recoveryInterface();
+                wordShow->reloadGlobalValue();
                 if (wordShow->loadWordInfo(value))
                 {
                     pushWidgetIndex(Widget_WordShow);
@@ -436,5 +438,21 @@ void WordTerminator::slot_handleMessage(WMessage message)
             }
         }
 //        else if (msgNum > 1) {}
+    }
+    else if (name == "WordSettingWidget")
+    {
+        if (msgNum == 1)
+        {
+            QString info, value;
+            message.getMessage(0, info, value);
+            if (info == "set reload flag")
+            {
+                bool flag = (value == "true" ? true : false);
+                wordCreate->setReloadFlag(flag);
+                wordLibrary->setReloadFlag(flag);
+                wordShow->setReloadFlag(flag);
+                wordMemorize->setReloadFlag(flag);
+            }
+        }
     }
 }

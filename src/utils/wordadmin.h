@@ -6,7 +6,7 @@
 #include <QDateTime>
 #include <QReadWriteLock>
 
-#define MAX_WORD_NUM 100000
+#define MAX_WORD_NUM 200000
 #define WORD_NAME_UNDEFINED "-1"
 #define MAX_TIMES 99999
 
@@ -19,7 +19,7 @@ public:
     QString m_name;
     int m_times;
     QDateTime m_modifyTime;
-    int m_groupid;
+    int m_groupId;
     int m_remember;
     bool m_isPhrase;
 };
@@ -117,18 +117,18 @@ public:
 
 
     /* 查找从 t1~t2 学习次数的单词 */
-    int getWordNumFromTimes(int t1, int t2, bool isRemember);
-    QStringList getWordListFromTimes(int t1, int t2, bool isRemember);
-    QStringList getAllWordList();
+    int getWordNumFromTimes(int t1, int t2, int groupId, bool isRemember);
+    QStringList getWordListFromTimes(int t1, int t2, int groupId, bool isRemember);
+    QStringList getAllWordList(int groupId);
     QList<BriefWordInfo> getWordListWithinTime(int minutes);
     QList<BriefWordInfo> getWordListWithinTime(int minutes, bool isRemember);
-    QList<WordTest> getAllWordCanMemorizeList();
-    QList<WordTest> getWordCanMemorizeListFromTimes(int t1, int t2, bool isRemember);
-    int getWordCanMemorizeNumFromTimes(int t1, int t2, bool isRemember);
+    QList<WordTest> getAllWordCanMemorizeList(int groupId);
+    QList<WordTest> getWordCanMemorizeListFromTimes(int t1, int t2, int groupId, bool isRemember);
+    int getWordCanMemorizeNumFromTimes(int t1, int t2, int groupId, bool isRemember);
     QList<BriefWordInfo> getWordCannotMemorizeWithoutTime(uint minutes);
 
     /* 索引查找 */
-    int searchWordTestList(QList<WordTest> &list, QString name);
+    int searchWordTestList(const QList<WordTest> &list, const QString &name);
 
 
 private:

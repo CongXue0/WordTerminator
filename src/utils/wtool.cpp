@@ -31,7 +31,7 @@ QRect WTool::getScreenGeometry()
 QString WTool::getScreenSize()
 {//x1.24
 //    return "15.6";
-//    return "14";
+    return "14";
     int height = getScreenGeometry().height();
     if (height >= 1000 && height <= 1100)
         return "15.6";
@@ -63,6 +63,35 @@ int WTool::rand(int a, int b)
 QDateTime WTool::getCurDateTimeMinus(uint sec)
 {
     return QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() - sec);
+}
+
+QStringList WTool::getGroupList()
+{
+    QStringList list;
+    for (int i = 0; i < 21; i++)
+    {
+        if (!Global::m_groupName[i].getValueStr().isEmpty())
+        {
+            list.append(Global::m_groupName[i].getValueStr());
+        }
+    }
+    return list;
+}
+
+int WTool::getGroupNo(QString groupName)
+{
+    if (groupName == ALL_GROUP)
+    {
+        return -1;
+    }
+    for (int i = 0; i < 21; i++)
+    {
+        if (Global::m_groupName[i].getValueStr() == groupName)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 QString WTool::readFileInfo(QString path)
@@ -119,6 +148,7 @@ bool WTool::makePath(QString path)
     {
         return dir.mkpath(path);
     }
+    return true;
 }
 
 bool WTool::makeDir(QString path)
@@ -128,6 +158,7 @@ bool WTool::makeDir(QString path)
     {
         return dir.mkdir(path);
     }
+    return true;
 }
 
 int WTool::getFontLength(QFont font, QString txt)
