@@ -1,6 +1,6 @@
 /***********QWidget***********/
 QWidget#widget_topBar{
-	qproperty-geometry:rect(0 0 660 40);
+	qproperty-geometry:rect(0 0 660 76);
 	background:#d7f3fe;
 }
 QWidget#widget_show{
@@ -12,6 +12,7 @@ QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
 
 /**********QPushButton**********/
 QPushButton#btn_return,
+QPushButton#btn_min,
 QPushButton#btn_mid,
 QPushButton#btn_max,
 QPushButton#btn_add,
@@ -28,8 +29,18 @@ QPushButton#btn_return{
 QPushButton#btn_return:hover{
 	background:url(skin/picture/14/left_hover.png) 0 center no-repeat #f0f0f0;
 }
+QPushButton#btn_min{
+	qproperty-geometry:rect(100 40 64 32);
+	background:#ffffff;
+	font-size:22px;
+	font-weight:bold;
+	color:#656669;
+}
+QPushButton#btn_min:hover{
+	background:#f0f0f0;
+}
 QPushButton#btn_mid{
-	qproperty-geometry:rect(180 4 64 32);
+	qproperty-geometry:rect(180 40 64 32);
 	background:#ffffff;
 	font-size:22px;
 	font-weight:bold;
@@ -39,7 +50,7 @@ QPushButton#btn_mid:hover{
 	background:#f0f0f0;
 }
 QPushButton#btn_max{
-	qproperty-geometry:rect(260 4 64 32);
+	qproperty-geometry:rect(260 40 64 32);
 	background:#ffffff;
 	font-size:22px;
 	font-weight:bold;
@@ -49,7 +60,7 @@ QPushButton#btn_max:hover{
 	background:#f0f0f0;
 }
 QPushButton#btn_add{
-	qproperty-geometry:rect(340 4 64 32);
+	qproperty-geometry:rect(340 40 64 32);
 	background:url(skin/picture/14/add.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_add:hover{
@@ -97,9 +108,33 @@ WTButton#wbtn_isRemember:checked:hover{
 	background:url(skin/picture/14/forever_hover.png) 0 center no-repeat #f0f0f0;
 }
 
+/***********QComboBox***********/
+QComboBox#combox_group{
+	border:2px solid #b0c4de;
+	background:rgba(255,255,255,0);
+	color:#656669;
+	font-size:22px;
+}
+QComboBox::down-arrow{
+	background:url(skin/picture/14/combox_arrow.png) no-repeat;
+	padding:0px;
+	width:30px;
+	height:20px;
+}
+QComboBox::drop-down{
+	border:none;
+	background:rgba(255,255,255,0);
+}
+QComboBox QAbstractItemView{
+	background-color:#f5f5f5;
+}
+QComboBox#combox_group{
+	qproperty-geometry:rect(420 40 210 32);
+}
+
 /**********QScrollArea**********/
 QScrollArea#scrollArea{
-	qproperty-geometry:rect(0 40 660 590);
+	qproperty-geometry:rect(0 76 660 554);
 	background:rgba(255,255,255,0);
 	border:0px;
 }

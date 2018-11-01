@@ -40,6 +40,7 @@ QLabel#label_range3_f,
 QLabel#label_range4_plus,
 QLabel#label_timesSet1,
 QLabel#label_timesSet2,
+QLabel#label_timesSet3,
 QLabel#label_group0,
 QLabel#label_group1,
 QLabel#label_group2,
@@ -146,6 +147,9 @@ QLabel#label_timesSet1{
 QLabel#label_timesSet2{
 	qproperty-geometry:rect(16 304 140 40);
 }
+QLabel#label_timesSet3{
+	qproperty-geometry:rect(16 352 140 40);
+}
 QLabel#label_group0{
 	qproperty-geometry:rect(16 16 130 40);
 }
@@ -232,6 +236,7 @@ QLineEdit#lineEdit_range3Right,
 QLineEdit#lineEdit_range4Left,
 QLineEdit#lineEdit_timesSet1,
 QLineEdit#lineEdit_timesSet2,
+QLineEdit#lineEdit_timesSet3,
 QLineEdit#lineEdit_group0Name,
 QLineEdit#lineEdit_group1Name,
 QLineEdit#lineEdit_group2Name,
@@ -318,6 +323,9 @@ QLineEdit#lineEdit_timesSet1{
 QLineEdit#lineEdit_timesSet2{
 	qproperty-geometry:rect(152 304 140 40);
 }
+QLineEdit#lineEdit_timesSet3{
+	qproperty-geometry:rect(152 352 140 40);
+}
 QLineEdit#lineEdit_group0Name{
 	qproperty-geometry:rect(142 16 180 40);
 }
@@ -399,6 +407,9 @@ QComboBox::down-arrow{
 QComboBox::drop-down{
 	border:none;
 	background:rgba(255,255,255,0);
+}
+QComboBox QAbstractItemView{
+	background-color:#f5f5f5;
 }
 
 /**********QPushButton**********/

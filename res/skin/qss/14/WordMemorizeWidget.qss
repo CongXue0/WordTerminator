@@ -4,7 +4,7 @@ QLabel#label_bg_welcome{
 	background:url(skin/picture/14/bg_mem_welcome.png);
 }
 QLabel#label_statistics{
-	qproperty-geometry:rect(40 256 300 109);
+	qproperty-geometry:rect(40 312 300 109);
 	/*background:#005656;*/
 	font-size:26px;
 	qproperty-alignment:'AlignLeft | AlignTop';
@@ -75,19 +75,42 @@ QRadioButton#radioBtn_forever::indicator::checked{
 	image:url(skin/picture/14/check1_active.png);
 }
 QRadioButton#radioBtn_range1{
-	qproperty-geometry:rect(420 91 254 50);
+	qproperty-geometry:rect(390 147 200 40);
 }
 QRadioButton#radioBtn_range2{
-	qproperty-geometry:rect(420 147 254 50);
+	qproperty-geometry:rect(390 203 200 40);
 }
 QRadioButton#radioBtn_range3{
-	qproperty-geometry:rect(420 203 254 50);
+	qproperty-geometry:rect(390 259 200 40);
 }
 QRadioButton#radioBtn_range4{
-	qproperty-geometry:rect(420 259 254 50);
+	qproperty-geometry:rect(390 315 200 40);
 }
 QRadioButton#radioBtn_forever{
-	qproperty-geometry:rect(420 315 254 50);
+	qproperty-geometry:rect(390 371 200 40);
+}
+
+/***********QComboBox***********/
+QComboBox#combox_group{
+	border:2px solid #b0c4de;
+	background:rgba(255,255,255,0);
+	font-size:24px;
+}
+QComboBox::down-arrow{
+	background:url(skin/picture/14/combox_arrow.png) no-repeat;
+	padding:0px;
+	width:30px;
+	height:20px;
+}
+QComboBox::drop-down{
+	border:none;
+	background:rgba(255,255,255,0);
+}
+QComboBox QAbstractItemView{
+	background-color:#f5f5f5;
+}
+QComboBox#combox_group{
+	qproperty-geometry:rect(390 91 220 40);
 }
 
 /**********QPushButton**********/

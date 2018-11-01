@@ -1,6 +1,6 @@
 /***********QWidget***********/
 QWidget#widget_topBar{
-	qproperty-geometry:rect(0 0 820 50);
+	qproperty-geometry:rect(0 0 820 95);
 	background:#d7f3fe;
 }
 QWidget#widget_show{
@@ -12,6 +12,7 @@ QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
 
 /**********QPushButton**********/
 QPushButton#btn_return,
+QPushButton#btn_min,
 QPushButton#btn_mid,
 QPushButton#btn_max,
 QPushButton#btn_add,
@@ -28,8 +29,18 @@ QPushButton#btn_return{
 QPushButton#btn_return:hover{
 	background:url(skin/picture/15.6/left_hover.png) 0 center no-repeat #f0f0f0;
 }
+QPushButton#btn_min{
+	qproperty-geometry:rect(120 50 80 40);
+	background:#ffffff;
+	font-size:28px;
+	font-weight:bold;
+	color:#656669;
+}
+QPushButton#btn_min:hover{
+	background:#f0f0f0;
+}
 QPushButton#btn_mid{
-	qproperty-geometry:rect(220 5 80 40);
+	qproperty-geometry:rect(220 50 80 40);
 	background:#ffffff;
 	font-size:28px;
 	font-weight:bold;
@@ -39,7 +50,7 @@ QPushButton#btn_mid:hover{
 	background:#f0f0f0;
 }
 QPushButton#btn_max{
-	qproperty-geometry:rect(320 5 80 40);
+	qproperty-geometry:rect(320 50 80 40);
 	background:#ffffff;
 	font-size:28px;
 	font-weight:bold;
@@ -49,7 +60,7 @@ QPushButton#btn_max:hover{
 	background:#f0f0f0;
 }
 QPushButton#btn_add{
-	qproperty-geometry:rect(420 5 80 40);
+	qproperty-geometry:rect(420 50 80 40);
 	background:url(skin/picture/15.6/add.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_add:hover{
@@ -79,7 +90,7 @@ QPushButton#btn_reset:hover{
 
 /**********WTButton**********/
 WTButton#wbtn_isRemember{
-	qproperty-geometry:rect(120 5 80 40);
+	qproperty-geometry:rect(420 5 80 40);
 	background:url(skin/picture/15.6/notforever.png) 0 center no-repeat #ffffff;
 	border:2px solid #f5f6f7;
 	border-radius:6px;
@@ -97,9 +108,33 @@ WTButton#wbtn_isRemember:checked:hover{
 	background:url(skin/picture/15.6/forever_hover.png) 0 center no-repeat #f0f0f0;
 }
 
+/***********QComboBox***********/
+QComboBox#combox_group{
+	border:2px solid #b0c4de;
+	background:rgba(255,255,255,0);
+	color:#656669;
+	font-size:26px;
+}
+QComboBox::down-arrow{
+	background:url(skin/picture/15.6/combox_arrow.png) no-repeat;
+	padding:0px;
+	width:40px;
+	height:25px;
+}
+QComboBox::drop-down{
+	border:none;
+	background:rgba(255,255,255,0);
+}
+QComboBox QAbstractItemView{
+	background-color:#f5f5f5;
+}
+QComboBox#combox_group{
+	qproperty-geometry:rect(520 50 240 40);
+}
+
 /**********QScrollArea**********/
 QScrollArea#scrollArea{
-	qproperty-geometry:rect(0 50 820 740);
+	qproperty-geometry:rect(0 95 820 695);
 	background:rgba(255,255,255,0);
 	border:0px;
 }

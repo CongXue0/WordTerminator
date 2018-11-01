@@ -61,6 +61,9 @@ QComboBox::drop-down{
 	border:none;
 	background:rgba(255,255,255,0);
 }
+QComboBox QAbstractItemView{
+	background-color:#f5f5f5;
+}
 
 /**********QLineEdit**********/
 QLineEdit#lineEdit_script{
