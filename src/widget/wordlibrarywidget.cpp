@@ -3,11 +3,20 @@
 #include <QKeyEvent>
 #include "wordadmin.h"
 #include "global.h"
+#include <QApplication>
+#include <QMessageBox>
 
 extern WordAdmin *p_wordAdmin;
 
 WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
 {
+    m_menu1 = new QMenu("操作", this);
+    m_menu1->setObjectName("m_menu1");
+    connect(m_menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu1Triggered(QAction *)));
+    m_menu2 = new QMenu("group", this);
+    m_menu2->setObjectName("m_menu2");
+    connect(m_menu2, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu2Triggered(QAction *)));
+
     label_bg = new QLabel(this);
     label_bg->setObjectName("label_bg");
     label_statistics = new QLabel(this);
@@ -27,10 +36,12 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     m_wordList.clear();
     m_model = new QStringListModel();
 
-    wordList = new QListView(this);
+    wordList = new WTListView(this);
     wordList->setObjectName("wordList");
     wordList->setEditTriggers(QAbstractItemView::NoEditTriggers);//设置只读
+    wordList->setSelectionMode(QListView::ExtendedSelection);
     wordList->setModel(m_model);
+    wordList->installEventFilter(this);
     connect(wordList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_itemDoubleClicked(QModelIndex)));
 
     radioBtn_range[0] = new QRadioButton(this);
@@ -83,6 +94,16 @@ void WordLibraryWidget::keyPressEvent(QKeyEvent *event)
     }
 }
 
+bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
+{
+    if (obj == wordList && e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent *>(e)->button() == Qt::RightButton)
+    {
+        m_modelList = wordList->selectedIndexes();
+        m_menu1->exec(QCursor::pos());
+    }
+    return QWidget::eventFilter(obj, e);
+}
+
 void WordLibraryWidget::recoveryInterface()
 {
     clearSearch();
@@ -99,10 +120,26 @@ void WordLibraryWidget::reloadGlobalValue()
     if (m_reloadFlag)
     {
         m_reloadFlag = false;
+
+        m_menu1->clear();
+        m_menu2->clear();
+        m_menu1->addAction(QString("Set times %1").arg(Global::m_timesSet1.getValueInt()))->setObjectName("menu1");
+        m_menu1->addAction(QString("Set times %1").arg(Global::m_timesSet2.getValueInt()))->setObjectName("menu1");
+        m_menu1->addAction(QString("Set times %1").arg(Global::m_timesSet3.getValueInt()))->setObjectName("menu1");
+        QStringList list = WTool::getGroupList();
+        for (int i = 0; i < list.count(); i++)
+        {
+            m_menu2->addAction(list.at(i))->setObjectName("menu2");
+        }
+        m_menu1->addMenu(m_menu2);
+        m_menu1->addAction(QString("Set to forever"))->setObjectName("menu1");
+        m_menu1->addAction(QString("Set to not forever"))->setObjectName("menu1");
+        m_menu1->addAction(QString("Delete"))->setObjectName("menu1");
+        m_menu1->addAction(QString("Clear times"))->setObjectName("menu1");
+
         disconnect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
         combox_group->clear();
         combox_group->addItem(ALL_GROUP);
-        QStringList list = WTool::getGroupList();
         for (int i = 0; i < list.count(); i++)
         {
             combox_group->addItem(list.at(i));
@@ -163,6 +200,118 @@ void WordLibraryWidget::updateWordStatistics()
 void WordLibraryWidget::loadStyleSheet()
 {
     setStyleSheet(WTool::getWordLibraryWidgetQss());
+}
+
+void WordLibraryWidget::slot_menu1Triggered(QAction *act)
+{
+    if (act->objectName() != "menu1" || m_modelList.count() == 0)
+        return;
+    QString operation = act->text();
+    if (operation.startsWith("Set times"))
+    {
+        int times = operation.mid(10, operation.length()).toInt();
+        BriefWordInfo word;
+        for (int i = 0; i < m_modelList.count(); i++)
+        {
+            if (p_wordAdmin->getWordBriefInfo(m_modelList.at(i).data().toString(), &word))
+            {
+                word.m_times = times;
+                word.m_modifyTime = QDateTime::currentDateTime();
+                word.m_remember = (word.m_remember > 0 ? 2 : -1);
+                if (p_wordAdmin->updateWord(word.m_name, "Times", QString::number(word.m_times), "ModifyTime",
+                    word.m_modifyTime.toString(TIMEFORMAT), "RememberState", QString::number(word.m_remember)))
+                {
+                    emit wordTimeIncreaseSignal(word.m_name);
+                }
+            }
+        }
+        this->updateWordList();
+        this->updateWordStatistics();
+    }
+    else if (operation == "Set to forever" || operation == "Set to not forever")
+    {
+        int remember;
+        if (operation == "Set to forever")
+            remember = 2;
+        else
+            remember = -1;
+        BriefWordInfo word;
+        for (int i = 0; i < m_modelList.count(); i++)
+        {
+            if (p_wordAdmin->getWordBriefInfo(m_modelList.at(i).data().toString(), &word))
+            {
+                word.m_modifyTime = QDateTime::currentDateTime();
+                word.m_remember = remember;
+                if (p_wordAdmin->updateWord(word.m_name, "ModifyTime", word.m_modifyTime.toString(TIMEFORMAT),
+                    "RememberState", QString::number(word.m_remember)))
+                {
+                    emit wordTimeIncreaseSignal(word.m_name);
+                }
+            }
+        }
+        this->updateWordList();
+        this->updateWordStatistics();
+    }
+    else if (operation == "Delete")
+    {
+        if (QMessageBox::question(this, "question", QString("是否删除?"),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+        {
+            QString name;
+            for (int i = 0; i < m_modelList.count(); i++)
+            {
+                name = m_modelList.at(i).data().toString();
+                if (p_wordAdmin->deleteWord(name))
+                {
+                    emit wordTimeIncreaseSignal(name);
+                }
+            }
+            this->updateWordList();
+            this->updateWordStatistics();
+        }
+    }
+    else if (operation == "Clear times")
+    {
+        BriefWordInfo word;
+        for (int i = 0; i < m_modelList.count(); i++)
+        {
+            if (p_wordAdmin->getWordBriefInfo(m_modelList.at(i).data().toString(), &word))
+            {
+                word.m_times = 0;
+                word.m_modifyTime = QDateTime::currentDateTime();
+                word.m_remember = (word.m_remember > 0 ? 2 : -1);
+                if (p_wordAdmin->updateWord(word.m_name, "Times", QString::number(word.m_times), "ModifyTime",
+                    word.m_modifyTime.toString(TIMEFORMAT), "RememberState", QString::number(word.m_remember)))
+                {
+                    emit wordTimeIncreaseSignal(word.m_name);
+                }
+            }
+        }
+        this->updateWordList();
+        this->updateWordStatistics();
+    }
+}
+
+void WordLibraryWidget::slot_menu2Triggered(QAction *act)
+{
+    if (act->objectName() != "menu2" || m_modelList.count() == 0)
+        return;
+    int groupId = WTool::getGroupNo(act->text());
+    BriefWordInfo word;
+    for (int i = 0; i < m_modelList.count(); i++)
+    {
+        if (p_wordAdmin->getWordBriefInfo(m_modelList.at(i).data().toString(), &word))
+        {
+            word.m_modifyTime = QDateTime::currentDateTime();
+            word.m_groupId = groupId;
+            word.m_remember = (word.m_remember > 0 ? 2 : -1);
+            if (p_wordAdmin->updateWord(word.m_name, "ModifyTime", word.m_modifyTime.toString(TIMEFORMAT),
+                "Groupid", QString::number(word.m_groupId), "RememberState", QString::number(word.m_remember)))
+            {
+                emit wordTimeIncreaseSignal(word.m_name);
+            }
+        }
+    }
 }
 
 void WordLibraryWidget::slot_btnSearch_clicked()

@@ -489,6 +489,38 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
     return false;
 }
 
+//bool WordAdmin::changeTimes(QString name, int times)
+//{
+//    if (name == WORD_NAME_UNDEFINED)
+//        return false;
+//    m_mutex.lockForWrite();
+//    for (int i = 0; i < m_currentTop; i++)
+//    {
+//        if (m_wordLib[i].m_name == name)
+//        {
+//            if (m_wordLib[i].m_times == times)
+//            {
+//                m_mutex.unlock();
+//                return false;
+//            }
+//            int r = m_wordLib[i].m_remember;
+//            r = (r > 0 ? 2 : -1);
+//            QSqlQuery query;
+//            QString sql = QString("update WordLibrary set Times=\"%1\",RememberState=\"%2\" where Name=\"%3\"")
+//                .arg(times).arg(r).arg(name);
+//            if (query.exec(sql))
+//            {
+//                m_wordLib[i].m_times = times;
+//                m_wordLib[i].m_remember = r;
+//                m_mutex.unlock();
+//                return true;
+//            }
+//        }
+//    }
+//    m_mutex.unlock();
+//    return false;
+//}
+
 bool WordAdmin::deleteWord(QString name)
 {
     if (name == WORD_NAME_UNDEFINED)

@@ -84,6 +84,7 @@ WordTerminator::WordTerminator(QWidget *parent) :
     wordLibrary = new WordLibraryWidget(this);
     wordLibrary->setObjectName("WordLibraryWidget");
     connect(wordLibrary, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
+    connect(wordLibrary, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
     connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), wordLibrary, SLOT(slot_wordTimeDecline(QString)));
     stackedWidget->addWidget(wordLibrary);
     pushWidgetIndex(Widget_WordLibrary);

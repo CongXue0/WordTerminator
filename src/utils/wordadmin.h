@@ -108,6 +108,7 @@ public:
     bool updateWord(QString name, QString field, QString value);
     bool updateWord(QString name, QString field1, QString value1, QString field2, QString value2);
     bool updateWord(QString name, QString field1, QString value1, QString field2, QString value2, QString field3, QString value3);
+//    bool changeTimes(QString name, int times);
     bool deleteWord(QString name);
     int resetAllWordRemerber(QWidget *parent);
     bool isWordExist(QString name, int *offset = NULL);

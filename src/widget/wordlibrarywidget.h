@@ -11,6 +11,8 @@
 #include "wmessage.h"
 #include <QComboBox>
 #include "wtool.h"
+#include "wtlistview.h"
+#include <QMenu>
 
 class WordLibraryWidget : public QWidget
 {
@@ -18,6 +20,7 @@ class WordLibraryWidget : public QWidget
 public:
     explicit WordLibraryWidget(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *obj, QEvent *e);
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
@@ -32,8 +35,11 @@ private:
 
 signals:
     void sendMessageSignal(WMessage message);
+    void wordTimeIncreaseSignal(QString name);
 
 private slots:
+    void slot_menu1Triggered(QAction *act);
+    void slot_menu2Triggered(QAction *act);
     void slot_btnSearch_clicked();
     void slot_btnCreate_clicked();
     void slot_itemDoubleClicked(QModelIndex index);
@@ -45,6 +51,10 @@ private slots:
 private:
     bool m_reloadFlag;
     int m_curGroupId;
+    QModelIndexList m_modelList;
+
+    QMenu *m_menu1;
+    QMenu *m_menu2;
 
     QLabel *label_bg;
     QLabel *label_statistics;
@@ -54,7 +64,7 @@ private:
     QPushButton *btn_search;
     QPushButton *btn_create;
 
-    QListView *wordList;
+    WTListView *wordList;
     QStringList m_wordList;
     QStringListModel *m_model;
 
