@@ -11,8 +11,8 @@ public:
     WMessage(QString info, QString value);
     ~WMessage();
 
-    void insertMessage(const int & index, const QString &info, const QString &value);
-    void getMessage(const int &index, QString &info, QString &value);
+    void insertMessage(int index, QString info, QString value);
+    void getMessage(int index, QString &info, QString &value);
     void clearMessage();
     int getMessageNum();
 

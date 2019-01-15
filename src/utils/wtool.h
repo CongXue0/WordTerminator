@@ -24,34 +24,34 @@ public:
     static void dirInit();//初始化文件夹
     static QRect getScreenGeometry();
     static QString getScreenSize();
-    static int divide(const int &a, const int &b);
+    static int divide(int a, int b);
     static QString getWordDBFilePath();
-    static int rand(const int &a, const int &b);//得到一个 [a, b] 范围内的随机数
+    static int rand(int a, int b);//得到一个 [a, b] 范围内的随机数
     static QDateTime getCurDateTimeMinus(uint sec);
 
     /* 组相关 */
     static QStringList getGroupList();
-    static int getGroupNo(const QString &groupName);
+    static int getGroupNo(QString groupName);
 
     /* 文件操作 */
-    static QString readFileInfo(const QString &path);
-    static void appendFileInfo(const QString &path, const QString &info);
-    static void writeFileInfo(const QString &path, const QString &info);
-    static bool makePath(const QString &path);
-    static bool makeDir(const QString &path);
+    static QString readFileInfo(QString path);
+    static void appendFileInfo(QString path, QString info);
+    static void writeFileInfo(QString path, QString info);
+    static bool makePath(QString path);
+    static bool makeDir(QString path);
 
     /* QString功能 */
-    static int getFontLength(const QFont &font, const QString &txt);
+    static int getFontLength(QFont font, QString txt);
     static int getTextLineNumber(QFont font, QString txt, int lineWidth);
-    static int getWordBorder(const QString &txt, const int &start, const bool &leftToRight);//查找失败返回 -1
-    static int skipChar(const QString &txt, const int &start, const char &ch, const bool &leftToRight);//跳过字符 返回 -1 跳过失败 -2 无法跳过
+    static int getWordBorder(QString txt, int start, bool leftToRight);//查找失败返回 -1
+    static int skipChar(QString txt, int start, char ch, bool leftToRight);//跳过字符 返回 -1 跳过失败 -2 无法跳过
     static QString arrangeWord(QString word, char sp);//规整单词
-    static bool isSpace(const QString &txt);
-    static bool isLetter(const QString &txt, char fl = ' ');//fl 为过滤字符，默认过滤空格
-    static bool isLanguage(const QString &txt, char fl = ' ');
-    static bool isEnglishSentence(const QString &txt, char fl = ' ');
-    static bool isWritting(const QString &txt);
-    static bool isChineseChar(const QChar &ch);
+    static bool isSpace(QString txt);
+    static bool isLetter(QString txt, char fl = ' ');//fl 为过滤字符，默认过滤空格
+    static bool isLanguage(QString txt, char fl = ' ');
+    static bool isEnglishSentence(QString txt, char fl = ' ');
+    static bool isWritting(QString txt);
+    static bool isChineseChar(QChar ch);
     static QStringList filterWordFromList(QStringList list, QString txt, QString strategy = "prefix");
     static QString shieldWord(QString txt, QString word);
 
