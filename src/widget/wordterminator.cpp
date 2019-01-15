@@ -16,6 +16,7 @@
 #include <QStandardPaths>
 #include "global.h"
 #include <QCoreApplication>
+#include "src/utils/version.h"
 
 extern WordAdmin *p_wordAdmin;
 extern ForgetThread *p_forgetThread;
@@ -33,6 +34,8 @@ WordTerminator::WordTerminator(QWidget *parent) :
 
     WTool::dirInit();
     Global::init(WTool::getConfigPath());
+
+    setWindowTitle("WordTerminator " + Version::getVersion());
 
     if (p_wordAdmin == NULL)
         p_wordAdmin = WordAdmin::getInstance();

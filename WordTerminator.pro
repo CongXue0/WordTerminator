@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     src/utils/global.cpp \
     src/widget/wordfunctionwidget.cpp \
     src/widget/wordsettingwidget.cpp \
-    src/utils/wtlistview.cpp
+    src/utils/wtlistview.cpp \
+    src/utils/version.cpp
 
 HEADERS  += src/widget/wordterminator.h \
     src/utils/wtool.h \
@@ -62,6 +63,7 @@ HEADERS  += src/widget/wordterminator.h \
     src/utils/global.h \
     src/widget/wordfunctionwidget.h \
     src/widget/wordsettingwidget.h \
-    src/utils/wtlistview.h
+    src/utils/wtlistview.h \
+    src/utils/version.h
 
 FORMS    += src/widget/wordterminator.ui
