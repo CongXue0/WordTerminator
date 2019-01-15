@@ -13,7 +13,7 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) : QWidget(parent)
     m_menu1 = new QMenu("操作", this);
     m_menu1->setObjectName("m_menu1");
     connect(m_menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu1Triggered(QAction *)));
-    m_menu2 = new QMenu("group", this);
+    m_menu2 = new QMenu("set group", this);
     m_menu2->setObjectName("m_menu2");
     connect(m_menu2, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu2Triggered(QAction *)));
 

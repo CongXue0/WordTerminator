@@ -4,7 +4,7 @@
 #include "wtool.h"
 #include "forgetthread.h"
 #include <QDebug>
-#include "time.h"
+#include <time.h>
 #include "memorythread.h"
 
 WordAdmin *p_wordAdmin;

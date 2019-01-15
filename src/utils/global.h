@@ -4,6 +4,11 @@
 #include <QString>
 #include <qglobal.h>
 #include <QMutex>
+#include <QDebug>
+
+#ifndef DEBUG
+    #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split('\\').last()).arg(__FUNCTION__).arg(__LINE__)
+#endif
 
 #define DECLINE_NUM 10
 #define XMLVARNUM 49

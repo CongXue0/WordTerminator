@@ -445,15 +445,15 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     if (m_mode == CREATE)
     {
         wordInfo.m_times = 0;
-        wordInfo.m_modifyTime = QDateTime::currentDateTime();
         wordInfo.m_remember = -1;
     }
     else if (m_mode == MODIFY)
     {
         wordInfo.m_times = m_times;
-        wordInfo.m_modifyTime = QDateTime::currentDateTime();
         wordInfo.m_remember = (m_remember > 0) ? 2 : -1;
     }
+    wordInfo.m_modifyTime = QDateTime::currentDateTime();
+    wordInfo.m_groupid = combox_group->currentIndex();
     wordInfo.m_isPhrase = checkBox_phrase->isChecked();
     wordInfo.m_phoneticSymbol = lineEdit_phoneticSymbol->text();
     wordInfo.m_voiceFile = "";
