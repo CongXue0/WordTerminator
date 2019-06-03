@@ -142,10 +142,7 @@ void WordTerminator::showEvent(QShowEvent *)
         QPoint point;
         QRect screen = WTool::getScreenGeometry();
         point.setX(screen.width() / 2 - size.width() / 2);
-        if (WTool::getScreenSize() == "14")
-            point.setY(8 * 4);
-        else if (WTool::getScreenSize() == "15.6")
-            point.setY(10 * 4);
+        point.setY(screen.height() / 2 - size.height() / 2);
         this->move(point);
 
         m_first = false;

@@ -94,6 +94,19 @@ int WTool::getGroupNo(QString groupName)
     return -1;
 }
 
+QString WTool::getGroupName(int groupId)
+{
+    if (groupId == -1)
+    {
+        return ALL_GROUP;
+    }
+    if (groupId >= 0 && groupId < 21)
+    {
+        return Global::m_groupName[groupId].getValueStr();
+    }
+    return "";
+}
+
 QString WTool::readFileInfo(QString path)
 {
     QString info;

@@ -32,6 +32,7 @@ public:
     /* 组相关 */
     static QStringList getGroupList();
     static int getGroupNo(QString groupName);
+    static QString getGroupName(int groupId);
 
     /* 文件操作 */
     static QString readFileInfo(QString path);

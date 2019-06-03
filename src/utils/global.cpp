@@ -27,6 +27,8 @@ XmlVar Global::m_script2;
 XmlVar Global::m_script3;
 XmlVar Global::m_script4;
 XmlVar Global::m_groupName[21];
+XmlVar Global::m_groupIndexLib;
+XmlVar Global::m_groupIndexMemory;
 
 QString Global::m_path;
 QVector<XmlVar *> Global::m_varList;
@@ -156,6 +158,8 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_groupName[18]);
     m_varList.append(&m_groupName[19]);
     m_varList.append(&m_groupName[20]);
+    m_varList.append(&m_groupIndexLib);
+    m_varList.append(&m_groupIndexMemory);
 
     load();
 }
@@ -259,6 +263,8 @@ void Global::reset()
     m_groupName[18] = XmlVar("GROUP18NAME", "");
     m_groupName[19] = XmlVar("GROUP19NAME", "");
     m_groupName[20] = XmlVar("GROUP20NAME", "");
+    m_groupIndexLib = XmlVar("GROUPINDEXLIB", "-1");
+    m_groupIndexMemory = XmlVar("GROUPINDEXMEMORY", "-1");
 }
 
 bool Global::saveXML(bool force)

@@ -247,7 +247,7 @@ void WordMemorizeWidget::reloadGlobalValue()
         {
             combox_group->addItem(list.at(i));
         }
-        combox_group->setCurrentIndex(1);
+        combox_group->setCurrentIndex(Global::m_groupIndexMemory.getValueInt() + 1);
         connect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
         m_curGroupId = 0;
 
@@ -1089,6 +1089,8 @@ void WordMemorizeWidget::slot_comboxGroup_currentIndexChanged(int index)
     Q_UNUSED(index);
     m_curGroupId = WTool::getGroupNo(combox_group->currentText());
     this->updateWordStatistics();
+    Global::m_groupIndexMemory.setValue(m_curGroupId);
+    Global::saveXML();
 }
 
 void WordMemorizeWidget::slot_btnStart_Clicked()

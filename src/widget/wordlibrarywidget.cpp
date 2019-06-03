@@ -144,7 +144,7 @@ void WordLibraryWidget::reloadGlobalValue()
         {
             combox_group->addItem(list.at(i));
         }
-        combox_group->setCurrentIndex(1);
+        combox_group->setCurrentIndex(Global::m_groupIndexLib.getValueInt() + 1);
         connect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
         m_curGroupId = 0;
 
@@ -363,6 +363,8 @@ void WordLibraryWidget::slot_comboxGroup_currentIndexChanged(int index)
     m_curGroupId = WTool::getGroupNo(combox_group->currentText());
     updateWordList();
     updateWordStatistics();
+    Global::m_groupIndexLib.setValue(m_curGroupId);
+    Global::saveXML();
 }
 
 void WordLibraryWidget::slot_wordTimeDecline(QString name)

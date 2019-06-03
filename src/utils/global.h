@@ -80,9 +80,8 @@ public:
     static XmlVar m_script3;
     static XmlVar m_script4;
     static XmlVar m_groupName[21];
-
-private:
-
+    static XmlVar m_groupIndexLib;
+    static XmlVar m_groupIndexMemory;
 
 private:
     static QString m_path;
