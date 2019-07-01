@@ -82,6 +82,7 @@ public:
     static XmlVar m_groupName[21];
     static XmlVar m_groupIndexLib;
     static XmlVar m_groupIndexMemory;
+    static XmlVar m_singleMemoryNum;
 
 private:
     static QString m_path;

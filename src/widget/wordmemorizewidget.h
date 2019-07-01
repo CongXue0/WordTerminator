@@ -5,12 +5,13 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
-#include "copylabel.h"
 #include <QScrollArea>
-#include "wordadmin.h"
 #include <QLineEdit>
-#include "linklabel.h"
 #include <QComboBox>
+#include <QSpinBox>
+#include "copylabel.h"
+#include "wordadmin.h"
+#include "linklabel.h"
 #include "wtool.h"
 
 class WordMemorizeWidget : public QWidget
@@ -101,6 +102,7 @@ private:
     QRect rect_recall_right;
     QRect rect_recall_center;
 
+    QLabel *label_singleNum;
     QLabel *label_bg_welcome;
     QLabel *label_bg_start;
     QLabel *label_statistics;
@@ -115,6 +117,8 @@ private:
     QRadioButton *radioBtn_forever;
 
     QComboBox *combox_group;
+
+    QSpinBox *spinBox_singleNum;
 
     QPushButton *btn_start;
     QPushButton *btn_know;

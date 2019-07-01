@@ -173,7 +173,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     }
     else
     {
-        in << "没有单词";
+        in << "There are no words.";
     }
     QMessageBox::about(this, "提示", "导出单词数 " + QString::number(count));
     file.close();

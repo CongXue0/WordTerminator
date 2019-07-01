@@ -18,6 +18,7 @@ WordTerminator{
 /***********QTextEdit***********/
 /***********QComboBox***********/
 /***********QTabWidget***********/
+/************QSpinBox************/
 
 QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView,QComboBox,QTabWidget{
 	font-family:"Microsoft Yahei";

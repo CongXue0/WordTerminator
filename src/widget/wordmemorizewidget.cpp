@@ -31,6 +31,9 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
     label_bg_welcome->setObjectName("label_bg_welcome");
     label_bg_start = new QLabel(this);
     label_bg_start->setObjectName("label_bg_start");
+    label_singleNum = new QLabel(label_bg_welcome);
+    label_singleNum->setObjectName("label_singleNum");
+    label_singleNum->setText("最大记忆单词数");
     label_statistics = new QLabel(label_bg_welcome);
     label_statistics->setObjectName("label_statistics");
     label_statistics->setText("当前可记单词数：2000\n"
@@ -88,6 +91,10 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
 
     combox_group = new QComboBox(label_bg_welcome);
     combox_group->setObjectName("combox_group");
+
+    spinBox_singleNum = new QSpinBox(label_bg_welcome);
+    spinBox_singleNum->setObjectName("spinBox_singleNum");
+    spinBox_singleNum->setRange(10, 10000);
 
     btn_start = new QPushButton(label_bg_welcome);
     btn_start->setObjectName("btn_start");
@@ -258,6 +265,8 @@ void WordMemorizeWidget::reloadGlobalValue()
         radioBtn_range[2]->setText(QString("times %1~%2")
             .arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
         radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
+
+        spinBox_singleNum->setValue(Global::m_singleMemoryNum.getValueInt());
     }
 }
 
@@ -375,6 +384,7 @@ void WordMemorizeWidget::setMode(int mode)
 
         label_bg_welcome->show();
         label_statistics->show();
+        label_singleNum->show();
         radioBtn_test[0]->show();
         radioBtn_test[1]->show();
         radioBtn_range[0]->show();
@@ -382,11 +392,13 @@ void WordMemorizeWidget::setMode(int mode)
         radioBtn_range[2]->show();
         radioBtn_range[3]->show();
         radioBtn_forever->show();
+        spinBox_singleNum->show();
         btn_start->show();
         break;
     case MEMORY:
         label_bg_welcome->hide();
         label_statistics->hide();
+        label_singleNum->hide();
         radioBtn_test[0]->hide();
         radioBtn_test[1]->hide();
         radioBtn_range[0]->hide();
@@ -394,6 +406,7 @@ void WordMemorizeWidget::setMode(int mode)
         radioBtn_range[2]->hide();
         radioBtn_range[3]->hide();
         radioBtn_forever->hide();
+        spinBox_singleNum->hide();
         btn_start->hide();
 
         label_bg_start->show();
@@ -1095,6 +1108,12 @@ void WordMemorizeWidget::slot_comboxGroup_currentIndexChanged(int index)
 
 void WordMemorizeWidget::slot_btnStart_Clicked()
 {
+    if (spinBox_singleNum->value() != Global::m_singleMemoryNum.getValueInt())
+    {
+        Global::m_singleMemoryNum.setValue(spinBox_singleNum->value());
+        Global::saveXML();
+    }
+
     m_testList.clear();
     m_nameList.clear();
     if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
@@ -1115,6 +1134,8 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
     }
     if (m_testList.size() > 0)
     {
+        m_testList = m_testList.mid(0, Global::m_singleMemoryNum.getValueInt());
+
         p_memThread->start();
         m_testModeNum = 0;
         for (int i = 0; i < 2; i++)

@@ -3,6 +3,11 @@ QLabel#label_bg_welcome{
 	qproperty-geometry:rect(0 0 660 630);
 	background:url(skin/picture/14/bg_mem_welcome.png);
 }
+QLabel#label_singleNum{
+	qproperty-geometry:rect(55 207 150 32);
+	font-size:18px;
+	qproperty-alignment:'AlignLeft | AlignVCenter';
+}
 QLabel#label_statistics{
 	qproperty-geometry:rect(40 312 300 109);
 	/*background:#005656;*/
@@ -111,6 +116,12 @@ QComboBox QAbstractItemView{
 }
 QComboBox#combox_group{
 	qproperty-geometry:rect(390 91 220 40);
+}
+
+/************QSpinBox************/
+QSpinBox#spinBox_singleNum{
+	font-size:20px;
+	qproperty-geometry:rect(189 207 96 32);
 }
 
 /**********QPushButton**********/

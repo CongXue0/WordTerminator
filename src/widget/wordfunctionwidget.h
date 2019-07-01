@@ -40,8 +40,6 @@ private:
     QComboBox *combox_script;
 
     QLineEdit *lineEdit_script;
-
-
 };
 
 #endif // WORDFUNCTIONWIDGET_H
