@@ -1,73 +1,73 @@
 /***********QLabel***********/
 QLabel#label_bg_func{
-	qproperty-geometry:rect(0 0 820 790);
-	background:url(skin/picture/15.6/bg_func.png);
+    qproperty-geometry:rect(0 0 820 790);
+    background:url(:/main/res/skin/picture/15.6/bg_func.png);
 }
 QLabel#label_refresh,
 QLabel#label_exportRule,
 QLabel#label_export{
-	font-size:33px;
-	color:#666666;
-	qproperty-alignment:'AlignLeft | AlignVCenter';
+    font-size:33px;
+    color:#666666;
+    qproperty-alignment:'AlignLeft | AlignVCenter';
 }
 QLabel#label_refresh{
-	qproperty-geometry:rect(20 10 400 50);
+    qproperty-geometry:rect(20 10 400 50);
 }
 QLabel#label_exportRule{
-	qproperty-geometry:rect(20 80 780 150);
-	font-size:28px;
+    qproperty-geometry:rect(20 80 780 150);
+    font-size:28px;
 }
 QLabel#label_export{
-	qproperty-geometry:rect(20 300 300 50);
+    qproperty-geometry:rect(20 300 300 50);
 }
 QLabel#line1{
-	qproperty-geometry:rect(20 70 780 1);
-	background:#708090;
+    qproperty-geometry:rect(20 70 780 1);
+    background:#708090;
 }
 QLabel#line2{
-	qproperty-geometry:rect(20 360 780 1);
-	background:#708090;
+    qproperty-geometry:rect(20 360 780 1);
+    background:#708090;
 }
 
 /**********QPushButton**********/
 QPushButton#btn_refresh{
-	qproperty-geometry:rect(420 10 100 50);
-	background:#4595d9;
-	font-size:24px;
-	color:#ffffff;
+    qproperty-geometry:rect(420 10 100 50);
+    background:#4595d9;
+    font-size:24px;
+    color:#ffffff;
 }
 QPushButton#btn_export{
-	qproperty-geometry:rect(260 300 100 50);
-	background:#8effff;
-	font-size:28px;
-	color:#666666;
+    qproperty-geometry:rect(260 300 100 50);
+    background:#8effff;
+    font-size:28px;
+    color:#666666;
 }
 
 /***********QComboBox***********/
 QComboBox#combox_script{
-	qproperty-geometry:rect(20 240 130 50);
-	border:2px solid #b0c4de;
-	background:rgba(255,255,255,0);
-	color:#666666;
-	font-size:30px;
+    qproperty-geometry:rect(20 240 130 50);
+    border:2px solid #b0c4de;
+    background:rgba(255,255,255,0);
+    color:#666666;
+    font-size:30px;
 }
 QComboBox::down-arrow{
-	background:url(skin/picture/15.6/combox_arrow.png) no-repeat;
-	padding:0px;
-	width:40px;
-	height:25px;
+    background:url(:/main/res/skin/picture/15.6/combox_arrow.png) no-repeat;
+    padding:0px;
+    width:40px;
+    height:25px;
 }
 QComboBox::drop-down{
-	border:none;
-	background:rgba(255,255,255,0);
+    border:none;
+    background:rgba(255,255,255,0);
 }
 QComboBox QAbstractItemView{
-	background-color:#f5f5f5;
+    background-color:#f5f5f5;
 }
 
 /**********QLineEdit**********/
 QLineEdit#lineEdit_script{
-	qproperty-geometry:rect(160 240 640 50);
-	font-size:32px;
+    qproperty-geometry:rect(160 240 640 50);
+    font-size:32px;
 }
 

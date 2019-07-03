@@ -566,42 +566,42 @@ void WTool::sDelay(uint sec, uint period, bool *isRun)
 
 QString WTool::getWordTerminatorQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordTerminator.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordTerminator.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordLibraryWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordLibraryWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordLibraryWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordCreateWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordCreateWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordCreateWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordShowWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordShowWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordShowWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordMemorizeWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordMemorizeWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordMemorizeWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordFunctionWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordFunctionWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordFunctionWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordSettingWidgetQss()
 {
-    return readFileInfo(QString("./skin/qss/%1/WordSettingWidget.qss").arg(getScreenSize()));
+    return readFileInfo(QString(":/main/res/skin/qss/%1/WordSettingWidget.qss").arg(getScreenSize()));
 }
 
 QString WTool::getWordMemorizeWidgetJsonPath()
 {
-    return QString("./skin/qss/%1/WordMemorizeWidget.json").arg(getScreenSize());
+    return QString(":/main/res/skin/qss/%1/WordMemorizeWidget.json").arg(getScreenSize());
 }
 
 QString WTool::getConfigPath()

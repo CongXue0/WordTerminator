@@ -1,228 +1,228 @@
 /***********QLabel***********/
 QLabel#label_bg_welcome{
-	qproperty-geometry:rect(0 0 820 790);
-	background:url(skin/picture/15.6/bg_mem_welcome.png);
+    qproperty-geometry:rect(0 0 820 790);
+    background:url(:/main/res/skin/picture/15.6/bg_mem_welcome.png);
 }
 QLabel#label_singleNum{
-	qproperty-geometry:rect(74 260 180 40);
-	font-size:22px;
-	qproperty-alignment:'AlignLeft | AlignVCenter';
+    qproperty-geometry:rect(74 260 180 40);
+    font-size:22px;
+    qproperty-alignment:'AlignLeft | AlignVCenter';
 }
 QLabel#label_statistics{
-	qproperty-geometry:rect(50 387 380 133);
-	/*background:#005656;*/
-	font-size:33px;
-	qproperty-alignment:'AlignLeft | AlignTop';
+    qproperty-geometry:rect(50 387 380 133);
+    /*background:#005656;*/
+    font-size:33px;
+    qproperty-alignment:'AlignLeft | AlignTop';
 }
 QLabel#label_bg_start{
-	qproperty-geometry:rect(0 0 820 790);
-	background:url(skin/picture/15.6/bg_mem_start.png);
+    qproperty-geometry:rect(0 0 820 790);
+    background:url(:/main/res/skin/picture/15.6/bg_mem_start.png);
 }
 QLabel#label_info{
-	qproperty-geometry:rect(10 5 800 40);
-	/*background:#005656;*/
-	font-size:36px;
-	color:#c0c0c0;
-	qproperty-alignment:'AlignRight | AlignVCenter';
+    qproperty-geometry:rect(10 5 800 40);
+    /*background:#005656;*/
+    font-size:36px;
+    color:#c0c0c0;
+    qproperty-alignment:'AlignRight | AlignVCenter';
 }
 QLabel#label_cha{
-	background:url(skin/picture/15.6/cha.png);
+    background:url(:/main/res/skin/picture/15.6/cha.png);
 }
 QLabel#label_gou{
-	background:url(skin/picture/15.6/gou.png);
+    background:url(:/main/res/skin/picture/15.6/gou.png);
 }
 QLabel#label_input{
-	qproperty-geometry:rect(10 561 260 50);
-	font-size:28px;
-	qproperty-alignment:'AlignLeft | AlignVCenter';
+    qproperty-geometry:rect(10 561 260 50);
+    font-size:28px;
+    qproperty-alignment:'AlignLeft | AlignVCenter';
 }
 QLabel#label_line{
-	qproperty-geometry:rect(260 610 490 1);
-	background:#a5a5a5;
+    qproperty-geometry:rect(260 610 490 1);
+    background:#a5a5a5;
 }
 
 /**********QRadioButton**********/
 QRadioButton{
-	/*background:#005656;*/
-	font-size:32px;
-	spacing:10px;
+    /*background:#005656;*/
+    font-size:32px;
+    spacing:10px;
 }
 QRadioButton::indicator{
-	width:50px;
-	height:50px;
+    width:50px;
+    height:50px;
 }
 QRadioButton#radioBtn_test1::indicator::unchecked,
 QRadioButton#radioBtn_test2::indicator::unchecked{
-	image:url(skin/picture/15.6/check3_inactive.png);
+    image:url(:/main/res/skin/picture/15.6/check3_inactive.png);
 }
 QRadioButton#radioBtn_test1::indicator::checked,
 QRadioButton#radioBtn_test2::indicator::checked{
-	image:url(skin/picture/15.6/check3_active.png);
+    image:url(:/main/res/skin/picture/15.6/check3_active.png);
 }
 QRadioButton#radioBtn_test1{
-	qproperty-geometry:rect(177 115 254 50);
+    qproperty-geometry:rect(177 115 254 50);
 }
 QRadioButton#radioBtn_test2{
-	qproperty-geometry:rect(177 185 254 50);
+    qproperty-geometry:rect(177 185 254 50);
 }
 QRadioButton#radioBtn_range1::indicator::unchecked,
 QRadioButton#radioBtn_range2::indicator::unchecked,
 QRadioButton#radioBtn_range3::indicator::unchecked,
 QRadioButton#radioBtn_range4::indicator::unchecked,
 QRadioButton#radioBtn_forever::indicator::unchecked{
-	image:url(skin/picture/15.6/check1_inactive.png);
+    image:url(:/main/res/skin/picture/15.6/check1_inactive.png);
 }
 QRadioButton#radioBtn_range1::indicator::checked,
 QRadioButton#radioBtn_range2::indicator::checked,
 QRadioButton#radioBtn_range3::indicator::checked,
 QRadioButton#radioBtn_range4::indicator::checked,
 QRadioButton#radioBtn_forever::indicator::checked{
-	image:url(skin/picture/15.6/check1_active.png);
+    image:url(:/main/res/skin/picture/15.6/check1_active.png);
 }
 QRadioButton#radioBtn_range1{
-	qproperty-geometry:rect(496 185 254 50);
+    qproperty-geometry:rect(496 185 254 50);
 }
 QRadioButton#radioBtn_range2{
-	qproperty-geometry:rect(496 255 254 50);
+    qproperty-geometry:rect(496 255 254 50);
 }
 QRadioButton#radioBtn_range3{
-	qproperty-geometry:rect(496 325 254 50);
+    qproperty-geometry:rect(496 325 254 50);
 }
 QRadioButton#radioBtn_range4{
-	qproperty-geometry:rect(496 395 254 50);
+    qproperty-geometry:rect(496 395 254 50);
 }
 QRadioButton#radioBtn_forever{
-	qproperty-geometry:rect(496 465 254 50);
+    qproperty-geometry:rect(496 465 254 50);
 }
 
 /***********QComboBox***********/
 QComboBox#combox_group{
-	border:2px solid #b0c4de;
-	background:rgba(255,255,255,0);
-	font-size:28px;
+    border:2px solid #b0c4de;
+    background:rgba(255,255,255,0);
+    font-size:28px;
 }
 QComboBox::down-arrow{
-	background:url(skin/picture/15.6/combox_arrow.png) no-repeat;
-	padding:0px;
-	width:40px;
-	height:25px;
+    background:url(:/main/res/skin/picture/15.6/combox_arrow.png) no-repeat;
+    padding:0px;
+    width:40px;
+    height:25px;
 }
 QComboBox::drop-down{
-	border:none;
-	background:rgba(255,255,255,0);
+    border:none;
+    background:rgba(255,255,255,0);
 }
 QComboBox QAbstractItemView{
-	background-color:#f5f5f5;
+    background-color:#f5f5f5;
 }
 QComboBox#combox_group{
-	qproperty-geometry:rect(496 115 250 50);
+    qproperty-geometry:rect(496 115 250 50);
 }
 
 /************QSpinBox************/
 QSpinBox#spinBox_singleNum{
-	font-size:24px;
-	qproperty-geometry:rect(238 260 130 40);
+    font-size:24px;
+    qproperty-geometry:rect(238 260 130 40);
 }
 
 /**********QPushButton**********/
 QPushButton#btn_start{
-	qproperty-geometry:rect(320 560 180 50);
-	background:url(skin/picture/15.6/green.png);
-	border-radius:6px;
-	font-size:36px;
-	color:#ffffff;
+    qproperty-geometry:rect(320 560 180 50);
+    background:url(:/main/res/skin/picture/15.6/green.png);
+    border-radius:6px;
+    font-size:36px;
+    color:#ffffff;
 }
 QPushButton#btn_start:hover{
-	background:url(skin/picture/15.6/green_hover.png);
+    background:url(:/main/res/skin/picture/15.6/green_hover.png);
 }
 QPushButton#btn_know{
-	qproperty-geometry:rect(190 628 180 50);
-	background:url(skin/picture/15.6/white.png);
-	border-radius:6px;
-	font-size:36px;
+    qproperty-geometry:rect(190 628 180 50);
+    background:url(:/main/res/skin/picture/15.6/white.png);
+    border-radius:6px;
+    font-size:36px;
 }
 QPushButton#btn_know:hover{
-	background:url(skin/picture/15.6/white_hover.png);
+    background:url(:/main/res/skin/picture/15.6/white_hover.png);
 }
 QPushButton#btn_notKnow{
-	qproperty-geometry:rect(450 628 180 50);
-	background:url(skin/picture/15.6/white.png);
-	border-radius:6px;
-	font-size:36px;
+    qproperty-geometry:rect(450 628 180 50);
+    background:url(:/main/res/skin/picture/15.6/white.png);
+    border-radius:6px;
+    font-size:36px;
 }
 QPushButton#btn_notKnow:hover{
-	background:url(skin/picture/15.6/white_hover.png);
+    background:url(:/main/res/skin/picture/15.6/white_hover.png);
 }
 QPushButton#btn_forever{
-	background:url(skin/picture/15.6/orange.png);
-	border-radius:6px;
-	font-size:30px;
+    background:url(:/main/res/skin/picture/15.6/orange.png);
+    border-radius:6px;
+    font-size:30px;
 }
 QPushButton#btn_forever:hover{
-	background:url(skin/picture/15.6/orange_hover.png);
+    background:url(:/main/res/skin/picture/15.6/orange_hover.png);
 }
 QPushButton#btn_notforever{
-	background:url(skin/picture/15.6/grey.png);
-	border-radius:6px;
-	font-size:30px;
+    background:url(:/main/res/skin/picture/15.6/grey.png);
+    border-radius:6px;
+    font-size:30px;
 }
 QPushButton#btn_notforever:hover{
-	background:url(skin/picture/15.6/grey_hover.png);
+    background:url(:/main/res/skin/picture/15.6/grey_hover.png);
 }
 QPushButton#btn_next{
-	background:url(skin/picture/15.6/white.png);
-	border-radius:6px;
-	font-size:36px;
+    background:url(:/main/res/skin/picture/15.6/white.png);
+    border-radius:6px;
+    font-size:36px;
 }
 QPushButton#btn_next:hover{
-	background:url(skin/picture/15.6/white_hover.png);
+    background:url(:/main/res/skin/picture/15.6/white_hover.png);
 }
 QPushButton#btn_submit{
-	qproperty-geometry:rect(320 631 180 50);
-	background:url(skin/picture/15.6/white.png);
-	border-radius:6px;
-	font-size:36px;
+    qproperty-geometry:rect(320 631 180 50);
+    background:url(:/main/res/skin/picture/15.6/white.png);
+    border-radius:6px;
+    font-size:36px;
 }
 QPushButton#btn_submit:hover{
-	background:url(skin/picture/15.6/white_hover.png);
+    background:url(:/main/res/skin/picture/15.6/white_hover.png);
 }
 
 /**********QScrollArea**********/
 QScrollArea#scrollArea{
-	qproperty-geometry:rect(0 60 820 457);
-	background:rgba(255,255,255,0);
-	border:0px;
+    qproperty-geometry:rect(0 60 820 457);
+    background:rgba(255,255,255,0);
+    border:0px;
 }
 
 /***********QWidget***********/
 QWidget#widget_start{
-	/*qproperty-geometry:rect(0 0 660 1000);*/
-	background:rgba(0,255,255,0);
+    /*qproperty-geometry:rect(0 0 660 1000);*/
+    background:rgba(0,255,255,0);
 }
 
 /***********CopyLabel***********/
 CopyLabel{
-	border:0px;
+    border:0px;
 }
 CopyLabel#copyLabel_word,
 CopyLabel#copyLabel_phoneticSymbol{
-	background:rgba(0,255,255,0);
+    background:rgba(0,255,255,0);
 }
 CopyLabel#copyLabel_WORD{
-	qproperty-geometry:rect(10 227 800 200);
-	background:rgba(0,255,255,0);
-	font-size:48px;
-	font-weight:bold;
-	color:#3b93ee;
+    qproperty-geometry:rect(10 227 800 200);
+    background:rgba(0,255,255,0);
+    font-size:48px;
+    font-weight:bold;
+    color:#3b93ee;
 }
 CopyLabel#copyLabel_word{
-	font-size:36px;
-	font-weight:bold;
-	color:#3b93ee;
+    font-size:36px;
+    font-weight:bold;
+    color:#3b93ee;
 }
 CopyLabel#copyLabel_phoneticSymbol{
-	font-size:28px;
-	color:#666666;
+    font-size:28px;
+    color:#666666;
 }
 CopyLabel#copyLabel_property1,
 CopyLabel#copyLabel_property2,
@@ -244,10 +244,10 @@ CopyLabel#copyLabel_property17,
 CopyLabel#copyLabel_property18,
 CopyLabel#copyLabel_property19,
 CopyLabel#copyLabel_property20{
-	background:#c7d0d9;
-	border-radius:6px;
-	font-size:24px;
-	color:#177bd0;
+    background:#c7d0d9;
+    border-radius:6px;
+    font-size:24px;
+    color:#177bd0;
 }
 CopyLabel#copyLabel_explain1,
 CopyLabel#copyLabel_explain2,
@@ -278,8 +278,8 @@ CopyLabel#copyLabel_example5,
 CopyLabel#copyLabel_example6,
 CopyLabel#copyLabel_synonym,
 CopyLabel#copyLabel_antonym{
-	background:rgba(0,255,255,0);
-	font-size:24px;
+    background:rgba(0,255,255,0);
+    font-size:24px;
 }
 
 /***********LinkLabel***********/
@@ -299,16 +299,16 @@ LinkLabel#linkLabel_antonym5,
 LinkLabel#linkLabel_antonym6,
 LinkLabel#linkLabel_antonym7,
 LinkLabel#linkLabel_antonym8{
-	background:rgba(255,255,255,0);
-	font-size:24px;
-	color:#177bd0;
+    background:rgba(255,255,255,0);
+    font-size:24px;
+    color:#177bd0;
 }
 
 /**********QLineEdit**********/
 QLineEdit#lineEdit_input{
-	qproperty-geometry:rect(260 561 490 50);
-	background:rgba(0,255,255,0);
-	border:0px;
-	font-size:28px;
+    qproperty-geometry:rect(260 561 490 50);
+    background:rgba(0,255,255,0);
+    border:0px;
+    font-size:28px;
 }
 

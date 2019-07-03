@@ -1,11 +1,11 @@
 /***********QWidget***********/
 QWidget#widget_topBar{
-	qproperty-geometry:rect(0 0 660 76);
-	background:#d7f3fe;
+    qproperty-geometry:rect(0 0 660 76);
+    background:#d7f3fe;
 }
 QWidget#widget_show{
-	/*qproperty-geometry:rect(0 0 660 1600);*/
-	background:rgba(255,255,255,0);
+    /*qproperty-geometry:rect(0 0 660 1600);*/
+    background:rgba(255,255,255,0);
 }
 
 QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
@@ -19,147 +19,147 @@ QPushButton#btn_add,
 QPushButton#btn_delete,
 QPushButton#btn_edit,
 QPushButton#btn_reset{
-	border:2px solid #f5f6f7;
-	border-radius:5px;
+    border:2px solid #f5f6f7;
+    border-radius:5px;
 }
 QPushButton#btn_return{
-	qproperty-geometry:rect(16 4 64 32);
-	background:url(skin/picture/14/left.png) 0 center no-repeat #ffffff;
+    qproperty-geometry:rect(16 4 64 32);
+    background:url(:/main/res/skin/picture/14/left.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_return:hover{
-	background:url(skin/picture/14/left_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/left_hover.png) 0 center no-repeat #f0f0f0;
 }
 QPushButton#btn_min{
-	qproperty-geometry:rect(100 40 64 32);
-	background:#ffffff;
-	font-size:22px;
-	font-weight:bold;
-	color:#656669;
+    qproperty-geometry:rect(100 40 64 32);
+    background:#ffffff;
+    font-size:22px;
+    font-weight:bold;
+    color:#656669;
 }
 QPushButton#btn_min:hover{
-	background:#f0f0f0;
+    background:#f0f0f0;
 }
 QPushButton#btn_mid{
-	qproperty-geometry:rect(180 40 64 32);
-	background:#ffffff;
-	font-size:22px;
-	font-weight:bold;
-	color:#656669;
+    qproperty-geometry:rect(180 40 64 32);
+    background:#ffffff;
+    font-size:22px;
+    font-weight:bold;
+    color:#656669;
 }
 QPushButton#btn_mid:hover{
-	background:#f0f0f0;
+    background:#f0f0f0;
 }
 QPushButton#btn_max{
-	qproperty-geometry:rect(260 40 64 32);
-	background:#ffffff;
-	font-size:22px;
-	font-weight:bold;
-	color:#656669;
+    qproperty-geometry:rect(260 40 64 32);
+    background:#ffffff;
+    font-size:22px;
+    font-weight:bold;
+    color:#656669;
 }
 QPushButton#btn_max:hover{
-	background:#f0f0f0;
+    background:#f0f0f0;
 }
 QPushButton#btn_add{
-	qproperty-geometry:rect(340 40 64 32);
-	background:url(skin/picture/14/add.png) 0 center no-repeat #ffffff;
+    qproperty-geometry:rect(340 40 64 32);
+    background:url(:/main/res/skin/picture/14/add.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_add:hover{
-	background:url(skin/picture/14/add_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/add_hover.png) 0 center no-repeat #f0f0f0;
 }
 QPushButton#btn_delete{
-	qproperty-geometry:rect(420 4 64 32);
-	background:url(skin/picture/14/delete.png) 0 center no-repeat #ffffff;
+    qproperty-geometry:rect(420 4 64 32);
+    background:url(:/main/res/skin/picture/14/delete.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_delete:hover{
-	background:url(skin/picture/14/delete_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/delete_hover.png) 0 center no-repeat #f0f0f0;
 }
 QPushButton#btn_edit{
-	qproperty-geometry:rect(500 4 64 32);
-	background:url(skin/picture/14/edit.png) 0 center no-repeat #ffffff;
+    qproperty-geometry:rect(500 4 64 32);
+    background:url(:/main/res/skin/picture/14/edit.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_edit:hover{
-	background:url(skin/picture/14/edit_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/edit_hover.png) 0 center no-repeat #f0f0f0;
 }
 QPushButton#btn_reset{
-	qproperty-geometry:rect(580 4 64 32);
-	background:url(skin/picture/14/reset.png) 0 center no-repeat #ffffff;
+    qproperty-geometry:rect(580 4 64 32);
+    background:url(:/main/res/skin/picture/14/reset.png) 0 center no-repeat #ffffff;
 }
 QPushButton#btn_reset:hover{
-	background:url(skin/picture/14/reset_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/reset_hover.png) 0 center no-repeat #f0f0f0;
 }
 
 /**********WTButton**********/
 WTButton#wbtn_isRemember{
-	qproperty-geometry:rect(100 4 64 32);
-	background:url(skin/picture/14/notforever.png) 0 center no-repeat #ffffff;
-	border:2px solid #f5f6f7;
-	border-radius:5px;
+    qproperty-geometry:rect(100 4 64 32);
+    background:url(:/main/res/skin/picture/14/notforever.png) 0 center no-repeat #ffffff;
+    border:2px solid #f5f6f7;
+    border-radius:5px;
 }
 WTButton#wbtn_isRemember:indicator{
-	background:rgba(255,255,255,0);
+    background:rgba(255,255,255,0);
 }
 WTButton#wbtn_isRemember:hover{
-	background:url(skin/picture/14/notforever_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/notforever_hover.png) 0 center no-repeat #f0f0f0;
 }
 WTButton#wbtn_isRemember:checked{
-	background:url(skin/picture/14/forever.png) 0 center no-repeat #ffffff;
+    background:url(:/main/res/skin/picture/14/forever.png) 0 center no-repeat #ffffff;
 }
 WTButton#wbtn_isRemember:checked:hover{
-	background:url(skin/picture/14/forever_hover.png) 0 center no-repeat #f0f0f0;
+    background:url(:/main/res/skin/picture/14/forever_hover.png) 0 center no-repeat #f0f0f0;
 }
 
 /***********QComboBox***********/
 QComboBox#combox_group{
-	border:2px solid #b0c4de;
-	background:rgba(255,255,255,0);
-	color:#656669;
-	font-size:22px;
+    border:2px solid #b0c4de;
+    background:rgba(255,255,255,0);
+    color:#656669;
+    font-size:22px;
 }
 QComboBox::down-arrow{
-	background:url(skin/picture/14/combox_arrow.png) no-repeat;
-	padding:0px;
-	width:30px;
-	height:20px;
+    background:url(:/main/res/skin/picture/14/combox_arrow.png) no-repeat;
+    padding:0px;
+    width:30px;
+    height:20px;
 }
 QComboBox::drop-down{
-	border:none;
-	background:rgba(255,255,255,0);
+    border:none;
+    background:rgba(255,255,255,0);
 }
 QComboBox QAbstractItemView{
-	background-color:#f5f5f5;
+    background-color:#f5f5f5;
 }
 QComboBox#combox_group{
-	qproperty-geometry:rect(420 40 210 32);
+    qproperty-geometry:rect(420 40 210 32);
 }
 
 /**********QScrollArea**********/
 QScrollArea#scrollArea{
-	qproperty-geometry:rect(0 76 660 554);
-	background:rgba(255,255,255,0);
-	border:0px;
+    qproperty-geometry:rect(0 76 660 554);
+    background:rgba(255,255,255,0);
+    border:0px;
 }
 
 /***********CopyLabel***********/
 CopyLabel{
-	border:0px;
+    border:0px;
 }
 CopyLabel#copyLabel_word,
 CopyLabel#copyLabel_phoneticSymbol,
 CopyLabel#copyLabel_times{
-	background:rgba(0,255,255,0);
+    background:rgba(0,255,255,0);
 }
 CopyLabel#copyLabel_word{
-	font-size:29px;
-	font-weight:bold;
-	color:#3b93ee;
+    font-size:29px;
+    font-weight:bold;
+    color:#3b93ee;
 }
 CopyLabel#copyLabel_phoneticSymbol{
-	font-size:23px;
-	color:#666666;
+    font-size:23px;
+    color:#666666;
 }
 CopyLabel#copyLabel_times{
-	font-size:23px;
-	color:#666666;
+    font-size:23px;
+    color:#666666;
 }
 CopyLabel#copyLabel_property1,
 CopyLabel#copyLabel_property2,
@@ -181,10 +181,10 @@ CopyLabel#copyLabel_property17,
 CopyLabel#copyLabel_property18,
 CopyLabel#copyLabel_property19,
 CopyLabel#copyLabel_property20{
-	background:#eaf5ff;
-	border-radius:5px;
-	font-size:20px;
-	color:#177bd0;
+    background:#eaf5ff;
+    border-radius:5px;
+    font-size:20px;
+    color:#177bd0;
 }
 CopyLabel#copyLabel_explain1,
 CopyLabel#copyLabel_explain2,
@@ -215,8 +215,8 @@ CopyLabel#copyLabel_example5,
 CopyLabel#copyLabel_example6,
 CopyLabel#copyLabel_synonym,
 CopyLabel#copyLabel_antonym{
-	background:rgba(0,255,255,0);
-	font-size:20px;
+    background:rgba(0,255,255,0);
+    font-size:20px;
 }
 
 /***********LinkLabel***********/
@@ -236,8 +236,8 @@ LinkLabel#linkLabel_antonym5,
 LinkLabel#linkLabel_antonym6,
 LinkLabel#linkLabel_antonym7,
 LinkLabel#linkLabel_antonym8{
-	background:rgba(0,255,255,0);
-	font-size:20px;
-	color:#177bd0;
+    background:rgba(0,255,255,0);
+    font-size:20px;
+    color:#177bd0;
 }
 

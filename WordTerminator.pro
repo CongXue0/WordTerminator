@@ -70,3 +70,6 @@ HEADERS  += src/widget/wordterminator.h \
     src/utils/version.h
 
 FORMS    += src/widget/wordterminator.ui
+
+RESOURCES += \
+    main.qrc

@@ -1,14 +1,14 @@
 /**********QScrollArea**********/
 QScrollArea#scrollArea{
-	qproperty-geometry:rect(0 0 660 630);
-	background:rgba(255,255,255,0);
-	border:0px;
+    qproperty-geometry:rect(0 0 660 630);
+    background:rgba(255,255,255,0);
+    border:0px;
 }
 
 /***********QWidget***********/
 QWidget#widget{
-	qproperty-geometry:rect(0 0 660 2240);
-	background:rgba(255,255,255,0);
+    qproperty-geometry:rect(0 0 660 2240);
+    background:rgba(255,255,255,0);
 }
 
 QLabel,QLineEdit,QCheckBox,QTextEdit{/*background:#005656;*/}
@@ -42,121 +42,121 @@ QLabel#label_art_English,
 QLabel#label_exampleSentence,
 QLabel#label_synonym,
 QLabel#label_antonym{
-	/*background:#005656;*/
-	font-size:23px;
-	qproperty-alignment:'AlignLeft | AlignVCenter';
+    /*background:#005656;*/
+    font-size:23px;
+    qproperty-alignment:'AlignLeft | AlignVCenter';
 }
 QLabel#label_word{
-	qproperty-geometry:rect(8 16 120 40);
-	color:#fc4343;
+    qproperty-geometry:rect(8 16 120 40);
+    color:#fc4343;
 }
 QLabel#label_group{
-	qproperty-geometry:rect(365 72 50 40);
-	color:#666666;
+    qproperty-geometry:rect(365 72 50 40);
+    color:#666666;
 }
 QLabel#label_phoneticSymbol{
-	qproperty-geometry:rect(8 128 48 40);
-	color:#666666;
+    qproperty-geometry:rect(8 128 48 40);
+    color:#666666;
 }
 QLabel#label_adj_Chinese{
-	qproperty-geometry:rect(8 184 102 40);
-	color:#666666;
+    qproperty-geometry:rect(8 184 102 40);
+    color:#666666;
 }
 QLabel#label_adj_English{
-	qproperty-geometry:rect(8 240 102 40);
-	color:#666666;
+    qproperty-geometry:rect(8 240 102 40);
+    color:#666666;
 }
 QLabel#label_adv_Chinese{
-	qproperty-geometry:rect(8 296 108 40);
-	color:#666666;
+    qproperty-geometry:rect(8 296 108 40);
+    color:#666666;
 }
 QLabel#label_adv_English{
-	qproperty-geometry:rect(8 352 108 40);
-	color:#666666;
+    qproperty-geometry:rect(8 352 108 40);
+    color:#666666;
 }
 QLabel#label_vt_Chinese{
-	qproperty-geometry:rect(8 408 89 40);
-	color:#666666;
+    qproperty-geometry:rect(8 408 89 40);
+    color:#666666;
 }
 QLabel#label_vt_English{
-	qproperty-geometry:rect(8 464 89 40);
-	color:#666666;
+    qproperty-geometry:rect(8 464 89 40);
+    color:#666666;
 }
 QLabel#label_vi_Chinese{
-	qproperty-geometry:rect(8 520 86 40);
-	color:#666666;
+    qproperty-geometry:rect(8 520 86 40);
+    color:#666666;
 }
 QLabel#label_vi_English{
-	qproperty-geometry:rect(8 576 86 40);
-	color:#666666;
+    qproperty-geometry:rect(8 576 86 40);
+    color:#666666;
 }
 QLabel#label_v_pastTense{
-	qproperty-geometry:rect(8 632 72 40);
-	color:#666666;
+    qproperty-geometry:rect(8 632 72 40);
+    color:#666666;
 }
 QLabel#label_v_pastParticiple{
-	qproperty-geometry:rect(329 632 92 40);
-	color:#666666;
+    qproperty-geometry:rect(329 632 92 40);
+    color:#666666;
 }
 QLabel#label_v_presentParticiple{
-	qproperty-geometry:rect(8 688 92 40);
-	color:#666666;
+    qproperty-geometry:rect(8 688 92 40);
+    color:#666666;
 }
 QLabel#label_v_thirdPersonSingular{
-	qproperty-geometry:rect(329 688 140 40);
-	color:#666666;
+    qproperty-geometry:rect(329 688 140 40);
+    color:#666666;
 }
 QLabel#label_noun_Chinese{
-	qproperty-geometry:rect(8 744 81 40);
-	color:#666666;
+    qproperty-geometry:rect(8 744 81 40);
+    color:#666666;
 }
 QLabel#label_noun_English{
-	qproperty-geometry:rect(8 800 81 40);
-	color:#666666;
+    qproperty-geometry:rect(8 800 81 40);
+    color:#666666;
 }
 QLabel#label_prep_Chinese{
-	qproperty-geometry:rect(8 856 120 40);
-	color:#666666;
+    qproperty-geometry:rect(8 856 120 40);
+    color:#666666;
 }
 QLabel#label_prep_English{
-	qproperty-geometry:rect(8 912 120 40);
-	color:#666666;
+    qproperty-geometry:rect(8 912 120 40);
+    color:#666666;
 }
 QLabel#label_conj_Chinese{
-	qproperty-geometry:rect(8 968 115 40);
-	color:#666666;
+    qproperty-geometry:rect(8 968 115 40);
+    color:#666666;
 }
 QLabel#label_conj_English{
-	qproperty-geometry:rect(8 1024 115 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1024 115 40);
+    color:#666666;
 }
 QLabel#label_pron_Chinese{
-	qproperty-geometry:rect(8 1080 121 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1080 121 40);
+    color:#666666;
 }
 QLabel#label_pron_English{
-	qproperty-geometry:rect(8 1136 121 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1136 121 40);
+    color:#666666;
 }
 QLabel#label_art_Chinese{
-	qproperty-geometry:rect(8 1192 99 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1192 99 40);
+    color:#666666;
 }
 QLabel#label_art_English{
-	qproperty-geometry:rect(8 1248 99 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1248 99 40);
+    color:#666666;
 }
 QLabel#label_exampleSentence{
-	qproperty-geometry:rect(8 1304 72 40);
-	color:#666666;
+    qproperty-geometry:rect(8 1304 72 40);
+    color:#666666;
 }
 QLabel#label_synonym{
-	qproperty-geometry:rect(8 2032 72 40);
-	color:#666666;
+    qproperty-geometry:rect(8 2032 72 40);
+    color:#666666;
 }
 QLabel#label_antonym{
-	qproperty-geometry:rect(8 2088 72 40);
-	color:#666666;
+    qproperty-geometry:rect(8 2088 72 40);
+    color:#666666;
 }
 
 /**********QLineEdit**********/
@@ -186,129 +186,129 @@ QLineEdit#lineEdit_art_Chinese,
 QLineEdit#lineEdit_art_English,
 QLineEdit#lineEdit_synonym,
 QLineEdit#lineEdit_antonym{
-	/*background:#005656;*/
-	font-size:23px;
+    /*background:#005656;*/
+    font-size:23px;
 }
 QLineEdit#lineEdit_word{
-	qproperty-geometry:rect(133 16 502 40);
+    qproperty-geometry:rect(133 16 502 40);
 }
 QLineEdit#lineEdit_phoneticSymbol{
-	qproperty-geometry:rect(60 128 240 40);
+    qproperty-geometry:rect(60 128 240 40);
 }
 QLineEdit#lineEdit_adj_Chinese{
-	qproperty-geometry:rect(114 184 521 40);
+    qproperty-geometry:rect(114 184 521 40);
 }
 QLineEdit#lineEdit_adj_English{
-	qproperty-geometry:rect(114 240 521 40);
+    qproperty-geometry:rect(114 240 521 40);
 }
 QLineEdit#lineEdit_adv_Chinese{
-	qproperty-geometry:rect(120 296 515 40);
+    qproperty-geometry:rect(120 296 515 40);
 }
 QLineEdit#lineEdit_adv_English{
-	qproperty-geometry:rect(120 352 515 40);
+    qproperty-geometry:rect(120 352 515 40);
 }
 QLineEdit#lineEdit_vt_Chinese{
-	qproperty-geometry:rect(101 408 534 40);
+    qproperty-geometry:rect(101 408 534 40);
 }
 QLineEdit#lineEdit_vt_English{
-	qproperty-geometry:rect(101 464 534 40);
+    qproperty-geometry:rect(101 464 534 40);
 }
 QLineEdit#lineEdit_vi_Chinese{
-	qproperty-geometry:rect(98 520 537 40);
+    qproperty-geometry:rect(98 520 537 40);
 }
 QLineEdit#lineEdit_vi_English{
-	qproperty-geometry:rect(98 576 537 40);
+    qproperty-geometry:rect(98 576 537 40);
 }
 QLineEdit#lineEdit_v_pastTense{
-	qproperty-geometry:rect(84 632 229 40);
+    qproperty-geometry:rect(84 632 229 40);
 }
 QLineEdit#lineEdit_v_pastParticiple{
-	qproperty-geometry:rect(425 632 210 40);
+    qproperty-geometry:rect(425 632 210 40);
 }
 QLineEdit#lineEdit_v_presentParticiple{
-	qproperty-geometry:rect(104 688 208 40);
+    qproperty-geometry:rect(104 688 208 40);
 }
 QLineEdit#lineEdit_v_thirdPersonSingular{
-	qproperty-geometry:rect(473 688 162 40);
+    qproperty-geometry:rect(473 688 162 40);
 }
 QLineEdit#lineEdit_noun_Chinese{
-	qproperty-geometry:rect(93 744 542 40);
+    qproperty-geometry:rect(93 744 542 40);
 }
 QLineEdit#lineEdit_noun_English{
-	qproperty-geometry:rect(93 800 542 40);
+    qproperty-geometry:rect(93 800 542 40);
 }
 QLineEdit#lineEdit_prep_Chinese{
-	qproperty-geometry:rect(132 856 503 40);
+    qproperty-geometry:rect(132 856 503 40);
 }
 QLineEdit#lineEdit_prep_English{
-	qproperty-geometry:rect(132 912 503 40);
+    qproperty-geometry:rect(132 912 503 40);
 }
 QLineEdit#lineEdit_conj_Chinese{
-	qproperty-geometry:rect(127 968 508 40);
+    qproperty-geometry:rect(127 968 508 40);
 }
 QLineEdit#lineEdit_conj_English{
-	qproperty-geometry:rect(127 1024 508 40);
+    qproperty-geometry:rect(127 1024 508 40);
 }
 QLineEdit#lineEdit_pron_Chinese{
-	qproperty-geometry:rect(133 1080 502 40);
+    qproperty-geometry:rect(133 1080 502 40);
 }
 QLineEdit#lineEdit_pron_English{
-	qproperty-geometry:rect(133 1136 502 40);
+    qproperty-geometry:rect(133 1136 502 40);
 }
 QLineEdit#lineEdit_art_Chinese{
-	qproperty-geometry:rect(111 1192 524 40);
+    qproperty-geometry:rect(111 1192 524 40);
 }
 QLineEdit#lineEdit_art_English{
-	qproperty-geometry:rect(111 1248 524 40);
+    qproperty-geometry:rect(111 1248 524 40);
 }
 QLineEdit#lineEdit_synonym{
-	qproperty-geometry:rect(84 2032 552 40);
+    qproperty-geometry:rect(84 2032 552 40);
 }
 QLineEdit#lineEdit_antonym{
-	qproperty-geometry:rect(84 2088 552 40);
+    qproperty-geometry:rect(84 2088 552 40);
 }
 
 /***********QCheckBox***********/
 QCheckBox#checkBox_phrase{
-	qproperty-geometry:rect(8 72 164 40);
-	/*background:#005656;*/
-	font-size:23px;
-	color:#fc4343;
-	spacing:4px;
+    qproperty-geometry:rect(8 72 164 40);
+    /*background:#005656;*/
+    font-size:23px;
+    color:#fc4343;
+    spacing:4px;
 }
 QCheckBox#checkBox_phrase::indicator{
-	width:40px;
-	height:40px;
+    width:40px;
+    height:40px;
 }
 QCheckBox#checkBox_phrase::indicator::unchecked{
-	image:url(skin/picture/14/check1_inactive.png);
+    image:url(:/main/res/skin/picture/14/check1_inactive.png);
 }
 QCheckBox#checkBox_phrase::indicator::checked{
-	image:url(skin/picture/14/check1_active.png);
+    image:url(:/main/res/skin/picture/14/check1_active.png);
 }
 
 /***********QComboBox***********/
 QComboBox#combox_group{
-	border:2px solid #b0c4de;
-	background:rgba(255,255,255,0);
-	font-size:23px;
-	color:#666666;
+    border:2px solid #b0c4de;
+    background:rgba(255,255,255,0);
+    font-size:23px;
+    color:#666666;
 }
 QComboBox::down-arrow{
-	background:url(skin/picture/14/combox_arrow.png) no-repeat;
-	padding:0px;
-	width:30px;
-	height:20px;
+    background:url(:/main/res/skin/picture/14/combox_arrow.png) no-repeat;
+    padding:0px;
+    width:30px;
+    height:20px;
 }
 QComboBox::drop-down{
-	border:none;
-	background:rgba(255,255,255,0);
+    border:none;
+    background:rgba(255,255,255,0);
 }
 QComboBox QAbstractItemView{
-	background-color:#f5f5f5;
+    background-color:#f5f5f5;
 }
 QComboBox#combox_group{
-	qproperty-geometry:rect(415 72 220 40);
+    qproperty-geometry:rect(415 72 220 40);
 }
 
 /***********QTextEdit***********/
@@ -318,46 +318,46 @@ QTextEdit#textEdit_exampleSentence3,
 QTextEdit#textEdit_exampleSentence4,
 QTextEdit#textEdit_exampleSentence5,
 QTextEdit#textEdit_exampleSentence6{
-	font-size:23px;
+    font-size:23px;
 }
 QTextEdit#textEdit_exampleSentence1{
-	qproperty-geometry:rect(8 1360 627 96);
+    qproperty-geometry:rect(8 1360 627 96);
 }
 QTextEdit#textEdit_exampleSentence2{
-	qproperty-geometry:rect(8 1472 627 96);
+    qproperty-geometry:rect(8 1472 627 96);
 }
 QTextEdit#textEdit_exampleSentence3{
-	qproperty-geometry:rect(8 1584 627 96);
+    qproperty-geometry:rect(8 1584 627 96);
 }
 QTextEdit#textEdit_exampleSentence4{
-	qproperty-geometry:rect(8 1696 627 96);
+    qproperty-geometry:rect(8 1696 627 96);
 }
 QTextEdit#textEdit_exampleSentence5{
-	qproperty-geometry:rect(8 1808 627 96);
+    qproperty-geometry:rect(8 1808 627 96);
 }
 QTextEdit#textEdit_exampleSentence6{
-	qproperty-geometry:rect(8 1920 627 96);
+    qproperty-geometry:rect(8 1920 627 96);
 }
 
 /**********QPushButton**********/
 QPushButton#btn_cancel{
-	qproperty-geometry:rect(201 2144 80 80);
-	background:url(skin/picture/14/cross.png) 0 center no-repeat rgba(255,255,255,0);
+    qproperty-geometry:rect(201 2144 80 80);
+    background:url(:/main/res/skin/picture/14/cross.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_cancel:hover{
-	background:url(skin/picture/14/cross_hover.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/cross_hover.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_cancel:pressed{
-	background:url(skin/picture/14/cross_pressed.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/cross_pressed.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_confirm{
-	qproperty-geometry:rect(361 2144 80 80);
-	background:url(skin/picture/14/hook.png) 0 center no-repeat rgba(255,255,255,0);
+    qproperty-geometry:rect(361 2144 80 80);
+    background:url(:/main/res/skin/picture/14/hook.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_confirm:hover{
-	background:url(skin/picture/14/hook_hover.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/hook_hover.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_confirm:pressed{
-	background:url(skin/picture/14/hook_pressed.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/hook_pressed.png) 0 center no-repeat rgba(255,255,255,0);
 }
 

@@ -1,6 +1,6 @@
 WordTerminator{
-	qproperty-geometry:rect(100 100 800 630);
-	background:#ffffff;
+    qproperty-geometry:rect(100 100 800 630);
+    background:#ffffff;
 }
 
 /***********QLabel***********/
@@ -21,25 +21,25 @@ WordTerminator{
 /************QSpinBox************/
 
 QLabel,CopyLabel,LinkLabel,QLineEdit,QTextEdit,QPushButton,QRadioButton,QCheckBox,WTButton,QListView,QComboBox,QTabWidget{
-	font-family:"Microsoft Yahei";
+    font-family:"Microsoft Yahei";
 }
 
 /***********QLabel***********/
 QLabel#label_menubg{
-	qproperty-geometry:rect(0 0 140 630);
-	background:url(skin/picture/14/bg_wt.png);
+    qproperty-geometry:rect(0 0 140 630);
+    background:url(:/main/res/skin/picture/14/bg_wt.png);
 }
 
 /**********QPushButton**********/
 QPushButton#btn_save{
-	qproperty-geometry:rect(40 20 60 60);
-	background:url(skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
+    qproperty-geometry:rect(40 20 60 60);
+    background:url(:/main/res/skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_save:hover{
-	background:url(skin/picture/14/save_hover.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/save_hover.png) 0 center no-repeat rgba(255,255,255,0);
 }
 QPushButton#btn_save:pressed{
-	background:url(skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
+    background:url(:/main/res/skin/picture/14/save.png) 0 center no-repeat rgba(255,255,255,0);
 }
 
 /**********WTButton**********/
@@ -47,59 +47,59 @@ WTButton#btn_lib,
 WTButton#btn_mem,
 WTButton#btn_fun,
 WTButton#btn_set{
-	font-size:18px;
-	color:#ffffff;
+    font-size:18px;
+    color:#ffffff;
 }
 WTButton#btn_lib:indicator,
 WTButton#btn_mem:indicator,
 WTButton#btn_fun:indicator,
 WTButton#btn_set:indicator{
-	width:34px;
-	height:34px;
+    width:34px;
+    height:34px;
 }
 WTButton#btn_lib:hover,
 WTButton#btn_mem:hover,
 WTButton#btn_fun:hover,
 WTButton#btn_set:hover{
-	background:#2f88d5;
+    background:#2f88d5;
 }
 WTButton#btn_lib:checked,
 WTButton#btn_mem:checked,
 WTButton#btn_fun:checked,
 WTButton#btn_set:checked{
-	background:#4595d9;
+    background:#4595d9;
 }
 WTButton#btn_lib{
-	qproperty-geometry:rect(0 100 140 34);
+    qproperty-geometry:rect(0 100 140 34);
 }
 WTButton#btn_lib:indicator:checked,
 WTButton#btn_lib:indicator:unchecked{
-	image:url(skin/picture/14/dictionary.png);
+    image:url(:/main/res/skin/picture/14/dictionary.png);
 }
 WTButton#btn_mem{
-	qproperty-geometry:rect(0 144 140 34);
+    qproperty-geometry:rect(0 144 140 34);
 }
 WTButton#btn_mem:indicator:checked,
 WTButton#btn_mem:indicator:unchecked{
-	image:url(skin/picture/14/memory.png);
+    image:url(:/main/res/skin/picture/14/memory.png);
 }
 WTButton#btn_fun{
-	qproperty-geometry:rect(0 188 140 34);
+    qproperty-geometry:rect(0 188 140 34);
 }
 WTButton#btn_fun:indicator:checked,
 WTButton#btn_fun:indicator:unchecked{
-	image:url(skin/picture/14/function.png);
+    image:url(:/main/res/skin/picture/14/function.png);
 }
 WTButton#btn_set{
-	qproperty-geometry:rect(0 232 140 34);
+    qproperty-geometry:rect(0 232 140 34);
 }
 WTButton#btn_set:indicator:checked,
 WTButton#btn_set:indicator:unchecked{
-	image:url(skin/picture/14/setting.png);
+    image:url(:/main/res/skin/picture/14/setting.png);
 }
 
 /***********QStackedWidget***********/
 QStackedWidget#stackedWidget{
-	qproperty-geometry:rect(140 0 660 630);
+    qproperty-geometry:rect(140 0 660 630);
 }
 
