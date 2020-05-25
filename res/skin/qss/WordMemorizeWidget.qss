@@ -1,0 +1,279 @@
+/***********QWidget***********/
+QWidget#widget_welcome {
+    border-image: url(:/main/res/skin/picture/bg_mem_welcome.png);
+}
+QWidget#widget_start {
+    border-image: url(:/main/res/skin/picture/bg_mem_start.png);
+}
+QWidget#widget_show {
+    background-color: transparent;
+}
+
+/***********QFrame***********/
+QFrame#hline_0 {
+    background-color: #a5a5a5;
+}
+
+/***********QLabel***********/
+QLabel#label_singleNum {
+    font-size: 22px;
+}
+QLabel#label_statistics {
+    font-size: 33px;
+}
+QLabel#label_info {
+    font-size: 36px;
+    color: #c0c0c0;
+    margin-right: 10px;
+}
+QLabel#label_input {
+    font-size: 28px;
+}
+
+/***********QCheckBox***********/
+QCheckBox#checkBox_test0,
+QCheckBox#checkBox_test1,
+QCheckBox#checkBox_range0,
+QCheckBox#checkBox_range1,
+QCheckBox#checkBox_range2,
+QCheckBox#checkBox_range3,
+QCheckBox#checkBox_forever {
+    font-size: 32px;
+    spacing: 10px;
+}
+QCheckBox::indicator {
+    width: 50px;
+    height: 50px;
+}
+QCheckBox#checkBox_test0::indicator::unchecked,
+QCheckBox#checkBox_test1::indicator::unchecked {
+    image: url(:/main/res/skin/picture/check3_inactive.png);
+}
+QCheckBox#checkBox_test0::indicator::checked,
+QCheckBox#checkBox_test1::indicator::checked {
+    image: url(:/main/res/skin/picture/check3_active.png);
+}
+QCheckBox#checkBox_range0::indicator::unchecked,
+QCheckBox#checkBox_range1::indicator::unchecked,
+QCheckBox#checkBox_range2::indicator::unchecked,
+QCheckBox#checkBox_range3::indicator::unchecked,
+QCheckBox#checkBox_forever::indicator::unchecked {
+    image: url(:/main/res/skin/picture/check1_inactive.png);
+}
+QCheckBox#checkBox_range0::indicator::checked,
+QCheckBox#checkBox_range1::indicator::checked,
+QCheckBox#checkBox_range2::indicator::checked,
+QCheckBox#checkBox_range3::indicator::checked,
+QCheckBox#checkBox_forever::indicator::checked {
+    image: url(:/main/res/skin/picture/check1_active.png);
+}
+
+/***********QComboBox***********/
+QComboBox#combox_group {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    font-size: 28px;
+}
+QComboBox::down-arrow {
+    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
+    padding: 0px;
+    width: 40px;
+    height: 25px;
+}
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    background-color: #f5f5f5;
+}
+
+/************QSpinBox************/
+QSpinBox#spinBox_singleNum {
+    font-size: 24px;
+}
+
+/**********QPushButton**********/
+QPushButton#btn_right {
+    border: none;
+    background: url(:/main/res/skin/picture/cha.png) transparent no-repeat center center;
+}
+QPushButton#btn_right:checked {
+    background: url(:/main/res/skin/picture/gou.png) transparent no-repeat center center;
+}
+QPushButton#btn_start {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/green.png);
+    font-size: 36px;
+    color: #ffffff;
+}
+QPushButton#btn_start:hover {
+    border-image: url(:/main/res/skin/picture/green_hover.png);
+}
+QPushButton#btn_know {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/white.png);
+    font-size: 36px;
+}
+QPushButton#btn_know:hover {
+    border-image: url(:/main/res/skin/picture/white_hover.png);
+}
+QPushButton#btn_notKnow {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/white.png);
+    font-size: 36px;
+}
+QPushButton#btn_notKnow:hover {
+    border-image: url(:/main/res/skin/picture/white_hover.png);
+}
+QPushButton#btn_forever {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/orange.png);
+    font-size: 30px;
+}
+QPushButton#btn_forever:hover {
+    border-image: url(:/main/res/skin/picture/orange_hover.png);
+}
+QPushButton#btn_notforever {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/grey.png);
+    font-size: 30px;
+}
+QPushButton#btn_notforever:hover {
+    border-image: url(:/main/res/skin/picture/grey_hover.png);
+}
+QPushButton#btn_next {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/white.png);
+    font-size: 36px;
+}
+QPushButton#btn_next:hover {
+    border-image: url(:/main/res/skin/picture/white_hover.png);
+}
+QPushButton#btn_submit {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/white.png);
+    font-size: 36px;
+}
+QPushButton#btn_submit:hover {
+    border-image: url(:/main/res/skin/picture/white_hover.png);
+}
+
+/**********QScrollArea**********/
+QScrollArea#scrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+/***********CopyLabel***********/
+CopyLabel {
+    border: none;
+}
+CopyLabel#copyLabel_WORD,
+CopyLabel#copyLabel_word,
+CopyLabel#copyLabel_phoneticSymbol {
+    background-color: transparent;
+}
+CopyLabel#copyLabel_WORD {
+    font-size: 48px;
+    font-weight: bold;
+    color: #3b93ee;
+}
+CopyLabel#copyLabel_word {
+    font-size: 36px;
+    font-weight: bold;
+    color: #3b93ee;
+}
+CopyLabel#copyLabel_phoneticSymbol {
+    font-size: 28px;
+    color: #666666;
+    padding-top: 5px;
+}
+CopyLabel#copyLabel_property0,
+CopyLabel#copyLabel_property1,
+CopyLabel#copyLabel_property2,
+CopyLabel#copyLabel_property3,
+CopyLabel#copyLabel_property4,
+CopyLabel#copyLabel_property5,
+CopyLabel#copyLabel_property6,
+CopyLabel#copyLabel_property7,
+CopyLabel#copyLabel_property8,
+CopyLabel#copyLabel_property9,
+CopyLabel#copyLabel_property10,
+CopyLabel#copyLabel_property11,
+CopyLabel#copyLabel_property12,
+CopyLabel#copyLabel_property13,
+CopyLabel#copyLabel_property14,
+CopyLabel#copyLabel_property15,
+CopyLabel#copyLabel_property16,
+CopyLabel#copyLabel_property17,
+CopyLabel#copyLabel_property18,
+CopyLabel#copyLabel_property19 {
+    background-color: #c7d0d9;
+    border-radius: 6px;
+    font-size: 24px;
+    color: #177bd0;
+}
+CopyLabel#copyLabel_explain0,
+CopyLabel#copyLabel_explain1,
+CopyLabel#copyLabel_explain2,
+CopyLabel#copyLabel_explain3,
+CopyLabel#copyLabel_explain4,
+CopyLabel#copyLabel_explain5,
+CopyLabel#copyLabel_explain6,
+CopyLabel#copyLabel_explain7,
+CopyLabel#copyLabel_explain8,
+CopyLabel#copyLabel_explain9,
+CopyLabel#copyLabel_explain10,
+CopyLabel#copyLabel_explain11,
+CopyLabel#copyLabel_explain12,
+CopyLabel#copyLabel_explain13,
+CopyLabel#copyLabel_explain14,
+CopyLabel#copyLabel_explain15,
+CopyLabel#copyLabel_explain16,
+CopyLabel#copyLabel_explain17,
+CopyLabel#copyLabel_explain18,
+CopyLabel#copyLabel_explain19,
+CopyLabel#copyLabel_exampleSentence,
+CopyLabel#copyLabel_example0,
+CopyLabel#copyLabel_example1,
+CopyLabel#copyLabel_example2,
+CopyLabel#copyLabel_example3,
+CopyLabel#copyLabel_example4,
+CopyLabel#copyLabel_example5,
+CopyLabel#copyLabel_synonym,
+CopyLabel#copyLabel_antonym {
+    background-color: transparent;
+    font-size: 24px;
+}
+
+/***********LinkLabel***********/
+LinkLabel#linkLabel_synonym0,
+LinkLabel#linkLabel_synonym1,
+LinkLabel#linkLabel_synonym2,
+LinkLabel#linkLabel_synonym3,
+LinkLabel#linkLabel_synonym4,
+LinkLabel#linkLabel_synonym5,
+LinkLabel#linkLabel_synonym6,
+LinkLabel#linkLabel_synonym7,
+LinkLabel#linkLabel_antonym0,
+LinkLabel#linkLabel_antonym1,
+LinkLabel#linkLabel_antonym2,
+LinkLabel#linkLabel_antonym3,
+LinkLabel#linkLabel_antonym4,
+LinkLabel#linkLabel_antonym5,
+LinkLabel#linkLabel_antonym6,
+LinkLabel#linkLabel_antonym7 {
+    border: none;
+    background-color: transparent;
+    font-size: 24px;
+    color: #177bd0;
+}
+
+/**********QLineEdit**********/
+QLineEdit#lineEdit_input {
+    border: none;
+    background-color: transparent;
+    font-size: 28px;
+}
+

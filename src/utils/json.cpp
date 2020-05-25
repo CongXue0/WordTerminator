@@ -473,7 +473,7 @@ namespace QtJson {
         bool ok;
 
         if (numberStr.contains('.')) {
-            return QVariant(numberStr.toDouble(NULL));
+            return QVariant(numberStr.toDouble(nullptr));
         } else if (numberStr.startsWith('-')) {
             int i = numberStr.toInt(&ok);
             if (!ok) {

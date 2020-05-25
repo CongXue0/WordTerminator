@@ -1,22 +1,16 @@
 #include "wordterminator.h"
 #include "ui_wordterminator.h"
-#include <QLayout>
 #include "wtool.h"
-#include <QDebug>
-#include <QDir>
-#include <QDesktopWidget>
 #include "wordadmin.h"
-#include <QMessageBox>
 #include "forgetthread.h"
-#include <QCloseEvent>
 #include "memorythread.h"
-#include <QInputDialog>
-#include <QProgressDialog>
-#include <QTextCodec>
-#include <QStandardPaths>
 #include "global.h"
-#include <QCoreApplication>
 #include "src/utils/version.h"
+#include <QLayout>
+#include <QDir>
+#include <QMessageBox>
+#include <QCloseEvent>
+#include <QProgressDialog>
 
 extern WordAdmin *p_wordAdmin;
 extern ForgetThread *p_forgetThread;
@@ -26,105 +20,43 @@ WordTerminator::WordTerminator(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WordTerminator)
 {
+    setStyleSheet(WTool::getStyleQss("WordTerminator"));
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
 
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    QDir::setCurrent(QCoreApplication::applicationDirPath());
-
-    WTool::dirInit();
-    Global::init(WTool::getConfigPath());
-
     setWindowTitle("WordTerminator " + Version::getVersion());
 
-    if (p_wordAdmin == NULL)
-        p_wordAdmin = WordAdmin::getInstance();
-    if (p_forgetThread == NULL)
-        p_forgetThread = new ForgetThread(this);
-    if (p_memThread == NULL)
-        p_memThread = new MemoryThread(this);
-
     m_first = true;
-    m_widgets.clear();
 
-    label_menubg = new QLabel(this);
-    label_menubg->setObjectName("label_menubg");
-
-    btn_save = new QPushButton(label_menubg);
-    btn_save->setObjectName("btn_save");
-    connect(btn_save, SIGNAL(clicked()), this, SLOT(slot_saveBtn_clicked()));
-
-    btn_lib = new WTButton(label_menubg);
-    btn_lib->setObjectName("btn_lib");
-    btn_lib->setText("词库管理");
-    btn_lib->setActive(true);
-    btn_lib->setAutoExclusive(true);
-    connect(btn_lib, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-
-    btn_mem = new WTButton(label_menubg);
-    btn_mem->setObjectName("btn_mem");
-    btn_mem->setText("单词记忆");
-    btn_mem->setAutoExclusive(true);
-    connect(btn_mem, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-
-    btn_fun = new WTButton(label_menubg);
-    btn_fun->setObjectName("btn_fun");
-    btn_fun->setText("其他功能");
-    btn_fun->setAutoExclusive(true);
-    connect(btn_fun, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-
-    btn_set = new WTButton(label_menubg);
-    btn_set->setObjectName("btn_set");
-    btn_set->setText("设置选项");
-    btn_set->setAutoExclusive(true);
-    connect(btn_set, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-
-    stackedWidget = new QStackedWidget(this);
-    stackedWidget->setObjectName("stackedWidget");
-
-    loadStyleSheet();
-
-    wordLibrary = new WordLibraryWidget(this);
-    wordLibrary->setObjectName("WordLibraryWidget");
-    connect(wordLibrary, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(wordLibrary, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), wordLibrary, SLOT(slot_wordTimeDecline(QString)));
-    stackedWidget->addWidget(wordLibrary);
     pushWidgetIndex(Widget_WordLibrary);
 
-    wordCreate = new WordCreateWidget(this);
-    wordCreate->setObjectName("WordCreateWidget");
-    connect(wordCreate, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(wordCreate, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    stackedWidget->addWidget(wordCreate);
-
-    wordShow = new WordShowWidget(this);
-    wordShow->setObjectName("WordShowWidget");
-    connect(wordShow, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(wordShow, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), wordShow, SLOT(slot_wordTimeDecline(QString)));
-    stackedWidget->addWidget(wordShow);
-
-    wordMemorize = new WordMemorizeWidget(this);
-    wordMemorize->setObjectName("WordMemorizeWidget");
-    connect(p_memThread, SIGNAL(wordCanMemorizeSignal(QString)), wordMemorize, SLOT(slot_wordCanMemorize(QString)));
-    connect(wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_memThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), wordLibrary, SLOT(slot_wordTimeIncrease(QString)));
-    connect(wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), wordShow, SLOT(slot_wordTimeIncrease(QString)));
-    connect(this, SIGNAL(stopWordMemorizeSignal(bool*)), wordMemorize, SLOT(slot_stopWordMemorize(bool*)));
-    stackedWidget->addWidget(wordMemorize);
-
-    wordFunc = new WordFunctionWidget(this);
-    wordFunc->setObjectName("WordFunctionWidget");
-    stackedWidget->addWidget(wordFunc);
-
-    wordSetting = new WordSettingWidget(this);
-    wordSetting->setObjectName("WordSettingWidget");
-    connect(wordSetting, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    stackedWidget->addWidget(wordSetting);
-
     p_forgetThread->start();
+
+    connect(ui->btn_save, SIGNAL(clicked()), this, SLOT(slot_saveBtn_clicked()));
+    connect(ui->btn_lib, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+    connect(ui->btn_mem, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+    connect(ui->btn_fun, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+    connect(ui->btn_set, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+
+    connect(ui->widget_wordLibrary, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
+    connect(ui->widget_wordLibrary, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeDecline(QString)));
+
+    connect(ui->widget_wordCreate, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
+    connect(ui->widget_wordCreate, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+
+    connect(ui->widget_wordShow, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
+    connect(ui->widget_wordShow, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), ui->widget_wordShow, SLOT(slot_wordTimeDecline(QString)));
+
+//    connect(p_memThread, SIGNAL(wordCanMemorizeSignal(QString)), ui->widget_wordMemorize, SLOT(slot_wordCanMemorize(QString)));
+//    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_memThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeIncrease(QString)));
+    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), ui->widget_wordShow, SLOT(slot_wordTimeIncrease(QString)));
+    connect(this, SIGNAL(stopWordMemorizeSignal(bool*)), ui->widget_wordMemorize, SLOT(slot_stopWordMemorize(bool*)));
+
+    connect(ui->widget_wordSetting, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
 }
 
 WordTerminator::~WordTerminator()
@@ -132,12 +64,17 @@ WordTerminator::~WordTerminator()
     delete ui;
 }
 
+int WordTerminator::getCurrentWidgetIndex()
+{
+    return ui->stackedWidget->currentIndex();
+}
+
 void WordTerminator::showEvent(QShowEvent *)
 {
     if (m_first)
     {
         QSize size = this->size();
-        this->setFixedSize(size);//固定窗口大小
+        this->setFixedSize(size);
 
         QPoint point;
         QRect screen = WTool::getScreenGeometry();
@@ -161,16 +98,6 @@ void WordTerminator::closeEvent(QCloseEvent *event)
     }
     else
         event->ignore();
-}
-
-int WordTerminator::getCurrentWidgetIndex()
-{
-    return stackedWidget->currentIndex();
-}
-
-void WordTerminator::loadStyleSheet()
-{
-    setStyleSheet(WTool::getWordTerminatorQss());
 }
 
 int WordTerminator::topWidgetIndex()
@@ -203,7 +130,7 @@ void WordTerminator::clearWidgetIndex()
 
 void WordTerminator::slot_saveBtn_clicked()
 {
-    int index = stackedWidget->currentIndex();
+    int index = ui->stackedWidget->currentIndex();
     switch (index)
     {
     case Widget_WordLibrary:
@@ -215,10 +142,10 @@ void WordTerminator::slot_saveBtn_clicked()
     case Widget_WordMemorize:
         break;
     case Widget_Function:
-        wordFunc->saveGlobalValue();
+        ui->widget_wordFunc->saveGlobalValue();
         break;
     case Widget_Setting:
-        wordSetting->saveGlobalValue();
+        ui->widget_wordSetting->saveGlobalValue();
         break;
     }
 }
@@ -226,7 +153,7 @@ void WordTerminator::slot_saveBtn_clicked()
 void WordTerminator::slot_wtbuttonPressed()
 {
     QString name = sender()->objectName();
-    int index = stackedWidget->currentIndex();
+    int index = ui->stackedWidget->currentIndex();
     if ((name == "btn_lib" && index == Widget_WordLibrary) || (name == "btn_mem" && index == Widget_WordMemorize) ||
         (name == "btn_fun" && index == Widget_Function) || (name == "btn_set" && index == Widget_Setting))
         return;
@@ -240,7 +167,7 @@ void WordTerminator::slot_wtbuttonPressed()
     case Widget_WordShow:
         break;
     case Widget_WordMemorize:
-        if (wordMemorize->getMode() == WordMemorizeWidget::MEMORY)
+        if (ui->widget_wordMemorize->getMode() == WordMemorizeWidget::MEMORY)
         {
             bool ret = false;
             emit stopWordMemorizeSignal(&ret);
@@ -266,53 +193,53 @@ void WordTerminator::slot_wtbuttonPressed()
     switch (index)//后处理
     {
     case Widget_WordLibrary:
-        wordLibrary->reloadGlobalValue();
-        wordLibrary->clearSearch();
-        wordLibrary->updateWordList();
-        wordLibrary->updateWordStatistics();
+        ui->widget_wordLibrary->reloadGlobalValue();
+        ui->widget_wordLibrary->clearSearch();
+        ui->widget_wordLibrary->updateWordList();
+        ui->widget_wordLibrary->updateWordStatistics();
         break;
     case Widget_WordMemorize:
-        wordMemorize->reloadGlobalValue();
-        wordMemorize->recoveryInterface();
-        wordMemorize->updateWordStatistics();
+        ui->widget_wordMemorize->reloadGlobalValue();
+        ui->widget_wordMemorize->recoveryInterface();
+        ui->widget_wordMemorize->updateWordStatistics();
         break;
     case Widget_Function:
-        wordFunc->reloadGlobalValue();
+        ui->widget_wordFunc->reloadGlobalValue();
         break;
     case Widget_Setting:
-        wordSetting->reloadGlobalValue();
+        ui->widget_wordSetting->reloadGlobalValue();
         break;
     }
     pushWidgetIndex(index);
-    stackedWidget->setCurrentIndex(index);
+    ui->stackedWidget->setCurrentIndex(index);
 
     if (name == "btn_lib")
     {
-        btn_lib->setActive(true);
-        btn_mem->setActive(false);
-        btn_fun->setActive(false);
-        btn_set->setActive(false);
+        ui->btn_lib->setChecked(true);
+        ui->btn_mem->setChecked(false);
+        ui->btn_fun->setChecked(false);
+        ui->btn_set->setChecked(false);
     }
     else if (name == "btn_mem")
     {
-        btn_lib->setActive(false);
-        btn_mem->setActive(true);
-        btn_fun->setActive(false);
-        btn_set->setActive(false);
+        ui->btn_lib->setChecked(false);
+        ui->btn_mem->setChecked(true);
+        ui->btn_fun->setChecked(false);
+        ui->btn_set->setChecked(false);
     }
     else if (name == "btn_fun")
     {
-        btn_lib->setActive(false);
-        btn_mem->setActive(false);
-        btn_fun->setActive(true);
-        btn_set->setActive(false);
+        ui->btn_lib->setChecked(false);
+        ui->btn_mem->setChecked(false);
+        ui->btn_fun->setChecked(true);
+        ui->btn_set->setChecked(false);
     }
     else if (name == "btn_set")
     {
-        btn_lib->setActive(false);
-        btn_mem->setActive(false);
-        btn_fun->setActive(false);
-        btn_set->setActive(true);
+        ui->btn_lib->setChecked(false);
+        ui->btn_mem->setChecked(false);
+        ui->btn_fun->setChecked(false);
+        ui->btn_set->setChecked(true);
     }
 }
 
@@ -321,8 +248,8 @@ void WordTerminator::slot_handleMessage(WMessage message)
     int msgNum = message.getMessageNum();
     if (msgNum <= 0)
         return;
-    QString name = sender()->objectName();
-    if (name == "WordLibraryWidget")
+    auto obj = this->sender();
+    if (obj == ui->widget_wordLibrary)
     {
         if (msgNum == 1)
         {
@@ -330,19 +257,19 @@ void WordTerminator::slot_handleMessage(WMessage message)
             message.getMessage(0, info, value);
             if (info == "create word")
             {
-                wordCreate->setCreateMode(WordCreateWidget::CREATE);
-                wordCreate->recoveryInterface();
+                ui->widget_wordCreate->setEdit(false);
+                ui->widget_wordCreate->recoveryInterface();
                 pushWidgetIndex(Widget_WordCreate);
-                stackedWidget->setCurrentIndex(Widget_WordCreate);
+                ui->stackedWidget->setCurrentIndex(Widget_WordCreate);
             }
             else if (info == "show word")
             {
-                wordShow->recoveryInterface();
-                wordShow->reloadGlobalValue();
-                if (wordShow->loadWordInfo(value))
+                ui->widget_wordShow->recoveryInterface();
+                ui->widget_wordShow->reloadGlobalValue();
+                if (ui->widget_wordShow->loadWordInfo(value))
                 {
                     pushWidgetIndex(Widget_WordShow);
-                    stackedWidget->setCurrentIndex(Widget_WordShow);
+                    ui->stackedWidget->setCurrentIndex(Widget_WordShow);
                 }
                 else
                 {
@@ -352,7 +279,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
         }
 //        else if (msgNum > 1) {}
     }
-    else if (name == "WordCreateWidget")
+    else if (obj == ui->widget_wordCreate)
     {
         if (msgNum == 1)
         {
@@ -361,28 +288,28 @@ void WordTerminator::slot_handleMessage(WMessage message)
             if (info == "cancel create")
             {
                 popWidgetIndex();
-                stackedWidget->setCurrentIndex(topWidgetIndex());
+                ui->stackedWidget->setCurrentIndex(topWidgetIndex());
             }
             else if (info == "create success")
             {
                 popWidgetIndex();
                 if (topWidgetIndex() == Widget_WordLibrary)
                 {
-                    wordLibrary->clearSearch();
-                    wordLibrary->updateWordList();
-                    wordLibrary->updateWordStatistics();
+                    ui->widget_wordLibrary->clearSearch();
+                    ui->widget_wordLibrary->updateWordList();
+                    ui->widget_wordLibrary->updateWordStatistics();
                 }
-                stackedWidget->setCurrentIndex(topWidgetIndex());
+                ui->stackedWidget->setCurrentIndex(topWidgetIndex());
             }
             else if (info == "modify success")
             {
                 popWidgetIndex();
                 if (topWidgetIndex() == Widget_WordShow)
                 {
-                    wordShow->recoveryInterface();
-                    if (wordShow->loadWordInfo(value))
+                    ui->widget_wordShow->recoveryInterface();
+                    if (ui->widget_wordShow->loadWordInfo(value))
                     {
-                        stackedWidget->setCurrentIndex(Widget_WordShow);
+                        ui->stackedWidget->setCurrentIndex(Widget_WordShow);
                     }
                     else
                     {
@@ -390,18 +317,18 @@ void WordTerminator::slot_handleMessage(WMessage message)
                         popWidgetIndex();
                         if (topWidgetIndex() == Widget_WordLibrary)
                         {
-                            wordLibrary->clearSearch();
-                            wordLibrary->updateWordList();
-                            wordLibrary->updateWordStatistics();
+                            ui->widget_wordLibrary->clearSearch();
+                            ui->widget_wordLibrary->updateWordList();
+                            ui->widget_wordLibrary->updateWordStatistics();
                         }
-                        stackedWidget->setCurrentIndex(topWidgetIndex());
+                        ui->stackedWidget->setCurrentIndex(topWidgetIndex());
                     }
                 }
             }
         }
 //        else if (msgNum > 1) {}
     }
-    else if (name == "WordShowWidget")
+    else if (obj == ui->widget_wordShow)
     {
         if (msgNum == 1)
         {
@@ -412,27 +339,27 @@ void WordTerminator::slot_handleMessage(WMessage message)
                 popWidgetIndex();
                 if (topWidgetIndex() == Widget_WordLibrary)
                 {
-                    wordLibrary->updateWordList();
-                    wordLibrary->updateWordStatistics();
+                    ui->widget_wordLibrary->updateWordList();
+                    ui->widget_wordLibrary->updateWordStatistics();
                 }
-                stackedWidget->setCurrentIndex(topWidgetIndex());
+                ui->stackedWidget->setCurrentIndex(topWidgetIndex());
             }
             else if (info == "delete success")
             {
-                wordLibrary->clearSearch();
-                wordLibrary->updateWordList();
-                wordLibrary->updateWordStatistics();
+                ui->widget_wordLibrary->clearSearch();
+                ui->widget_wordLibrary->updateWordList();
+                ui->widget_wordLibrary->updateWordStatistics();
                 popWidgetIndex();
-                stackedWidget->setCurrentIndex(topWidgetIndex());
+                ui->stackedWidget->setCurrentIndex(topWidgetIndex());
             }
             else if (info == "edit word")
             {
-                wordCreate->setCreateMode(WordCreateWidget::MODIFY);
-                wordCreate->recoveryInterface();
-                if (wordCreate->loadWordInfo(value))
+                ui->widget_wordCreate->setEdit(true);
+                ui->widget_wordCreate->recoveryInterface();
+                if (ui->widget_wordCreate->loadWordInfo(value))
                 {
                     pushWidgetIndex(Widget_WordCreate);
-                    stackedWidget->setCurrentIndex(Widget_WordCreate);
+                    ui->stackedWidget->setCurrentIndex(Widget_WordCreate);
                 }
                 else
                     QMessageBox::about(this, "提示", "获取单词信息失败");
@@ -440,7 +367,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
         }
 //        else if (msgNum > 1) {}
     }
-    else if (name == "WordSettingWidget")
+    else if (obj == ui->widget_wordSetting)
     {
         if (msgNum == 1)
         {
@@ -449,10 +376,10 @@ void WordTerminator::slot_handleMessage(WMessage message)
             if (info == "set reload flag")
             {
                 bool flag = (value == "true" ? true : false);
-                wordCreate->setReloadFlag(flag);
-                wordLibrary->setReloadFlag(flag);
-                wordShow->setReloadFlag(flag);
-                wordMemorize->setReloadFlag(flag);
+                ui->widget_wordCreate->setReloadFlag(flag);
+                ui->widget_wordLibrary->setReloadFlag(flag);
+                ui->widget_wordShow->setReloadFlag(flag);
+                ui->widget_wordMemorize->setReloadFlag(flag);
             }
         }
     }

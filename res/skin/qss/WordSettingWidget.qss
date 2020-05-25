@@ -1,0 +1,69 @@
+/***********QTabWidget***********/
+QTabWidget#tabWidget {
+    font-size: 30px;
+}
+QTabWidget#tabWidget QTabBar::tab {
+    color: #6495ed;
+}
+
+/***********QWidget***********/
+QWidget#tab_forgetSet,
+QWidget#tab_libSet,
+QWidget#tab_groupSet,
+QWidget#tab_help {
+    border-image: url(:/main/res/skin/picture/bg_func.png);
+}
+
+/***********QLabel***********/
+QLabel {
+    font-size: 28px;
+    color: #666666;
+}
+QLabel#label_declineTimes {
+    font-size: 24px;
+    color: #666666;
+}
+QLabel#label_range1_f,
+QLabel#label_range2_f,
+QLabel#label_range3_f {
+    font-size: 33px;
+}
+
+/**********QLineEdit**********/
+QLineEdit {
+    font-size: 30px;
+}
+
+/***********QComboBox***********/
+QComboBox#combox_memLevel {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    color: #666666;
+    font-size: 30px;
+}
+QComboBox::down-arrow {
+    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
+    padding: 0px;
+    width: 40px;
+    height: 25px;
+}
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    background-color: #f5f5f5;
+}
+
+/**********QPushButton**********/
+QPushButton#btn_reset {
+    border: 4px solid #f5f6f7;
+    border-radius: 8px;
+    background-color: #4169e1;
+    font-size: 30px;
+    color: #f0f8ff;
+}
+QPushButton#btn_reset:hover {
+    background-color: #4a77ef;
+}
+

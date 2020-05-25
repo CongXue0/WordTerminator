@@ -5,19 +5,19 @@ WTListView::WTListView(QWidget *parent) : QListView(parent)
 {
 }
 
-void WTListView::mousePressEvent(QMouseEvent *e)
-{
-    QListView::mousePressEvent(e);
-    QWidget::mousePressEvent(e);
-}
+//void WTListView::mousePressEvent(QMouseEvent *e)
+//{
+//    QListView::mousePressEvent(e);
+//    QWidget::mousePressEvent(e);
+//}
 
-void WTListView::mouseReleaseEvent(QMouseEvent *e)
-{
-    QListView::mouseReleaseEvent(e);
-    QWidget::mouseReleaseEvent(e);
-}
+//void WTListView::mouseReleaseEvent(QMouseEvent *e)
+//{
+//    QListView::mouseReleaseEvent(e);
+//    QWidget::mouseReleaseEvent(e);
+//}
 
-QModelIndexList WTListView::selectedIndexes() const
-{
-    return QListView::selectedIndexes();
-}
+//QModelIndexList WTListView::selectedIndexes() const
+//{
+//    return QListView::selectedIndexes();
+//}

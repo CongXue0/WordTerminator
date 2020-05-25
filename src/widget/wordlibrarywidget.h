@@ -11,16 +11,18 @@
 #include "wmessage.h"
 #include <QComboBox>
 #include "wtool.h"
-#include "wtlistview.h"
 #include <QMenu>
+
+namespace Ui
+{
+    class WordLibraryWidget;
+}
 
 class WordLibraryWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WordLibraryWidget(QWidget *parent = 0);
-    void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *obj, QEvent *e);
+    explicit WordLibraryWidget(QWidget *parent = nullptr);
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
@@ -28,14 +30,9 @@ public:
     void updateWordList();
     void updateWordStatistics();
 
-public slots:
-
 private:
-    void loadStyleSheet();
-
-signals:
-    void sendMessageSignal(WMessage message);
-    void wordTimeIncreaseSignal(QString name);
+    void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *obj, QEvent *e);
 
 private slots:
     void slot_menu1Triggered(QAction *act);
@@ -43,12 +40,17 @@ private slots:
     void slot_btnSearch_clicked();
     void slot_btnCreate_clicked();
     void slot_itemDoubleClicked(QModelIndex index);
-    void slot_radioButtonClicked();
+    void slot_checkBoxClicked();
     void slot_comboxGroup_currentIndexChanged(int index);
     void slot_wordTimeDecline(QString name);
     void slot_wordTimeIncrease(QString name);
 
+signals:
+    void sendMessageSignal(WMessage message);
+    void wordTimeIncreaseSignal(QString name);
+
 private:
+    Ui::WordLibraryWidget *ui;
     bool m_reloadFlag;
     int m_curGroupId;
     QModelIndexList m_modelList;
@@ -56,24 +58,8 @@ private:
     QMenu *m_menu1;
     QMenu *m_menu2;
 
-    QLabel *label_bg;
-    QLabel *label_statistics;
-
-    QLineEdit *lineEdit_search;
-
-    QPushButton *btn_search;
-    QPushButton *btn_create;
-
-    WTListView *wordList;
     QStringList m_wordList;
     QStringListModel *m_model;
-
-    QRadioButton *radioBtn_range[4];
-    QRadioButton *radioBtn_forever;
-
-    QComboBox *combox_group;
-    QComboBox *combox_search;
-
 };
 
 #endif // WORDLIBRARYWIDGET_H

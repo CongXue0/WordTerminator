@@ -16,7 +16,7 @@ public:
     void clearMessage();
     int getMessageNum();
 
-private:
+protected:
     QStringList m_list;
 };
 

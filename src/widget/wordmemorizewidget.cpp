@@ -1,16 +1,25 @@
 #include "wordmemorizewidget.h"
-#include <QMessageBox>
-#include <QDebug>
+#include "ui_wordmemorizewidget.h"
 #include "json.h"
 #include "memorythread.h"
-#include <QKeyEvent>
 #include "global.h"
+#include <QMessageBox>
+#include <QDebug>
+#include <QKeyEvent>
+#include <QScrollBar>
 
 extern WordAdmin *p_wordAdmin;
 extern MemoryThread *p_memThread;
 
-WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
+enum { SHOW_WORD, SHOW_EXPLAIN, SHOW_INFO };
+
+WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::WordMemorizeWidget)
 {
+    setStyleSheet(WTool::getStyleQss("WordMemorizeWidget"));
+    ui->setupUi(this);
+
     m_mode = WELCOME;
     m_test = NONE;
     m_propertyNum = 0;
@@ -22,165 +31,52 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) : QWidget(parent)
     m_pastNum = 0;
     m_curIndex = -1;
     m_lastWord = "";
-    if (WTool::getScreenSize() == "14")
-        m_spacing = 8;
-    else if (WTool::getScreenSize() == "15.6")
-        m_spacing = 10;
+    m_spacing = 10;
 
-    label_bg_welcome = new QLabel(this);
-    label_bg_welcome->setObjectName("label_bg_welcome");
-    label_bg_start = new QLabel(this);
-    label_bg_start->setObjectName("label_bg_start");
-    label_singleNum = new QLabel(label_bg_welcome);
-    label_singleNum->setObjectName("label_singleNum");
-    label_singleNum->setText("最大记忆单词数");
-    label_statistics = new QLabel(label_bg_welcome);
-    label_statistics->setObjectName("label_statistics");
-    label_statistics->setText("当前可记单词数：2000\n"
-                              "总共可记单词数：10000");
-    label_info = new QLabel(label_bg_start);
-    label_info->setObjectName("label_info");
-    label_info->setText("已记忆：    未记忆：");
-    label_cha = new QLabel(label_bg_start);
-    label_cha->setObjectName("label_cha");
-    label_gou = new QLabel(label_bg_start);
-    label_gou->setObjectName("label_gou");
-    label_input = new QLabel(label_bg_start);
-    label_input->setObjectName("label_input");
-    label_input->setText("请输入正确的单词：");
-    label_line = new QLabel(label_bg_start);
-    label_line->setObjectName("label_line");
+    ui->btn_right->setCheckable(true);
+    ui->btn_right->setAutoCheck(false);
 
-    radioBtn_test[0] = new QRadioButton(label_bg_welcome);
-    radioBtn_test[0]->setObjectName("radioBtn_test1");
-    radioBtn_test[0]->setText("探索回忆");
-    radioBtn_test[0]->setChecked(true);
-    radioBtn_test[0]->setAutoExclusive(false);
-    radioBtn_test[1] = new QRadioButton(label_bg_welcome);
-    radioBtn_test[1]->setObjectName("radioBtn_test2");
-    radioBtn_test[1]->setText("英文回想");
-    radioBtn_test[1]->setChecked(true);
-    radioBtn_test[1]->setAutoExclusive(false);
+    ui->copyLabel_WORD->setAlignment(Qt::AlignCenter);
 
-    radioBtn_range[0] = new QRadioButton(label_bg_welcome);
-    radioBtn_range[0]->setObjectName("radioBtn_range1");
-    radioBtn_range[0]->setChecked(true);
-    radioBtn_range[0]->setAutoExclusive(false);
-    connect(radioBtn_range[0], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
-    radioBtn_range[1] = new QRadioButton(label_bg_welcome);
-    radioBtn_range[1]->setObjectName("radioBtn_range2");
-    radioBtn_range[1]->setChecked(true);
-    radioBtn_range[1]->setAutoExclusive(false);
-    connect(radioBtn_range[1], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
-    radioBtn_range[2] = new QRadioButton(label_bg_welcome);
-    radioBtn_range[2]->setObjectName("radioBtn_range3");
-    radioBtn_range[2]->setChecked(false);
-    radioBtn_range[2]->setAutoExclusive(false);
-    connect(radioBtn_range[2], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
-    radioBtn_range[3] = new QRadioButton(label_bg_welcome);
-    radioBtn_range[3]->setObjectName("radioBtn_range4");
-    radioBtn_range[3]->setChecked(false);
-    radioBtn_range[3]->setAutoExclusive(false);
-    connect(radioBtn_range[3], SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
-    radioBtn_forever = new QRadioButton(label_bg_welcome);
-    radioBtn_forever->setObjectName("radioBtn_forever");
-    radioBtn_forever->setText("forever");
-    radioBtn_forever->setChecked(false);
-    radioBtn_forever->setAutoExclusive(false);
-    connect(radioBtn_forever, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
-
-    combox_group = new QComboBox(label_bg_welcome);
-    combox_group->setObjectName("combox_group");
-
-    spinBox_singleNum = new QSpinBox(label_bg_welcome);
-    spinBox_singleNum->setObjectName("spinBox_singleNum");
-    spinBox_singleNum->setRange(10, 10000);
-
-    btn_start = new QPushButton(label_bg_welcome);
-    btn_start->setObjectName("btn_start");
-    btn_start->setText("开始记忆");
-    connect(btn_start, SIGNAL(clicked()), this, SLOT(slot_btnStart_Clicked()));
-    btn_know = new QPushButton(label_bg_start);
-    btn_know->setObjectName("btn_know");
-    btn_know->setText("认识");
-    connect(btn_know, SIGNAL(clicked()), this, SLOT(slot_btnKnow_Clicked()));
-    btn_notKnow = new QPushButton(label_bg_start);
-    btn_notKnow->setObjectName("btn_notKnow");
-    btn_notKnow->setText("不认识");
-    connect(btn_notKnow, SIGNAL(clicked()), this, SLOT(slot_btnNotKnow_Clicked()));
-    btn_forever = new QPushButton(label_bg_start);
-    btn_forever->setObjectName("btn_forever");
-    btn_forever->setText("设为forever组");
-    connect(btn_forever, SIGNAL(clicked()), this, SLOT(slot_btnForever_Clicked()));
-    btn_notforever = new QPushButton(label_bg_start);
-    btn_notforever->setObjectName("btn_notforever");
-    btn_notforever->setText("移出forever组");
-    connect(btn_notforever, SIGNAL(clicked()), this, SLOT(slot_btnNotForever_Clicked()));
-    btn_next = new QPushButton(label_bg_start);
-    btn_next->setObjectName("btn_next");
-    btn_next->setText("下一个");
-    connect(btn_next, SIGNAL(clicked()), this, SLOT(slot_btnNext_Clicked()));
-    btn_submit = new QPushButton(label_bg_start);
-    btn_submit->setObjectName("btn_submit");
-    btn_submit->setText("提交");
-    connect(btn_submit, SIGNAL(clicked()), this, SLOT(slot_btnSubmit_Clicked()));
-
-    scrollArea = new QScrollArea(label_bg_start);
-    scrollArea->setObjectName("scrollArea");
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    widget_start = new QWidget(label_bg_start);
-    widget_start->setObjectName("widget_start");
-    scrollArea->setWidget(widget_start);
-
-    copyLabel_WORD = new CopyLabel(label_bg_start);
-    copyLabel_WORD->setObjectName("copyLabel_WORD");
-    copyLabel_word = new CopyLabel(widget_start);
-    copyLabel_word->setObjectName("copyLabel_word");
-    copyLabel_phoneticSymbol = new CopyLabel(widget_start);
-    copyLabel_phoneticSymbol->setObjectName("copyLabel_phoneticSymbol");
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < PROPERTY_NUM; ++i)
     {
-        copyLabel_property[i] = new CopyLabel(widget_start);
-        copyLabel_property[i]->setObjectName(QString("copyLabel_property%1").arg(i + 1));
+        copyLabel_property[i] = this->findChild<CopyLabel *>(QString("copyLabel_property%1").arg(i));
+        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
+        copyLabel_explain[i] = this->findChild<CopyLabel *>(QString("copyLabel_explain%1").arg(i));
+        widget_explain[i] = this->findChild<QWidget *>(QString("widget_explain%1").arg(i));
     }
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < EXAMPLE_NUM; ++i)
     {
-        copyLabel_explain[i] = new CopyLabel(widget_start);
-        copyLabel_explain[i]->setObjectName(QString("copyLabel_explain%1").arg(i + 1));
+        copyLabel_example[i] = this->findChild<CopyLabel *>(QString("copyLabel_example%1").arg(i));
     }
 
-    copyLabel_exampleSentence = new CopyLabel(widget_start);
-    copyLabel_exampleSentence->setObjectName("copyLabel_exampleSentence");
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < RELATED_NUM; ++i)
     {
-        copyLabel_example[i] = new CopyLabel(widget_start);
-        copyLabel_example[i]->setObjectName(QString("copyLabel_example%1").arg(i + 1));
+        linkLabel_synonym[i] = this->findChild<LinkLabel *>(QString("linkLabel_synonym%1").arg(i));
     }
-
-    copyLabel_synonym = new CopyLabel(widget_start);
-    copyLabel_synonym->setObjectName("copyLabel_synonym");
-    copyLabel_antonym = new CopyLabel(widget_start);
-    copyLabel_antonym->setObjectName("copyLabel_antonym");
-
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < RELATED_NUM; ++i)
     {
-        linkLabel_synonym[i] = new LinkLabel(widget_start);
-        linkLabel_synonym[i]->setObjectName(QString("linkLabel_synonym%1").arg(i + 1));
+        linkLabel_antonym[i] = this->findChild<LinkLabel *>(QString("linkLabel_antonym%1").arg(i));
     }
-    for (int i = 0; i < 8; i++)
-    {
-        linkLabel_antonym[i] = new LinkLabel(widget_start);
-        linkLabel_antonym[i]->setObjectName(QString("linkLabel_antonym%1").arg(i + 1));
-    }
-
-
-    lineEdit_input = new QLineEdit(label_bg_start);
-    lineEdit_input->setObjectName("lineEdit_input");
 
     m_reloadFlag = true;
     reloadGlobalValue();
-    loadStyleSheet();
-    loadJsonRect();
+
+    WTool::LayoutHelper_init(dynamic_cast<QBoxLayout *>(ui->widget_show->layout()));
+
+    connect(ui->checkBox_range0, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
+    connect(ui->checkBox_range1, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
+    connect(ui->checkBox_range2, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
+    connect(ui->checkBox_range3, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
+    connect(ui->checkBox_forever, SIGNAL(clicked()), this, SLOT(slot_radioButtonClicked()));
+    connect(ui->combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+    connect(ui->btn_start, SIGNAL(clicked()), this, SLOT(slot_btnStart_Clicked()));
+    connect(ui->btn_know, SIGNAL(clicked()), this, SLOT(slot_btnKnow_Clicked()));
+    connect(ui->btn_notKnow, SIGNAL(clicked()), this, SLOT(slot_btnNotKnow_Clicked()));
+    connect(ui->btn_forever, SIGNAL(clicked()), this, SLOT(slot_btnForever_Clicked()));
+    connect(ui->btn_notforever, SIGNAL(clicked()), this, SLOT(slot_btnNotForever_Clicked()));
+    connect(ui->btn_next, SIGNAL(clicked()), this, SLOT(slot_btnNext_Clicked()));
+    connect(ui->btn_submit, SIGNAL(clicked()), this, SLOT(slot_btnSubmit_Clicked()));
 }
 
 void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
@@ -189,21 +85,21 @@ void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
     {
         if (m_test == NONE)
         {
-            if (btn_start->isVisible())
+            if (ui->btn_start->isVisible())
                 slot_btnStart_Clicked();
         }
         else if (m_test == EXPLORATE)
         {
-            if (btn_know->isVisible())
+            if (ui->btn_know->isVisible())
                 slot_btnKnow_Clicked();
-            else if (btn_next->isVisible())
+            else if (ui->btn_next->isVisible())
                 slot_btnNext_Clicked();
         }
         else if (m_test == RECALL)
         {
-            if (btn_submit->isVisible())
+            if (ui->btn_submit->isVisible())
                 slot_btnSubmit_Clicked();
-            else if (btn_next->isVisible())
+            else if (ui->btn_next->isVisible())
                 slot_btnNext_Clicked();
         }
     }
@@ -211,14 +107,14 @@ void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
     {
         if (m_test == EXPLORATE)
         {
-            if (btn_notKnow->isVisible())
+            if (ui->btn_notKnow->isVisible())
                 slot_btnNotKnow_Clicked();
-            else if (btn_forever->isVisible())
+            else if (ui->btn_forever->isVisible())
                 slot_btnForever_Clicked();
         }
         else if (m_test == RECALL)
         {
-            if (btn_forever->isVisible())
+            if (ui->btn_forever->isVisible())
                 slot_btnForever_Clicked();
         }
     }
@@ -235,7 +131,6 @@ void WordMemorizeWidget::recoveryInterface()
     m_lastWord = "";
     m_testList.clear();
     m_nameList.clear();
-    lineEdit_input->clear();
 
     this->setMode(WELCOME);
     this->setFocus();
@@ -246,27 +141,26 @@ void WordMemorizeWidget::reloadGlobalValue()
     if (m_reloadFlag)
     {
         m_reloadFlag = false;
-        disconnect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
-        combox_group->clear();
-        combox_group->addItem(ALL_GROUP);
+        QSignalBlocker sb(ui->combox_group);
+        ui->combox_group->clear();
+        ui->combox_group->addItem(ALL_GROUP);
         QStringList list = WTool::getGroupList();
-        for (int i = 0; i < list.count(); i++)
+        for (int i = 0; i < list.count(); ++i)
         {
-            combox_group->addItem(list.at(i));
+            ui->combox_group->addItem(list.at(i));
         }
-        combox_group->setCurrentIndex(Global::m_groupIndexMemory.getValueInt() + 1);
-        connect(combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+        ui->combox_group->setCurrentIndex(Global::m_groupIndexMemory.getValueInt() + 1);
         m_curGroupId = 0;
 
-        radioBtn_range[0]->setText(QString("times %1~%2")
+        ui->checkBox_range0->setText(QString("times %1~%2")
             .arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
-        radioBtn_range[1]->setText(QString("times %1~%2")
+        ui->checkBox_range1->setText(QString("times %1~%2")
             .arg(Global::m_range2Left.getValueStr()).arg(Global::m_range2Right.getValueStr()));
-        radioBtn_range[2]->setText(QString("times %1~%2")
+        ui->checkBox_range2->setText(QString("times %1~%2")
             .arg(Global::m_range3Left.getValueStr()).arg(Global::m_range3Right.getValueStr()));
-        radioBtn_range[3]->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
+        ui->checkBox_range3->setText(QString("times %1+").arg(Global::m_range4Left.getValueStr()));
 
-        spinBox_singleNum->setValue(Global::m_singleMemoryNum.getValueInt());
+        ui->spinBox_singleNum->setValue(Global::m_singleMemoryNum.getValueInt());
     }
 }
 
@@ -278,27 +172,27 @@ void WordMemorizeWidget::setReloadFlag(bool flag)
 void WordMemorizeWidget::updateWordStatistics()
 {
     int num1 = 0, num2 = 0, num3 = 0;
-    if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
-        !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
+    if (!ui->checkBox_range0->isChecked() && !ui->checkBox_range1->isChecked() && !ui->checkBox_range2->isChecked() &&
+        !ui->checkBox_range3->isChecked() && !ui->checkBox_forever->isChecked())
     {
         num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, MAX_TIMES, m_curGroupId, false);
         num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(0, MAX_TIMES, m_curGroupId, true);
     }
     else
     {
-        if (radioBtn_range[0]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[1]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[2]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[3]->isChecked())
-            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, radioBtn_forever->isChecked());
+        if (ui->checkBox_range0->isChecked())
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range1->isChecked())
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range2->isChecked())
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range3->isChecked())
+            num1 += p_wordAdmin->getWordCanMemorizeNumFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked());
     }
     num2 = p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, m_curGroupId, false);
     num3 = p_wordAdmin->getWordNumFromTimes(0, MAX_TIMES, m_curGroupId, true);
 
-    label_statistics->setText(QString("当前可记单词数：%1\n未记住的单词数：%2\n已记住的单词数：%3")
+    ui->label_statistics->setText(QString("当前可记单词数：%1\n未记住的单词数：%2\n已记住的单词数：%3")
         .arg(num1).arg(num2).arg(num3));
 }
 
@@ -307,155 +201,78 @@ int WordMemorizeWidget::getMode()
     return m_mode;
 }
 
-void WordMemorizeWidget::loadStyleSheet()
-{
-    setStyleSheet(WTool::getWordMemorizeWidgetQss());
-}
-
-void WordMemorizeWidget::loadJsonRect()
-{
-    QString path = WTool::getWordMemorizeWidgetJsonPath();
-    bool ok;
-    QtJson::JsonObject result = QtJson::parse(WTool::readFileInfo(path), ok).toMap();
-    if (!ok)
-    {
-        DEBUG << "open json file " + path + " failed";
-        return;
-    }
-
-    QtJson::JsonObject tmp = result["explorate"].toMap()["left"].toMap();
-    rect_explorate_left.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-
-    tmp = result["explorate"].toMap()["right"].toMap();
-    rect_explorate_right.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-
-    tmp = result["explorate"].toMap()["center"].toMap();
-    rect_explorate_center.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-
-    tmp = result["recall"].toMap()["left"].toMap();
-    rect_recall_left.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-
-    tmp = result["recall"].toMap()["right"].toMap();
-    rect_recall_right.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-
-    tmp = result["recall"].toMap()["center"].toMap();
-    rect_recall_center.setRect(tmp["x"].toInt(), tmp["y"].toInt(), tmp["w"].toInt(), tmp["h"].toInt());
-}
-
 void WordMemorizeWidget::setMode(int mode)
 {
     m_mode = mode;
     switch (m_mode)
     {
     case WELCOME:
-        label_bg_start->hide();
-        label_info->hide();
-        scrollArea->hide();
-        widget_start->hide();
-        copyLabel_word->hide();
-        copyLabel_phoneticSymbol->hide();
-        for (int i = 0; i < 20; i++)
-        {
-            copyLabel_property[i]->hide();
-            copyLabel_explain[i]->hide();
-        }
-        copyLabel_exampleSentence->hide();
-        for (int i = 0; i < 6; i++)
-            copyLabel_example[i]->hide();
-        copyLabel_synonym->hide();
-        copyLabel_antonym->hide();
-        for (int i = 0; i < 8; i++)
-        {
-            linkLabel_synonym[i]->hide();
-            linkLabel_antonym[i]->hide();
-        }
-        copyLabel_WORD->hide();
-        btn_know->hide();
-        btn_notKnow->hide();
-        btn_next->hide();
-        btn_forever->hide();
-        btn_notforever->hide();
-        label_cha->hide();
-        label_gou->hide();
-        label_input->hide();
-        lineEdit_input->hide();
-        label_line->hide();
-        btn_submit->hide();
-
-        label_bg_welcome->show();
-        label_statistics->show();
-        label_singleNum->show();
-        radioBtn_test[0]->show();
-        radioBtn_test[1]->show();
-        radioBtn_range[0]->show();
-        radioBtn_range[1]->show();
-        radioBtn_range[2]->show();
-        radioBtn_range[3]->show();
-        radioBtn_forever->show();
-        spinBox_singleNum->show();
-        btn_start->show();
+        ui->stackedWidget->setCurrentIndex(0);
         break;
     case MEMORY:
-        label_bg_welcome->hide();
-        label_statistics->hide();
-        label_singleNum->hide();
-        radioBtn_test[0]->hide();
-        radioBtn_test[1]->hide();
-        radioBtn_range[0]->hide();
-        radioBtn_range[1]->hide();
-        radioBtn_range[2]->hide();
-        radioBtn_range[3]->hide();
-        radioBtn_forever->hide();
-        spinBox_singleNum->hide();
-        btn_start->hide();
+        ui->stackedWidget->setCurrentIndex(1);
 
-        label_bg_start->show();
-        label_info->show();
-        scrollArea->hide();
-        widget_start->hide();
-        copyLabel_word->hide();
-        copyLabel_phoneticSymbol->hide();
-        for (int i = 0; i < 20; i++)
+        ui->copyLabel_WORD->clear();
+        ui->copyLabel_WORD->hide();
+        ui->copyLabel_word->clear();
+        ui->copyLabel_word->hide();
+        ui->copyLabel_phoneticSymbol->clear();
+        ui->copyLabel_phoneticSymbol->hide();
+        ui->widget_word->hide();
+        for (int i = 0; i < PROPERTY_NUM; ++i)
         {
-            copyLabel_property[i]->hide();
-            copyLabel_explain[i]->hide();
+            copyLabel_property[i]->clear();
+            copyLabel_explain[i]->clear();
+            widget_explain[i]->hide();
         }
-        copyLabel_exampleSentence->hide();
-        for (int i = 0; i < 6; i++)
-            copyLabel_example[i]->hide();
-        copyLabel_synonym->hide();
-        copyLabel_antonym->hide();
-        for (int i = 0; i < 8; i++)
+        ui->copyLabel_exampleSentence->clear();
+        ui->copyLabel_exampleSentence->hide();
+        for (int i = 0; i < EXAMPLE_NUM; ++i)
         {
+            copyLabel_example[i]->clear();
+            copyLabel_example[i]->hide();
+        }
+        ui->copyLabel_synonym->clear();
+        ui->copyLabel_synonym->hide();
+        ui->copyLabel_antonym->clear();
+        ui->copyLabel_antonym->hide();
+        for (int i = 0; i < RELATED_NUM; ++i)
+        {
+            linkLabel_synonym[i]->clear();
             linkLabel_synonym[i]->hide();
+            linkLabel_antonym[i]->clear();
             linkLabel_antonym[i]->hide();
         }
-        copyLabel_WORD->hide();
-        btn_know->hide();
-        btn_notKnow->hide();
-        btn_next->hide();
-        btn_forever->hide();
-        btn_notforever->hide();
-        label_cha->hide();
-        label_gou->hide();
-        label_input->hide();
-        lineEdit_input->hide();
-        label_line->hide();
-        btn_submit->hide();
+        ui->widget_synonym0->hide();
+        ui->widget_synonym1->hide();
+        ui->widget_antonym0->hide();
+        ui->widget_antonym1->hide();
+
+        ui->btn_know->hide();
+        ui->btn_notKnow->hide();
+        ui->btn_next->hide();
+        ui->btn_forever->hide();
+        ui->btn_notforever->hide();
+        ui->btn_right->hide();
+        ui->btn_submit->hide();
+        ui->label_input->clear();
+        ui->label_input->hide();
+        ui->lineEdit_input->clear();
+        ui->lineEdit_input->hide();
+        ui->hline_0->hide();
         break;
     }
 }
 
 void WordMemorizeWidget::testListInit()
 {
-    int size = m_testList.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < m_testList.size(); ++i)
     {
-        if (radioBtn_test[0]->isChecked())
+        if (ui->checkBox_test0->isChecked())
         {
             m_testList[i].m_isPass[0] = false;
         }
-        if (radioBtn_test[1]->isChecked())
+        if (ui->checkBox_test1->isChecked())
         {
             m_testList[i].m_isPass[1] = false;
         }
@@ -464,7 +281,6 @@ void WordMemorizeWidget::testListInit()
 
 void WordMemorizeWidget::loadTestInfo()
 {
-    lineEdit_input->clear();
     chooseTestWord();
     if (p_wordAdmin->getWordInfo(m_testList.at(m_curIndex).m_info.m_name, &m_word))
     {
@@ -472,7 +288,7 @@ void WordMemorizeWidget::loadTestInfo()
 
         int r = WTool::rand(0, m_testList.at(m_curIndex).notPassNum() - 1);
         m_test = -1;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; ++i)
         {
             if (!m_testList.at(m_curIndex).m_isPass[i])
             {
@@ -488,24 +304,18 @@ void WordMemorizeWidget::loadTestInfo()
         switch (m_test)
         {
         case EXPLORATE:
-            clearWordInfo();
             setWordInfo(false);
-            setViewPosition();
-            copyLabel_WORD->show();
-            btn_know->show();
-            btn_notKnow->show();
+            reloadLayout();
+            wordInfoShow(SHOW_WORD);
+            bottomLayoutSet({{}, { ui->btn_know, ui->btn_notKnow }});
             this->setFocus();
             break;
         case RECALL:
-            clearWordInfo();
             setWordInfo(true);
-            setViewPosition();
-            showWordInfo(false);
-            label_input->show();
-            lineEdit_input->show();
-            label_line->show();
-            btn_submit->show();
-            lineEdit_input->setFocus();
+            reloadLayout();
+            wordInfoShow(SHOW_EXPLAIN);
+            bottomLayoutSet({{ ui->label_input, ui->lineEdit_input, ui->hline_0 }, { ui->btn_submit }});
+            ui->lineEdit_input->setFocus();
             break;
         case DICTATE:
             break;
@@ -515,75 +325,54 @@ void WordMemorizeWidget::loadTestInfo()
         QMessageBox::about(this, "提示", QString("记忆模式加载 %1 失败").arg(m_testList.at(m_curIndex).m_info.m_name));
 }
 
-void WordMemorizeWidget::clearWordInfo()
-{
-    copyLabel_WORD->clear();
-    copyLabel_word->clear();
-    copyLabel_phoneticSymbol->clear();
-    for (int i = 0; i < 20; i++)
-    {
-        copyLabel_property[i]->clear();
-        copyLabel_explain[i]->clear();
-    }
-    copyLabel_exampleSentence->clear();
-    for (int i = 0; i < 6; i++)
-        copyLabel_example[i]->clear();
-    copyLabel_synonym->clear();
-    copyLabel_antonym->clear();
-    for (int i = 0; i < 8; i++)
-    {
-        linkLabel_synonym[i]->clear();
-        linkLabel_antonym[i]->clear();
-    }
-}
-
 void WordMemorizeWidget::setWordInfo(bool isShield)
 {
-    QString name = m_word.m_name;
     QString tmp;
     if (m_word.m_isPhrase)
-        label_input->setText("请输入正确的词组：");
+        ui->label_input->setText("请输入正确的词组：");
     else
-        label_input->setText("请输入正确的单词：");
-    copyLabel_WORD->setText(name);
-    copyLabel_WORD->setAlignment(Qt::AlignCenter);
-    copyLabel_word->setText(name);
-    if (m_word.m_phoneticSymbol.isEmpty() == false)
+        ui->label_input->setText("请输入正确的单词：");
+    ui->copyLabel_WORD->setText(m_word.m_name);
+    ui->copyLabel_WORD->show();
+
+    m_lineNum = 1;
+    ui->copyLabel_word->setText(m_word.m_name);
+    ui->copyLabel_word->show();
+    if (!m_word.m_phoneticSymbol.isEmpty())
     {
-        copyLabel_phoneticSymbol->setText(m_word.m_phoneticSymbol);
+        ui->copyLabel_phoneticSymbol->setText(m_word.m_phoneticSymbol);
+        ui->copyLabel_phoneticSymbol->show();
     }
+    ui->widget_word->show();
+
     int i = 0;
     if (!m_word.m_adj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_adj_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_adj_English.isEmpty())
     {
         copyLabel_property[i]->setText("adj.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_adj_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
         i++;
     }
     if (!m_word.m_adv_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_adv_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_adv_English.isEmpty())
     {
         copyLabel_property[i]->setText("adv.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_adv_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (m_word.m_vt_Chinese == m_word.m_vi_Chinese && m_word.m_vt_English == m_word.m_vi_English &&
         (!m_word.m_vt_Chinese.isEmpty() || !m_word.m_vt_English.isEmpty()))
@@ -591,18 +380,16 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vt_Chinese;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
         if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.& vi.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vt_English;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
     }
     else
@@ -610,41 +397,36 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         if (!m_word.m_vt_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vt_Chinese;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
         if (!m_word.m_vt_English.isEmpty())
         {
             copyLabel_property[i]->setText("vt.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vt_English;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
         if (!m_word.m_vi_Chinese.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vi_Chinese;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
         if (!m_word.m_vi_English.isEmpty())
         {
             copyLabel_property[i]->setText("vi.");
-            copyLabel_property[i]->setAlignment(Qt::AlignCenter);
             tmp = m_word.m_vi_English;
-            copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-            i++;
+            copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+            widget_explain[i++]->show();
         }
     }
     if (!m_word.m_pastTense.isEmpty() || !m_word.m_pastParticiple.isEmpty() ||
         !m_word.m_presentParticiple.isEmpty() || !m_word.m_thirdPersonSingular.isEmpty())
     {
         copyLabel_property[i]->setText("变形");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         if (!m_word.m_pastTense.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  过去式: " + m_word.m_pastTense);
         if (!m_word.m_pastParticiple.isEmpty())
@@ -654,367 +436,440 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         if (!m_word.m_thirdPersonSingular.isEmpty())
             copyLabel_explain[i]->setText(copyLabel_explain[i]->text() + "  第三人称单数: " + m_word.m_thirdPersonSingular);
         copyLabel_explain[i]->setText(copyLabel_explain[i]->text().trimmed());
-        i++;
+        widget_explain[i++]->show();
     }
     if (!m_word.m_noun_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_noun_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_noun_English.isEmpty())
     {
         copyLabel_property[i]->setText("n.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_noun_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_prep_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_prep_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_prep_English.isEmpty())
     {
         copyLabel_property[i]->setText("prep.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_prep_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_conj_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_conj_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_conj_English.isEmpty())
     {
         copyLabel_property[i]->setText("conj.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_conj_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_pron_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_pron_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_pron_English.isEmpty())
     {
         copyLabel_property[i]->setText("pron.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_pron_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_art_Chinese.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_art_Chinese;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     if (!m_word.m_art_English.isEmpty())
     {
         copyLabel_property[i]->setText("art.");
-        copyLabel_property[i]->setAlignment(Qt::AlignCenter);
         tmp = m_word.m_art_English;
-        copyLabel_explain[i]->setText((isShield == true ? WTool::shieldWord(tmp, name) : tmp));
-        i++;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
     }
     m_propertyNum = i;
+    m_lineNum += m_propertyNum;
+
     if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
         !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
         !m_word.m_exampleSentence[4].isEmpty() || !m_word.m_exampleSentence[5].isEmpty())
     {
-        copyLabel_exampleSentence->setText("例句：");
-        for (i = 0; i < 6; i++)
+        ui->copyLabel_exampleSentence->setText("例句：");
+        ui->copyLabel_exampleSentence->show();
+        for (i = 0; i < EXAMPLE_NUM; ++i)
         {
             if (!m_word.m_exampleSentence[i].isEmpty())
             {
                 copyLabel_example[i]->setText(QString("%1. %2").arg(i + 1).arg(m_word.m_exampleSentence[i]));
+                copyLabel_example[i]->show();
             }
             else
-            {
-                m_exampleNum = i;
                 break;
-            }
         }
+        m_exampleNum = i;
+        m_lineNum += m_exampleNum + 1;
     }
     if (!m_word.m_synonym.isEmpty())
     {
-        copyLabel_synonym->setText("同义词：");
+        ui->copyLabel_synonym->setText("同义词：");
+        ui->copyLabel_synonym->show();
         QStringList list = m_word.m_synonym.split(';');
-        for (i = 0; i < list.size(); i++)
+        for (i = 0; i < list.size() && i < RELATED_NUM; ++i)
         {
             if (list.at(i) != "")
             {
-                linkLabel_synonym[i]->setText(list.at(i));
+                linkLabel_synonym[i]->setText(list.at(i).trimmed());
+                linkLabel_synonym[i]->show();
             }
         }
         m_synonymNum = i;
+        if (m_synonymNum > 0) ui->widget_synonym0->show();
+        if (m_synonymNum > 4) ui->widget_synonym1->show();
+
+        if (m_synonymNum > 4)
+            m_lineNum += 3;
+        else if (m_synonymNum > 0)
+            m_lineNum += 2;
     }
     if (!m_word.m_antonym.isEmpty())
     {
-        copyLabel_antonym->setText("反义词：");
+        ui->copyLabel_antonym->setText("反义词：");
+        ui->copyLabel_antonym->show();
         QStringList list = m_word.m_antonym.split(';');
-        for (i = 0; i < list.size(); i++)
+        for (i = 0; i < list.size() && i < RELATED_NUM; ++i)
         {
             if (list.at(i) != "")
             {
-                linkLabel_antonym[i]->setText(list.at(i));
+                linkLabel_antonym[i]->setText(list.at(i).trimmed());
+                linkLabel_antonym[i]->show();
             }
         }
         m_antonymNum = i;
+        if (m_antonymNum > 0) ui->widget_antonym0->show();
+        if (m_antonymNum > 4) ui->widget_antonym1->show();
+
+        if (m_antonymNum > 4)
+            m_lineNum += 3;
+        else if (m_antonymNum > 0)
+            m_lineNum += 2;
     }
 }
 
-void WordMemorizeWidget::setViewPosition()
+void WordMemorizeWidget::reloadLayout()
 {
-    QString screen = WTool::getScreenSize();
-    if (screen == "14")
-        setViewPosition_14();
-    else if (screen == "15.6")
-        setViewPosition_15();
+    auto ma = ui->widget_show->layout()->contentsMargins();
+    int sp = ui->widget_show->layout()->spacing();
+    int bar_width = m_lineNum > 10 ? ui->scrollArea->verticalScrollBar()->width() : 0;
+    int width = ui->scrollArea->width() - bar_width;
+    int l_width = width - ma.left() - ma.right();
+
+    int x = ma.left(), y = ma.top(), h;
+    QSize s;
+
+    h = ui->copyLabel_WORD->minimumHeight();
+    s = ui->scrollArea->size();
+    ui->copyLabel_WORD->setGeometry(x, (s.height() - h) / 2, l_width, h);
+
+    h = ui->copyLabel_word->minimumHeight();
+    ui->widget_word->setGeometry(x, y, l_width, h);
+    ui->copyLabel_word->setGeometry(0, 0, ui->copyLabel_word->sizeHint().width(), h);
+    if (ui->copyLabel_phoneticSymbol->isVisible())
+        ui->copyLabel_phoneticSymbol->setGeometry(ui->copyLabel_word->width() + ui->widget_word->layout()->spacing(), 0, ui->copyLabel_phoneticSymbol->sizeHint().width(), h);
+
+    x = ma.left(); y += h + sp; h = ui->copyLabel_property0->minimumHeight();
+    for (int i = 0; i < PROPERTY_NUM; ++i)
+    {
+        if (!widget_explain[i]->isVisible()) continue;
+        copyLabel_property[i]->setGeometry(0, 0, copyLabel_property[i]->sizeHint().width(), h);
+        int ex_x = copyLabel_property[i]->width() + widget_explain[i]->layout()->spacing();
+        int ex_width = l_width - copyLabel_property[i]->width() - widget_explain[i]->layout()->spacing();
+        copyLabel_explain[i]->setFixedWidth(ex_width);
+        s = copyLabel_explain[i]->sizeHint();
+        copyLabel_explain[i]->setGeometry(ex_x, 0, ex_width, s.height());
+
+        widget_explain[i]->setGeometry(x, y, l_width, s.height());
+        y += s.height() + sp;
+    }
+
+    if (ui->copyLabel_exampleSentence->isVisible())
+    {
+        ui->copyLabel_exampleSentence->setGeometry(x, y, l_width, h);
+        y += h + sp;
+        for (int i = 0; i < EXAMPLE_NUM; ++i)
+        {
+            if (!copyLabel_example[i]->isVisible()) continue;
+            copyLabel_example[i]->setFixedWidth(l_width);
+            s = copyLabel_example[i]->sizeHint();
+            copyLabel_example[i]->setGeometry(x, y, l_width, s.height());
+            y += s.height() + sp;
+        }
+    }
+
+    if (ui->copyLabel_synonym->isVisible())
+    {
+        ui->copyLabel_synonym->setGeometry(x, y, l_width, h);
+        y += h + sp;
+
+        int t_x = 0;
+        if (ui->widget_synonym0->isVisible())
+        {
+            ui->widget_synonym0->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 0; i < 4; ++i)
+            {
+                if (!linkLabel_synonym[i]->isVisible()) continue;
+                linkLabel_synonym[i]->setGeometry(t_x, 0, linkLabel_synonym[i]->sizeHint().width(), h);
+                t_x += linkLabel_synonym[i]->width() + ui->widget_synonym0->layout()->spacing();
+            }
+            t_x = 0;
+        }
+        if (ui->widget_synonym1->isVisible())
+        {
+            ui->widget_synonym1->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 4; i < RELATED_NUM; ++i)
+            {
+                if (!linkLabel_synonym[i]->isVisible()) continue;
+                linkLabel_synonym[i]->setGeometry(t_x, 0, linkLabel_synonym[i]->sizeHint().width(), h);
+                t_x += linkLabel_synonym[i]->width() + ui->widget_synonym1->layout()->spacing();
+            }
+        }
+    }
+
+    if (ui->copyLabel_antonym->isVisible())
+    {
+
+        ui->copyLabel_antonym->setGeometry(x, y, l_width, h);
+        y += h + sp;
+
+        int t_x = 0;
+        if (ui->widget_antonym0->isVisible())
+        {
+            ui->widget_antonym0->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 0; i < 4; ++i)
+            {
+                if (!linkLabel_antonym[i]->isVisible()) continue;
+                linkLabel_antonym[i]->setGeometry(t_x, 0, linkLabel_antonym[i]->sizeHint().width(), h);
+                t_x += linkLabel_antonym[i]->width() + ui->widget_antonym0->layout()->spacing();
+            }
+            t_x = 0;
+        }
+        if (ui->widget_antonym1->isVisible())
+        {
+            ui->widget_antonym1->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 4; i < RELATED_NUM; ++i)
+            {
+                if (!linkLabel_antonym[i]->isVisible()) continue;
+                linkLabel_antonym[i]->setGeometry(t_x, 0, linkLabel_antonym[i]->sizeHint().width(), h);
+                t_x += linkLabel_antonym[i]->width() + ui->widget_antonym1->layout()->spacing();
+            }
+        }
+    }
+
+    y = y - sp + ma.bottom();
+    if (y < ui->scrollArea->height())
+        y = ui->scrollArea->height();
+//    ui->widget_show->setFixedSize(width, y);
+    m_container_height_ = y;
 }
 
-void WordMemorizeWidget::setViewPosition_14()
+void WordMemorizeWidget::bottomLayoutSet(QVector<QVector<QWidget *>> w_set)
 {
-    int x = 8, y = 8, h = 47;
-    int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
-    copyLabel_word->setGeometry(x, y, len, h);
+    if (w_set.size() != 2) return;
+    QVector<QWidget *> views = { ui->label_input, ui->lineEdit_input, ui->hline_0, ui->btn_right, ui->btn_know, ui->btn_notKnow,
+        ui->btn_forever, ui->btn_notforever, ui->btn_next, ui->btn_submit };
 
-    if (!copyLabel_phoneticSymbol->text().isEmpty())
+    QVector<QWidget *> views_2;
+    for (int i = 0; i < w_set.size(); ++i)
     {
-        len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
-        x = copyLabel_word->x() + copyLabel_word->width() + 16;
-        y = 12, h = 39;
-        copyLabel_phoneticSymbol->setGeometry(x, y, len, h);
-    }
-
-    y = 8, h = 47;
-    for (int i = 0; i < m_propertyNum; i++)
-    {
-        x = 8, y += h + 16, len = 80;
-        h = 39;
-        copyLabel_property[i]->setGeometry(x, y, len, h);
-        len = WTool::getFontLength(copyLabel_explain[i]->font(), copyLabel_explain[i]->text()) + 8;
-        x += copyLabel_property[i]->width() + 4;
-        if (x + len + 8 > 635)
+        for (int j = 0; j < w_set[i].size(); ++j)
         {
-            len = 635 - x;
-            int num = WTool::getTextLineNumber(copyLabel_explain[i]->font(),
-                copyLabel_explain[i]->text(), 635 - x - 8);
-            h = 39 + 26 * (num - 1);
-        }
-        copyLabel_explain[i]->setGeometry(x, y, len, h);
-    }
-
-    if (!copyLabel_exampleSentence->text().isEmpty())
-    {
-        x = 8, y += h + 16;
-        h = 39;
-        len = WTool::getFontLength(copyLabel_exampleSentence->font(), copyLabel_exampleSentence->text()) + 8;
-        copyLabel_exampleSentence->setGeometry(x, y, len, h);
-        for (int i = 0; i < m_exampleNum; i++)
-        {
-            x = 8, y += h + 16;
-            h = 39;
-            len = WTool::getFontLength(copyLabel_example[i]->font(), copyLabel_example[i]->text()) + 8;
-            if (x + len + 8 > 635)
-            {
-                len = 635 - x;
-                int num = WTool::getTextLineNumber(copyLabel_example[i]->font(),
-                    copyLabel_example[i]->text(), 635 - x - 8);
-                h = 39 + 26 * (num - 1);
-            }
-            copyLabel_example[i]->setGeometry(x, y, len, h);
+            views_2.append(w_set[i][j]);
         }
     }
-
-    if (!copyLabel_synonym->text().isEmpty())
+    for (int i = 0; i < views.size(); ++i)
     {
-        x = 8, y += h + 16;
-        h = 39;
-        len = WTool::getFontLength(copyLabel_synonym->font(), copyLabel_synonym->text()) + 8;
-        copyLabel_synonym->setGeometry(x, y, len, h);
-        x = 8, y += h + 8;
-        for (int i = 0; i < m_synonymNum; i++)
-        {
-            len = WTool::getFontLength(linkLabel_synonym[i]->font(), linkLabel_synonym[i]->text()) + 4;
-            if (x + len > 635)
-            {
-                x = 8, y += h + 8;
-            }
-            linkLabel_synonym[i]->setGeometry(x, y, len, h);
-            x += len + 16;
-        }
+        if (views_2.contains(views[i]))
+            views[i]->show();
+        else
+            views[i]->hide();
     }
 
-    if (!copyLabel_antonym->text().isEmpty())
+    QMargins ma(9, 9, 9, 9);
+    QSize s1 = ui->widget_bottom->size(), s;
+    int x = 0, y = 0, w = 0, h = 0, spacing = 6;
+    int l_width = s1.width() - ma.left() - ma.right();
+    QVector<QWidget *> set1 = w_set[0];
+    QVector<QWidget *> set2 = w_set[1];
+    if (!set1.isEmpty())
     {
-        x = 8, y += h + 16;
-        h = 39;
-        len = WTool::getFontLength(copyLabel_antonym->font(), copyLabel_antonym->text()) + 8;
-        copyLabel_antonym->setGeometry(x, y, len, h);
-        x = 8, y += h + 8;
-        for (int i = 0; i < m_antonymNum; i++)
+        s = ui->label_input->sizeHint();
+        w = s.width();
+        h = s.height();
+        x = ma.left();
+        y = s1.height() / 2 - 9 - h - 50;
+        ui->label_input->setGeometry(x, y, w, h);
+
+        x += w;
+        w = set1.size() == 4 ? (l_width - w - 50 - spacing) : (l_width - w);
+        ui->lineEdit_input->setGeometry(x, y, w, h);
+        ui->hline_0->setGeometry(x, y + 50, w, 1);
+        if (set1.size() == 4)
         {
-            len = WTool::getFontLength(linkLabel_antonym[i]->font(), linkLabel_antonym[i]->text()) + 4;
-            if (x + len > 635)
-            {
-                x = 8, y += h + 8;
-            }
-            linkLabel_antonym[i]->setGeometry(x, y, len, h);
-            x += len + 16;
+            x += w + spacing;
+            ui->btn_right->setGeometry(x, y, h, h);
         }
     }
+    if (!set2.isEmpty())
+    {
+        int num = set2.size();
+        bool right_show = false;
+        if (set2[set2.size() - 1] == ui->btn_right)
+        {
+            right_show = true;
+            num--;
+            if (num == 0) return;
+        }
+        if (num == 1)
+        {
+            s = set2[0]->minimumSize();
+            w = s.width();
+            h = s.height();
+            x = (s1.width() - s.width()) / 2;
+            y = s1.height() / 2 + 9 - 50;
+            set2[0]->setGeometry(x, y, w, h);
+        }
+        else if (num == 2)
+        {
+            s = set2[0]->minimumSize();
+            w = s.width();
+            h = s.height();
+            x = s1.width() / 2 - 27 - w;
+            y = s1.height() / 2 + 9 - 50;
+            set2[0]->setGeometry(x, y, w, h);
 
-    y += h + 8;
-    widget_start->setGeometry(0, 0, 660, y);
+            x += w + 27;
+            s = set2[1]->minimumSize();
+            w = s.width();
+            h = s.height();
+            set2[1]->setGeometry(x, y, w, h);
+        }
+        if (right_show)
+        {
+            x += w + 18;
+            ui->btn_right->setGeometry(x, y, h, h);
+        }
+    }
 }
 
-void WordMemorizeWidget::setViewPosition_15()
+void WordMemorizeWidget::wordInfoShow(int mode)
 {
-    int x = 10, y = 10, h = 55;
-    int len = WTool::getFontLength(copyLabel_word->font(), copyLabel_word->text()) + 12;
-    copyLabel_word->setGeometry(x, y, len, h);
-
-    if (!copyLabel_phoneticSymbol->text().isEmpty())
+    if (mode == SHOW_WORD)
     {
-        len = WTool::getFontLength(copyLabel_phoneticSymbol->font(), copyLabel_phoneticSymbol->text()) + 12;
-        x = copyLabel_word->x() + copyLabel_word->width() + 20;
-        y = 15, h = 44;
-        copyLabel_phoneticSymbol->setGeometry(x, y, len, h);
-    }
+        ui->copyLabel_WORD->show();
 
-    y = 10, h = 55;
-    for (int i = 0; i < m_propertyNum; i++)
-    {
-        x = 10, y += h + 20, len = 100;
-        h = 44;
-        copyLabel_property[i]->setGeometry(x, y, len, h);
-        len = WTool::getFontLength(copyLabel_explain[i]->font(), copyLabel_explain[i]->text()) + 9;
-        x += copyLabel_property[i]->width() + 5;
-        if (x + len + 10 > 790)
+        ui->widget_word->hide();
+        for (int i = 0; i < PROPERTY_NUM; ++i)
         {
-            len = 790 - x;
-            int num = WTool::getTextLineNumber(copyLabel_explain[i]->font(),
-                copyLabel_explain[i]->text(), 790 - x - 10);
-            h = 44 + 30 * (num - 1);
+            widget_explain[i]->hide();
         }
-        copyLabel_explain[i]->setGeometry(x, y, len, h);
-    }
-
-    if (!copyLabel_exampleSentence->text().isEmpty())
-    {
-        x = 10, y += h + 20;
-        h = 44;
-        len = WTool::getFontLength(copyLabel_exampleSentence->font(), copyLabel_exampleSentence->text()) + 8;
-        copyLabel_exampleSentence->setGeometry(x, y, len, h);
-        for (int i = 0; i < m_exampleNum; i++)
+        ui->copyLabel_exampleSentence->hide();
+        for (int i = 0; i < EXAMPLE_NUM; ++i)
         {
-            x = 10, y += h + 20;
-            h = 44;
-            len = WTool::getFontLength(copyLabel_example[i]->font(), copyLabel_example[i]->text()) + 8;
-            if (x + len + 10 > 790)
-            {
-                len = 790 - x;
-                int num = WTool::getTextLineNumber(copyLabel_example[i]->font(),
-                    copyLabel_example[i]->text(), 790 - x - 10);
-                h = 44 + 30 * (num - 1);
-            }
-            copyLabel_example[i]->setGeometry(x, y, len, h);
+            copyLabel_example[i]->hide();
         }
-    }
+        ui->copyLabel_synonym->hide();
+        ui->copyLabel_antonym->hide();
+        ui->widget_synonym0->hide();
+        ui->widget_synonym1->hide();
+        ui->widget_antonym0->hide();
+        ui->widget_antonym1->hide();
 
-    if (!copyLabel_synonym->text().isEmpty())
+        ui->widget_show->setFixedHeight(ui->scrollArea->size().height());
+    }
+    else if (mode == SHOW_EXPLAIN)
     {
-        x = 10, y += h + 20;
-        h = 44;
-        len = WTool::getFontLength(copyLabel_synonym->font(), copyLabel_synonym->text()) + 8;
-        copyLabel_synonym->setGeometry(x, y, len, h);
-        x = 10, y += h + 10;
-        for (int i = 0; i < m_synonymNum; i++)
+        ui->copyLabel_WORD->hide();
+
+        ui->widget_word->hide();
+        for (int i = 0; i < PROPERTY_NUM; ++i)
         {
-            len = WTool::getFontLength(linkLabel_synonym[i]->font(), linkLabel_synonym[i]->text()) + 5;
-            if (x + len > 790)
-            {
-                x = 10, y += h + 10;
-            }
-            linkLabel_synonym[i]->setGeometry(x, y, len, h);
-            x += len + 20;
+            if (copyLabel_property[i]->text().isEmpty()) continue;
+            if (copyLabel_property[i]->text() != "变形")
+                widget_explain[i]->show();
+            else
+                widget_explain[i]->hide();
         }
-    }
-
-    if (!copyLabel_antonym->text().isEmpty())
-    {
-        x = 10, y += h + 20;
-        h = 44;
-        len = WTool::getFontLength(copyLabel_antonym->font(), copyLabel_antonym->text()) + 8;
-        copyLabel_antonym->setGeometry(x, y, len, h);
-        x = 10, y += h + 10;
-        for (int i = 0; i < m_antonymNum; i++)
+        ui->copyLabel_exampleSentence->hide();
+        for (int i = 0; i < EXAMPLE_NUM; ++i)
         {
-            len = WTool::getFontLength(linkLabel_antonym[i]->font(), linkLabel_antonym[i]->text()) + 5;
-            if (x + len > 790)
-            {
-                x = 10, y += h + 10;
-            }
-            linkLabel_antonym[i]->setGeometry(x, y, len, h);
-            x += len + 20;
+            copyLabel_example[i]->hide();
         }
+        ui->copyLabel_synonym->hide();
+        ui->copyLabel_antonym->hide();
+        ui->widget_synonym0->hide();
+        ui->widget_synonym1->hide();
+        ui->widget_antonym0->hide();
+        ui->widget_antonym1->hide();
+
+        ui->widget_show->setFixedHeight(m_container_height_);
     }
-
-    y += h + 10;
-    widget_start->setGeometry(0, 0, 820, y);
-}
-
-void WordMemorizeWidget::showWordInfo(bool showWord)
-{
-    scrollArea->show();
-    widget_start->show();
-    if (showWord)
+    else if (mode == SHOW_INFO)
     {
-        copyLabel_word->show();
-        if (!copyLabel_phoneticSymbol->text().isEmpty())
-            copyLabel_phoneticSymbol->show();
-        if (!copyLabel_exampleSentence->text().isEmpty())
-            copyLabel_exampleSentence->show();
-        for (int i = 0; i < m_exampleNum; i++)
+        ui->copyLabel_WORD->hide();
+
+        ui->widget_word->show();
+        if (!ui->copyLabel_phoneticSymbol->text().isEmpty())
+            ui->copyLabel_phoneticSymbol->show();
+        for (int i = 0; i < PROPERTY_NUM; ++i)
+        {
+            if (copyLabel_property[i]->text().isEmpty()) continue;
+            widget_explain[i]->show();
+        }
+        if (!ui->copyLabel_exampleSentence->text().isEmpty())
+            ui->copyLabel_exampleSentence->show();
+        for (int i = 0; i < EXAMPLE_NUM; ++i)
+        {
+            if (copyLabel_example[i]->text().isEmpty()) continue;
             copyLabel_example[i]->show();
-
-        if (!copyLabel_synonym->text().isEmpty())
-            copyLabel_synonym->show();
-        for (int i = 0; i < m_synonymNum; i++)
-            linkLabel_synonym[i]->show();
-
-        if (!copyLabel_antonym->text().isEmpty())
-            copyLabel_antonym->show();
-        for (int i = 0; i < m_antonymNum; i++)
-            linkLabel_antonym[i]->show();
-    }
-    for (int i = 0; i < m_propertyNum; i++)
-    {
-        if (showWord || copyLabel_property[i]->text() != "变形")
-        {
-            copyLabel_property[i]->show();
-            copyLabel_explain[i]->show();
         }
+        if (!ui->copyLabel_synonym->text().isEmpty())
+            ui->copyLabel_synonym->show();
+        if (!ui->copyLabel_antonym->text().isEmpty())
+            ui->copyLabel_antonym->show();
+        if (!linkLabel_synonym[0]->text().isEmpty())
+            ui->widget_synonym0->show();
+        if (!linkLabel_synonym[4]->text().isEmpty())
+            ui->widget_synonym1->show();
+        if (!linkLabel_antonym[0]->text().isEmpty())
+            ui->widget_antonym0->show();
+        if (!linkLabel_antonym[4]->text().isEmpty())
+            ui->widget_antonym1->show();
+
+        ui->widget_show->setFixedHeight(m_container_height_);
     }
 }
 
@@ -1040,7 +895,7 @@ void WordMemorizeWidget::chooseStrategy_level0()
     {
         if (m_testNum > 15)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; ++i)
             {
                 int r = WTool::rand(0, m_testNum - 1);
                 if (m_nameList.contains(m_testList.at(r).m_info.m_name))
@@ -1050,7 +905,7 @@ void WordMemorizeWidget::chooseStrategy_level0()
                         r++;
                         if (r >= m_testNum)
                             r = 0;
-                    } while (m_nameList.contains(m_testList.at(r).m_info.m_name) == true);
+                    } while (m_nameList.contains(m_testList.at(r).m_info.m_name));
                 }
                 m_nameList.append(m_testList.at(r).m_info.m_name);
             }
@@ -1100,7 +955,7 @@ void WordMemorizeWidget::slot_radioButtonClicked()
 void WordMemorizeWidget::slot_comboxGroup_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
-    m_curGroupId = WTool::getGroupNo(combox_group->currentText());
+    m_curGroupId = WTool::getGroupNo(ui->combox_group->currentText());
     this->updateWordStatistics();
     Global::m_groupIndexMemory.setValue(m_curGroupId);
     Global::saveXML();
@@ -1108,49 +963,46 @@ void WordMemorizeWidget::slot_comboxGroup_currentIndexChanged(int index)
 
 void WordMemorizeWidget::slot_btnStart_Clicked()
 {
-    if (spinBox_singleNum->value() != Global::m_singleMemoryNum.getValueInt())
+    if (ui->spinBox_singleNum->value() != Global::m_singleMemoryNum.getValueInt())
     {
-        Global::m_singleMemoryNum.setValue(spinBox_singleNum->value());
+        Global::m_singleMemoryNum.setValue(ui->spinBox_singleNum->value());
         Global::saveXML();
     }
 
     m_testList.clear();
     m_nameList.clear();
-    if (!radioBtn_range[0]->isChecked() && !radioBtn_range[1]->isChecked() && !radioBtn_range[2]->isChecked() &&
-        !radioBtn_range[3]->isChecked() && !radioBtn_forever->isChecked())
+    if (!ui->checkBox_range0->isChecked() && !ui->checkBox_range1->isChecked() && !ui->checkBox_range2->isChecked() &&
+        !ui->checkBox_range3->isChecked() && !ui->checkBox_forever->isChecked())
     {
         m_testList = p_wordAdmin->getAllWordCanMemorizeList(m_curGroupId);
     }
     else
     {
-        if (radioBtn_range[0]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[1]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[2]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, radioBtn_forever->isChecked());
-        if (radioBtn_range[3]->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, radioBtn_forever->isChecked());
+        if (ui->checkBox_range0->isChecked())
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range1->isChecked())
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range2->isChecked())
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+        if (ui->checkBox_range3->isChecked())
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked());
     }
     if (m_testList.size() > 0)
     {
         m_testList = m_testList.mid(0, Global::m_singleMemoryNum.getValueInt());
 
-        p_memThread->start();
+//        p_memThread->start();
         m_testModeNum = 0;
-        for (int i = 0; i < 2; i++)
-        {
-            if (radioBtn_test[i]->isChecked())
-                m_testModeNum++;
-        }
+        if (ui->checkBox_test0->isChecked())
+            m_testModeNum++;
+        if (ui->checkBox_test1->isChecked())
+            m_testModeNum++;
         if (m_testModeNum > 0)
         {
-            m_mutex.lock();
             m_testNum = m_testList.size();
             m_pastNum = 0;
-            label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
             this->testListInit();
-            m_mutex.unlock();
             DEBUG << "m_testNum:" << m_testNum;
             if (m_testNum > 0)
                 this->loadTestInfo();
@@ -1166,52 +1018,30 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
 
 void WordMemorizeWidget::slot_btnKnow_Clicked()
 {
-    btn_know->hide();
-    btn_notKnow->hide();
-    copyLabel_WORD->hide();
-    showWordInfo(true);
+    wordInfoShow(SHOW_INFO);
 
     m_testList[m_curIndex].m_isPass[m_test] = true;
+    ui->btn_right->setChecked(true);
     if (m_testList[m_curIndex].isPass())
     {
         m_lastWord = "";
         m_word.m_times++;
         if (m_word.m_times >= Global::m_leastForeverTimes.getValueInt() && m_word.m_remember <= 0)
         {
-            btn_forever->setGeometry(rect_explorate_left);
-            btn_forever->show();
-            btn_next->setGeometry(rect_explorate_right);
-            btn_next->show();
-
-            label_gou->setGeometry(btn_next->x() + btn_next->width() + m_spacing, btn_next->y(),
-                btn_next->height(), btn_next->height());
-            label_gou->show();
+            bottomLayoutSet({{}, { ui->btn_forever, ui->btn_next, ui->btn_right }});
         }
         else if (m_word.m_remember > 0)
         {
-            btn_notforever->setGeometry(rect_explorate_left);
-            btn_notforever->show();
-            btn_next->setGeometry(rect_explorate_right);
-            btn_next->show();
-
-            label_gou->setGeometry(btn_next->x() + btn_next->width() + m_spacing, btn_next->y(),
-                btn_next->height(), btn_next->height());
-            label_gou->show();
+            bottomLayoutSet({{}, { ui->btn_notforever, ui->btn_next, ui->btn_right }});
         }
         else
         {
-            btn_next->setGeometry(rect_explorate_center);
-            btn_next->show();
-
-            label_gou->setGeometry(btn_next->x() + btn_next->width() + m_spacing, btn_next->y(),
-                btn_next->height(), btn_next->height());
-            label_gou->show();
+            bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
         }
 
-        m_mutex.lock();
         m_testNum--;
         m_pastNum++;
-        label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
 
         m_word.m_modifyTime = QDateTime::currentDateTime();
         if (m_word.m_remember == -1 || m_word.m_remember == 2)
@@ -1227,18 +1057,12 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
         m_nameList.removeAll(m_testList.at(m_curIndex).m_info.m_name);
         DEBUG<<"name:"<<m_testList.at(m_curIndex).m_info.m_name<<", remove:"<<m_nameList;
         m_testList.removeAt(m_curIndex);
-        m_mutex.unlock();
         emit wordTimeIncreaseSignal(m_word.m_name);
     }
     else
     {
         m_lastWord = m_testList.at(m_curIndex).m_info.m_name;
-        btn_next->setGeometry(rect_explorate_center);
-        btn_next->show();
-
-        label_gou->setGeometry(btn_next->x() + btn_next->width() + m_spacing, btn_next->y(),
-            btn_next->height(), btn_next->height());
-        label_gou->show();
+        bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
     }
     this->setFocus();
 }
@@ -1246,17 +1070,10 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
 void WordMemorizeWidget::slot_btnNotKnow_Clicked()
 {
     m_lastWord = m_testList.at(m_curIndex).m_info.m_name;
-    btn_know->hide();
-    btn_notKnow->hide();
-    copyLabel_WORD->hide();
-    showWordInfo(true);
+    wordInfoShow(SHOW_INFO);
 
-    btn_next->setGeometry(rect_explorate_center);
-    btn_next->show();
-
-    label_cha->setGeometry(btn_next->x() + btn_next->width() + m_spacing, btn_next->y(),
-        btn_next->height(), btn_next->height());
-    label_cha->show();
+    ui->btn_right->setChecked(false);
+    bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
 
     this->setFocus();
 }
@@ -1266,8 +1083,8 @@ void WordMemorizeWidget::slot_btnForever_Clicked()
     p_wordAdmin->updateWord(m_word.m_name, "RememberState", "1");
     if (m_testNum == 0)
     {
-        p_memThread->stop();
-        p_memThread->wait();
+//        p_memThread->stop();
+//        p_memThread->wait();
         QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
         this->recoveryInterface();
         this->updateWordStatistics();
@@ -1283,8 +1100,8 @@ void WordMemorizeWidget::slot_btnNotForever_Clicked()
     p_wordAdmin->updateWord(m_word.m_name, "RememberState", "0");
     if (m_testNum == 0)
     {
-        p_memThread->stop();
-        p_memThread->wait();
+//        p_memThread->stop();
+//        p_memThread->wait();
         QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
         this->recoveryInterface();
         this->updateWordStatistics();
@@ -1299,8 +1116,8 @@ void WordMemorizeWidget::slot_btnNext_Clicked()
 {
     if (m_testNum == 0)
     {
-        p_memThread->stop();
-        p_memThread->wait();
+//        p_memThread->stop();
+//        p_memThread->wait();
         QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
         this->recoveryInterface();
         this->updateWordStatistics();
@@ -1313,20 +1130,8 @@ void WordMemorizeWidget::slot_btnNext_Clicked()
 
 void WordMemorizeWidget::slot_btnSubmit_Clicked()
 {
-    btn_submit->hide();
-    clearWordInfo();
-    setWordInfo(true);
-    setViewPosition();
-    showWordInfo(true);
-    for (int i = 0; i < m_propertyNum; i++)
-    {
-        if (copyLabel_property[i]->text() == "变形")
-        {
-            copyLabel_property[i]->show();
-            copyLabel_explain[i]->show();
-        }
-    }
-    if (lineEdit_input->text() == m_word.m_name)
+    wordInfoShow(SHOW_INFO);
+    if (ui->lineEdit_input->text() == m_word.m_name)
     {
         m_testList[m_curIndex].m_isPass[m_test] = true;
         if (m_testList[m_curIndex].isPass())
@@ -1335,40 +1140,23 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
             m_word.m_times++;
             if (m_word.m_times >= Global::m_leastForeverTimes.getValueInt() && m_word.m_remember <= 0)
             {
-                btn_forever->setGeometry(rect_recall_left);
-                btn_forever->show();
-                btn_next->setGeometry(rect_recall_right);
-                btn_next->show();
-
-                label_gou->setGeometry(lineEdit_input->x() + lineEdit_input->width() + m_spacing,
-                    lineEdit_input->y(), lineEdit_input->height(), lineEdit_input->height());
-                label_gou->show();
+                ui->btn_right->setChecked(true);
+                bottomLayoutSet({{}, { ui->btn_forever, ui->btn_next, ui->btn_right }});
             }
             else if (m_word.m_remember > 0)
             {
-                btn_notforever->setGeometry(rect_recall_left);
-                btn_notforever->show();
-                btn_next->setGeometry(rect_recall_right);
-                btn_next->show();
-
-                label_gou->setGeometry(lineEdit_input->x() + lineEdit_input->width() + m_spacing,
-                    lineEdit_input->y(), lineEdit_input->height(), lineEdit_input->height());
-                label_gou->show();
+                ui->btn_right->setChecked(true);
+                bottomLayoutSet({{}, { ui->btn_notforever, ui->btn_next, ui->btn_right }});
             }
             else
             {
-                btn_next->setGeometry(rect_recall_center);
-                btn_next->show();
-
-                label_gou->setGeometry(lineEdit_input->x() + lineEdit_input->width() + m_spacing,
-                    lineEdit_input->y(), lineEdit_input->height(), lineEdit_input->height());
-                label_gou->show();
+                ui->btn_right->setChecked(true);
+                bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
             }
 
-            m_mutex.lock();
             m_testNum--;
             m_pastNum++;
-            label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
 
             m_word.m_modifyTime = QDateTime::currentDateTime();
             if (m_word.m_remember == -1 || m_word.m_remember == 2)
@@ -1384,105 +1172,92 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
             m_nameList.removeAll(m_testList.at(m_curIndex).m_info.m_name);
             DEBUG<<"name:"<<m_testList.at(m_curIndex).m_info.m_name<<", remove:"<<m_nameList;
             m_testList.removeAt(m_curIndex);
-            m_mutex.unlock();
             emit wordTimeIncreaseSignal(m_word.m_name);
         }
         else
         {
             m_lastWord = m_testList.at(m_curIndex).m_info.m_name;
-            btn_next->setGeometry(rect_recall_center);
-            btn_next->show();
-
-            label_gou->setGeometry(lineEdit_input->x() + lineEdit_input->width() + m_spacing,
-                lineEdit_input->y(), lineEdit_input->height(), lineEdit_input->height());
-            label_gou->show();
+            ui->btn_right->setChecked(true);
+            bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
         }
     }
     else
     {
         m_lastWord = m_testList.at(m_curIndex).m_info.m_name;
-        btn_next->setGeometry(rect_recall_center);
-        btn_next->show();
-
-        label_cha->setGeometry(lineEdit_input->x() + lineEdit_input->width() + m_spacing,
-            lineEdit_input->y(), lineEdit_input->height(), lineEdit_input->height());
-        label_cha->show();
+        ui->btn_right->setChecked(false);
+        bottomLayoutSet({{}, { ui->btn_next, ui->btn_right }});
     }
     this->setFocus();
 }
 
-void WordMemorizeWidget::slot_wordCanMemorize(QString name)
-{
-    if (name.isEmpty() || name == WORD_NAME_UNDEFINED)
-        return;
-    for (int i = 0; i < m_testList.count(); i++)
-    {
-        if (m_testList.at(i).m_info.m_name == name)
-            return;
-    }
+//void WordMemorizeWidget::slot_wordCanMemorize(QString name)
+//{
+//    if (name.isEmpty() || name == WORD_NAME_UNDEFINED)
+//        return;
+//    for (int i = 0; i < m_testList.count(); ++i)
+//    {
+//        if (m_testList.at(i).m_info.m_name == name)
+//            return;
+//    }
 
-    WordTest test;
-    if (p_wordAdmin->getWordBriefInfo(name, &test.m_info))
-    {
-        int times = test.m_info.m_times;
-        if ((test.m_info.m_remember > 0) != radioBtn_forever->isChecked() ||
-            ((radioBtn_range[0]->isChecked() == true && (times < Global::m_range1Left.getValueInt() || times > Global::m_range1Right.getValueInt())) &&
-            (radioBtn_range[1]->isChecked() == true && (times < Global::m_range2Left.getValueInt() || times > Global::m_range2Right.getValueInt())) &&
-            (radioBtn_range[2]->isChecked() == true && (times < Global::m_range3Left.getValueInt() || times > Global::m_range3Right.getValueInt())) &&
-            (radioBtn_range[3]->isChecked() == true && (times < Global::m_range4Left.getValueInt() || times > MAX_TIMES))))
-        {
-            return;
-        }
-        if (radioBtn_test[0]->isChecked())
-        {
-            test.m_isPass[0] = false;
-        }
-        if (radioBtn_test[1]->isChecked())
-        {
-            test.m_isPass[1] = false;
-        }
-        m_mutex.lock();
-        m_testList.append(test);
-        m_testNum++;
-        label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
-        m_mutex.unlock();
-    }
-    else
-        DEBUG << "wordCanMemorize get word fail";
-}
+//    WordTest test;
+//    if (p_wordAdmin->getWordBriefInfo(name, &test.m_info))
+//    {
+//        int times = test.m_info.m_times;
+//        if ((test.m_info.m_remember > 0) != ui->checkBox_forever->isChecked() ||
+//            ((ui->checkBox_range0->isChecked() && (times < Global::m_range1Left.getValueInt() || times > Global::m_range1Right.getValueInt())) &&
+//            (ui->checkBox_range1->isChecked() && (times < Global::m_range2Left.getValueInt() || times > Global::m_range2Right.getValueInt())) &&
+//            (ui->checkBox_range2->isChecked() && (times < Global::m_range3Left.getValueInt() || times > Global::m_range3Right.getValueInt())) &&
+//            (ui->checkBox_range3->isChecked() && (times < Global::m_range4Left.getValueInt() || times > MAX_TIMES))))
+//        {
+//            return;
+//        }
+//        if (ui->checkBox_test0->isChecked())
+//        {
+//            test.m_isPass[0] = false;
+//        }
+//        if (ui->checkBox_test1->isChecked())
+//        {
+//            test.m_isPass[1] = false;
+//        }
+//        m_testList.append(test);
+//        m_testNum++;
+//        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+//    }
+//    else
+//        DEBUG << "wordCanMemorize get word fail";
+//}
 
-void WordMemorizeWidget::slot_wordTimeDecline(QString name)
-{
-    m_mutex.lock();
-    if (m_testList.at(m_curIndex).m_info.m_name != name)
-    {
-        for (int i = 0; i < m_testList.size(); i++)
-        {
-            if (m_testList.at(i).m_info.m_name == name)
-            {
-                m_testList[i].m_info.m_times--;
-                break;
-            }
-        }
-    }
-    m_mutex.unlock();
-}
+//void WordMemorizeWidget::slot_wordTimeDecline(QString name)
+//{
+//    if (m_testList.at(m_curIndex).m_info.m_name != name)
+//    {
+//        for (int i = 0; i < m_testList.size(); ++i)
+//        {
+//            if (m_testList.at(i).m_info.m_name == name)
+//            {
+//                m_testList[i].m_info.m_times--;
+//                break;
+//            }
+//        }
+//    }
+//}
 
 void WordMemorizeWidget::slot_stopWordMemorize(bool *ret)
 {
     if (QMessageBox::question(this, "queation", "是否停止记忆?", QMessageBox::Yes,
         QMessageBox::No) == QMessageBox::Yes)
     {
-        p_memThread->stop();
-        p_memThread->wait();
-        if (ret != NULL)
+//        p_memThread->stop();
+//        p_memThread->wait();
+        if (ret != nullptr)
         {
             *ret = true;
         }
     }
     else
     {
-        if (ret != NULL)
+        if (ret != nullptr)
             *ret = false;
     }
 }

@@ -190,7 +190,7 @@ void Global::load()
         xmlReader.readNext();
         while (!xmlReader.atEnd())
         {
-            for (int i = 0; i < m_varList.count(); i++)
+            for (int i = 0; i < m_varList.count(); ++i)
             {
                 if (xmlReader.name() == m_varList[i]->m_xmlName)
                 {
@@ -272,7 +272,7 @@ void Global::reset()
 
 bool Global::saveXML(bool force)
 {
-    if (XmlVar::m_flag == 0 && force == false)
+    if (XmlVar::m_flag == 0 && !force)
     {
         return false;
     }
@@ -284,7 +284,7 @@ bool Global::saveXML(bool force)
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement("CONFIG");
 
-    for (int i = 0; i < m_varList.count(); i++)
+    for (int i = 0; i < m_varList.count(); ++i)
     {
         xmlWriter.writeTextElement(m_varList[i]->m_xmlName, m_varList[i]->m_valueStr);
     }

@@ -29,47 +29,56 @@ INCLUDEPATH += "./src/utils"
 INCLUDEPATH += "./src/view"
 INCLUDEPATH += "./src/widget"
 SOURCES += main.cpp\
+    src/widget/wordautomatedmemorizewidget.cpp \
         src/widget/wordterminator.cpp \
-    src/utils/wtool.cpp \
-    src/view/wtbutton.cpp \
     src/widget/wordlibrarywidget.cpp \
     src/widget/wordcreatewidget.cpp \
-    src/view/copylabel.cpp \
     src/widget/wordshowwidget.cpp \
-    src/view/linklabel.cpp \
+    src/widget/wordmemorizewidget.cpp \
+    src/widget/wordfunctionwidget.cpp \
+    src/widget/wordsettingwidget.cpp \
+    src/utils/wtool.cpp \
     src/utils/wordadmin.cpp \
     src/utils/wmessage.cpp \
     src/utils/forgetthread.cpp \
-    src/widget/wordmemorizewidget.cpp \
     src/utils/memorythread.cpp \
     src/utils/json.cpp \
     src/utils/global.cpp \
-    src/widget/wordfunctionwidget.cpp \
-    src/widget/wordsettingwidget.cpp \
-    src/utils/wtlistview.cpp \
-    src/utils/version.cpp
+    src/utils/version.cpp \
+    src/view/wtbutton.cpp \
+    src/view/copylabel.cpp \
+    src/view/linklabel.cpp \
+    src/view/dtcp_tool_button.cpp
 
 HEADERS  += src/widget/wordterminator.h \
-    src/utils/wtool.h \
-    src/view/wtbutton.h \
+    src/widget/wordautomatedmemorizewidget.h \
     src/widget/wordlibrarywidget.h \
     src/widget/wordcreatewidget.h \
-    src/view/copylabel.h \
     src/widget/wordshowwidget.h \
-    src/view/linklabel.h \
+    src/widget/wordmemorizewidget.h \
+    src/widget/wordfunctionwidget.h \
+    src/widget/wordsettingwidget.h \
+    src/utils/wtool.h \
     src/utils/wordadmin.h \
     src/utils/wmessage.h \
     src/utils/forgetthread.h \
-    src/widget/wordmemorizewidget.h \
     src/utils/memorythread.h \
     src/utils/json.h \
     src/utils/global.h \
-    src/widget/wordfunctionwidget.h \
-    src/widget/wordsettingwidget.h \
-    src/utils/wtlistview.h \
-    src/utils/version.h
+    src/utils/version.h \
+    src/view/wtbutton.h \
+    src/view/copylabel.h \
+    src/view/linklabel.h \
+    src/view/dtcp_tool_button.h
 
-FORMS    += src/widget/wordterminator.ui
+FORMS    += src/widget/wordterminator.ui \
+    src/widget/wordautomatedmemorizewidget.ui \
+    src/widget/wordlibrarywidget.ui \
+    src/widget/wordcreatewidget.ui \
+    src/widget/wordshowwidget.ui \
+    src/widget/wordmemorizewidget.ui \
+    src/widget/wordfunctionwidget.ui \
+    src/widget/wordsettingwidget.ui
 
 RESOURCES += \
     main.qrc

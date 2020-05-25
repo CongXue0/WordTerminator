@@ -9,7 +9,6 @@ public:
     Version() = delete;
 
     static QString getVersion();
-
 };
 
 #endif // VERSION_H

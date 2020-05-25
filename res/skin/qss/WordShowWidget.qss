@@ -1,0 +1,222 @@
+/***********QWidget***********/
+QWidget#widget_topBar {
+    background-color: #d7f3fe;
+}
+QWidget#widget_show {
+    background-color: transparent;
+}
+
+/**********QPushButton**********/
+QPushButton#btn_return,
+QPushButton#btn_min,
+QPushButton#btn_mid,
+QPushButton#btn_max,
+QPushButton#btn_add,
+QPushButton#btn_delete,
+QPushButton#btn_edit,
+QPushButton#btn_reset {
+    border: 2px solid #f5f6f7;
+    border-radius: 6px;
+}
+QPushButton#btn_return {
+    background: url(:/main/res/skin/picture/left.png) #ffffff no-repeat center center;
+}
+QPushButton#btn_return:hover {
+    background: url(:/main/res/skin/picture/left_hover.png) #f0f0f0 no-repeat center center;
+}
+QPushButton#btn_min {
+    background-color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    color: #656669;
+}
+QPushButton#btn_min:hover {
+    background-color: #f0f0f0;
+}
+QPushButton#btn_mid {
+    background: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    color: #656669;
+}
+QPushButton#btn_mid:hover {
+    background-color: #f0f0f0;
+}
+QPushButton#btn_max {
+    background: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    color: #656669;
+}
+QPushButton#btn_max:hover {
+    background: #f0f0f0;
+}
+QPushButton#btn_add {
+    background: url(:/main/res/skin/picture/add.png) #ffffff no-repeat center center;
+}
+QPushButton#btn_add:hover {
+    background: url(:/main/res/skin/picture/add_hover.png) #f0f0f0 no-repeat center center;
+}
+QPushButton#btn_delete {
+    background: url(:/main/res/skin/picture/delete.png) #ffffff no-repeat center center;
+}
+QPushButton#btn_delete:hover {
+    background: url(:/main/res/skin/picture/delete_hover.png) #f0f0f0 no-repeat center center;
+}
+QPushButton#btn_edit {
+    background: url(:/main/res/skin/picture/edit.png) #ffffff no-repeat center center;
+}
+QPushButton#btn_edit:hover {
+    background: url(:/main/res/skin/picture/edit_hover.png) #f0f0f0 no-repeat center center;
+}
+QPushButton#btn_reset {
+    background: url(:/main/res/skin/picture/reset.png) #ffffff no-repeat center center;
+}
+QPushButton#btn_reset:hover {
+    background: url(:/main/res/skin/picture/reset_hover.png) #f0f0f0 no-repeat center center;
+}
+
+/**********WTButton**********/
+WTButton#wbtn_isRemember {
+    background: url(:/main/res/skin/picture/notforever.png) #ffffff no-repeat center center;
+    border: 2px solid #f5f6f7;
+    border-radius: 6px;
+}
+WTButton#wbtn_isRemember:hover {
+    background: url(:/main/res/skin/picture/notforever_hover.png) #f0f0f0 no-repeat center center;
+}
+WTButton#wbtn_isRemember:checked {
+    background: url(:/main/res/skin/picture/forever.png) #ffffff no-repeat center center;
+}
+WTButton#wbtn_isRemember:checked:hover {
+    background: url(:/main/res/skin/picture/forever_hover.png) #f0f0f0 no-repeat center center;
+}
+
+/***********QComboBox***********/
+QComboBox#combox_group {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    color: #656669;
+    font-size: 26px;
+}
+QComboBox::down-arrow {
+    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
+    padding: 0px;
+    width: 40px;
+    height: 25px;
+}
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    background-color: #f5f5f5;
+}
+
+/**********QScrollArea**********/
+QScrollArea#scrollArea {
+    background-color: transparent;
+    border: none;
+}
+
+/***********CopyLabel***********/
+CopyLabel {
+    border: none;
+}
+CopyLabel#copyLabel_word,
+CopyLabel#copyLabel_phoneticSymbol,
+CopyLabel#copyLabel_times {
+	background-color: transparent;
+}
+CopyLabel#copyLabel_word {
+    font-size: 36px;
+    font-weight: bold;
+    color: #3b93ee;
+}
+CopyLabel#copyLabel_phoneticSymbol,
+CopyLabel#copyLabel_times {
+    font-size: 28px;
+    color: #666666;
+    padding-top: 5px;
+}
+CopyLabel#copyLabel_property0,
+CopyLabel#copyLabel_property1,
+CopyLabel#copyLabel_property2,
+CopyLabel#copyLabel_property3,
+CopyLabel#copyLabel_property4,
+CopyLabel#copyLabel_property5,
+CopyLabel#copyLabel_property6,
+CopyLabel#copyLabel_property7,
+CopyLabel#copyLabel_property8,
+CopyLabel#copyLabel_property9,
+CopyLabel#copyLabel_property10,
+CopyLabel#copyLabel_property11,
+CopyLabel#copyLabel_property12,
+CopyLabel#copyLabel_property13,
+CopyLabel#copyLabel_property14,
+CopyLabel#copyLabel_property15,
+CopyLabel#copyLabel_property16,
+CopyLabel#copyLabel_property17,
+CopyLabel#copyLabel_property18,
+CopyLabel#copyLabel_property19 {
+    background-color: #eaf5ff;
+    border-radius: 6px;
+    font-size: 24px;
+    color: #177bd0;
+}
+CopyLabel#copyLabel_explain0,
+CopyLabel#copyLabel_explain1,
+CopyLabel#copyLabel_explain2,
+CopyLabel#copyLabel_explain3,
+CopyLabel#copyLabel_explain4,
+CopyLabel#copyLabel_explain5,
+CopyLabel#copyLabel_explain6,
+CopyLabel#copyLabel_explain7,
+CopyLabel#copyLabel_explain8,
+CopyLabel#copyLabel_explain9,
+CopyLabel#copyLabel_explain10,
+CopyLabel#copyLabel_explain11,
+CopyLabel#copyLabel_explain12,
+CopyLabel#copyLabel_explain13,
+CopyLabel#copyLabel_explain14,
+CopyLabel#copyLabel_explain15,
+CopyLabel#copyLabel_explain16,
+CopyLabel#copyLabel_explain17,
+CopyLabel#copyLabel_explain18,
+CopyLabel#copyLabel_explain19,
+CopyLabel#copyLabel_exampleSentence,
+CopyLabel#copyLabel_example0,
+CopyLabel#copyLabel_example1,
+CopyLabel#copyLabel_example2,
+CopyLabel#copyLabel_example3,
+CopyLabel#copyLabel_example4,
+CopyLabel#copyLabel_example5,
+CopyLabel#copyLabel_synonym,
+CopyLabel#copyLabel_antonym {
+    background-color: transparent;
+    font-size: 24px;
+}
+
+/***********LinkLabel***********/
+LinkLabel#linkLabel_synonym0,
+LinkLabel#linkLabel_synonym1,
+LinkLabel#linkLabel_synonym2,
+LinkLabel#linkLabel_synonym3,
+LinkLabel#linkLabel_synonym4,
+LinkLabel#linkLabel_synonym5,
+LinkLabel#linkLabel_synonym6,
+LinkLabel#linkLabel_synonym7,
+LinkLabel#linkLabel_antonym0,
+LinkLabel#linkLabel_antonym1,
+LinkLabel#linkLabel_antonym2,
+LinkLabel#linkLabel_antonym3,
+LinkLabel#linkLabel_antonym4,
+LinkLabel#linkLabel_antonym5,
+LinkLabel#linkLabel_antonym6,
+LinkLabel#linkLabel_antonym7 {
+    border: none;
+    background-color: transparent;
+    font-size: 24px;
+    color: #177bd0;
+}
+

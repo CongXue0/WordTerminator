@@ -9,6 +9,9 @@
 #define MAX_WORD_NUM 200000
 #define WORD_NAME_UNDEFINED "-1"
 #define MAX_TIMES 99999
+#define PROPERTY_NUM 17
+#define EXAMPLE_NUM 6
+#define RELATED_NUM 8
 
 class BriefWordInfo
 {
@@ -84,7 +87,7 @@ public:
     int notPassNum() const
     {
         int j = 0;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; ++i)
         {
             if (!m_isPass[i])
                 j++;
@@ -102,7 +105,7 @@ class WordAdmin : public QObject
 public:
     static WordAdmin *getInstance();
     int getCurrentWordNum();
-    bool getWordInfo(QString name, WordInfo *word, int *offset = NULL);
+    bool getWordInfo(QString name, WordInfo *word, int *offset = nullptr);
     bool insertWord(WordInfo *word);
     bool updateWord(WordInfo *word);
     bool updateWord(QString name, QString field, QString value);
@@ -110,8 +113,8 @@ public:
     bool updateWord(QString name, QString field1, QString value1, QString field2, QString value2, QString field3, QString value3);
     bool deleteWord(QString name);
     int resetAllWordRemerber(QWidget *parent);
-    bool isWordExist(QString name, int *offset = NULL);
-    bool getWordBriefInfo(QString name, BriefWordInfo *word, int *offset = NULL);
+    bool isWordExist(QString name, int *offset = nullptr);
+    bool getWordBriefInfo(QString name, BriefWordInfo *word, int *offset = nullptr);
     bool getMutexStatus();
     static bool wordCanMemorize(int remState, QDateTime modifyTime);
 
@@ -131,7 +134,7 @@ public:
     int searchWordTestList(QList<WordTest> list, QString name);
 
 private:
-    explicit WordAdmin(QObject *parent = 0);
+    explicit WordAdmin(QObject *parent = nullptr);
     void initDB();
     bool loadAllWord();
     int checkAllWordTimesDecline();//返回受影响的单词数

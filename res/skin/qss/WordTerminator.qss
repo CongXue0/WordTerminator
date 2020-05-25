@@ -1,0 +1,82 @@
+/***********QWidget***********/
+/***********QFrame***********/
+/***********QDialog***********/
+/***********QLabel***********/
+/***********CopyLabel***********/
+/***********LinkLabel***********/
+/**********QLineEdit**********/
+/**********QPushButton**********/
+/**********WTButton**********/
+/**********QRadioButton**********/
+/***********QCheckBox***********/
+/************QListView************/
+/***********QStackedWidget***********/
+/**********QScrollArea**********/
+/***********QTextEdit***********/
+/***********QComboBox***********/
+/***********QTabWidget***********/
+/************QSpinBox************/
+
+* {
+    font-family: "Microsoft Yahei";
+}
+
+/***********QDialog***********/
+WordTerminator {
+    background-color: white;
+}
+
+/***********QWidget***********/
+QWidget#widget_menu {
+    background: url(:/main/res/skin/picture/bg_wt.png) transparent no-repeat center center;
+}
+
+/**********QPushButton**********/
+QPushButton#btn_save {
+    background: url(:/main/res/skin/picture/save.png) transparent no-repeat center center;
+}
+QPushButton#btn_save:hover {
+    background: url(:/main/res/skin/picture/save_hover.png) transparent no-repeat center center;
+}
+QPushButton#btn_save:pressed {
+    background: url(:/main/res/skin/picture/save.png) transparent no-repeat center center;
+}
+
+/**********WTButton**********/
+WTButton#btn_lib {
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    background: url(:/main/res/skin/picture/dictionary.png) transparent no-repeat left center;
+}
+WTButton#btn_mem {
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    background: url(:/main/res/skin/picture/memory.png) transparent no-repeat left center;
+}
+WTButton#btn_fun {
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    background: url(:/main/res/skin/picture/function.png) transparent no-repeat left center;
+}
+WTButton#btn_set {
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    background: url(:/main/res/skin/picture/setting.png) transparent no-repeat left center;
+}
+WTButton#btn_lib:hover,
+WTButton#btn_mem:hover,
+WTButton#btn_fun:hover,
+WTButton#btn_set:hover {
+    background-color: #2f88d5;
+}
+WTButton#btn_lib:checked,
+WTButton#btn_mem:checked,
+WTButton#btn_fun:checked,
+WTButton#btn_set:checked {
+    background-color: #4595d9;
+}
+

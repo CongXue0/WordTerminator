@@ -23,7 +23,7 @@ public:
     QString getMemValueStr();
     int getMemValueInt();
 
-private:
+protected:
     QString m_valueStr;
     int m_valueInt;
     QMutex m_mutex;
@@ -40,20 +40,17 @@ public:
     QString getValueStr();
     int getValueInt();
 
-private:
+protected:
     static quint32 m_flag;
     QString m_xmlName;
     QString m_valueStr;
     int m_valueInt;
-
 };
 
 class Global
 {
-private:
-    Global() {}
-
 public:
+    Global() = delete;
     static void init(const QString &configPath);
     static void load();
     static void reset();
@@ -84,10 +81,9 @@ public:
     static XmlVar m_groupIndexMemory;
     static XmlVar m_singleMemoryNum;
 
-private:
+protected:
     static QString m_path;
     static QVector<XmlVar *> m_varList;
-
 };
 
 #endif // GLOBAL_H

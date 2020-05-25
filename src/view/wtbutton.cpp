@@ -4,169 +4,84 @@
 #include <QApplication>
 #include <QMouseEvent>
 
-WTButton::WTButton(QWidget *parent) : QCheckBox(parent)
+WTButton::WTButton(QWidget *parent) : QPushButton(parent)
 {
-    QCheckBox::setText("");
-    m_activeTxt = "";
-    m_inactiveTxt = "";
-    m_activeTip = "";
-    m_inactiveTip = "";
-    m_activeColor = "#ffffff";
-    m_inactiveColor = "#ffffff";
+    m_checkedTxt = "";
+    m_uncheckedTxt = "";
+    m_checkedTip = "";
+    m_uncheckedTip = "";
 
-    btn_bg = new QPushButton(this);
-    btn_bg->setFlat(true);
-    btn_bg->setStyleSheet("QPushButton{border-style:none;}");
-    btn_bg->installEventFilter(this);
+    this->setCheckable(true);
 
-    connect(this, SIGNAL(stateChanged(int)), this, SLOT(slot_buttonStateChanged(int)));
+    connect(this, SIGNAL(clicked(bool)), this, SLOT(slot_buttonClicked(bool)));
 }
 
-void WTButton::showEvent(QShowEvent *)
+void WTButton::setText(const QString &text)
 {
-    btn_bg->setGeometry(0, 0, this->width(), this->height());
-    btn_bg->setFont(this->font());
-    updateColor();
-}
-
-bool WTButton::eventFilter(QObject *obj, QEvent *e)
-{
-    if (obj == btn_bg && e->type() == QEvent::MouseButtonPress)
-    {
-        this->click();
-        return true;
-    }
-    return QCheckBox::eventFilter(obj, e);
-}
-
-void WTButton::setText(QString text)
-{
-    if (text.contains("&"))
-        text.replace("&", "&&");
-    btn_bg->setText(text);
+    auto tmpText = text;
+    if (tmpText.contains("&"))
+        tmpText.replace("&", "&&");
+    QPushButton::setText(tmpText);
 }
 
 QString WTButton::text() const
 {
-    QString txt = btn_bg->text();
+    QString txt = QPushButton::text();
     if (txt.contains("&"))
         txt.replace("&&", "&");
     return txt;
 }
 
-void WTButton::setActive(bool active)
+void WTButton::setCheckedText(const QString& checkedTxt)
 {
-    this->setChecked(active);
-}
-
-bool WTButton::isActive() const
-{
-    return this->isChecked();
-}
-
-void WTButton::setActiveText(const QString& activeTxt)
-{
-    if (m_activeTxt == activeTxt)
+    if (m_checkedTxt == checkedTxt)
         return;
-    m_activeTxt = activeTxt;
-    if (this->isChecked() && !m_activeTxt.isEmpty())
-        this->setText(m_activeTxt);
+    m_checkedTxt = checkedTxt;
+    if (this->isChecked() && !m_checkedTxt.isEmpty())
+        this->setText(m_checkedTxt);
 }
 
-void WTButton::setInactiveText(const  QString & inactiveTxt)
+void WTButton::setUncheckedText(const QString& uncheckedTxt)
 {
-    if (m_inactiveTxt == inactiveTxt)
+    if (m_uncheckedTxt == uncheckedTxt)
         return;
-    m_inactiveTxt = inactiveTxt;
-    if (!this->isChecked() && !m_inactiveTxt.isEmpty())
-        this->setText(m_inactiveTxt);
+    m_uncheckedTxt = uncheckedTxt;
+    if (!this->isChecked() && !m_uncheckedTxt.isEmpty())
+        this->setText(m_uncheckedTxt);
 }
 
-void WTButton::setActiveTip(const QString& activeTip)
+void WTButton::setCheckedTip(const QString& checkedTip)
 {
-    if (m_activeTip == activeTip)
+    if (m_checkedTip == checkedTip)
         return;
-    m_activeTip = activeTip;
-    if (this->isChecked() && !m_activeTip.isEmpty())
-        this->setToolTip(m_activeTip);
+    m_checkedTip = checkedTip;
+    if (this->isChecked() && !m_checkedTip.isEmpty())
+        this->setToolTip(m_checkedTip);
 }
 
-void WTButton::setInactiveTip(const QString &inactiveTip)
+void WTButton::setUncheckedTip(const QString &uncheckedTip)
 {
-    if (m_inactiveTip == inactiveTip)
+    if (m_uncheckedTip == uncheckedTip)
         return;
-    m_inactiveTip = inactiveTip;
-    if (!this->isChecked()&& !m_inactiveTip.isEmpty())
-        this->setToolTip(m_inactiveTip);
+    m_uncheckedTip = uncheckedTip;
+    if (!this->isChecked() && !m_uncheckedTip.isEmpty())
+        this->setToolTip(m_uncheckedTip);
 }
 
-QString WTButton::getActiveColor()
+void WTButton::slot_buttonClicked(bool check)
 {
-    return m_activeColor;
-}
-
-void WTButton::setActiveColor(QString color)
-{
-    m_activeColor = color;
-}
-
-QString WTButton::getInactiveColor()
-{
-    return m_inactiveColor;
-}
-
-void WTButton::setInactiveColor(QString color)
-{
-    m_inactiveColor = color;
-}
-
-QPushButton *WTButton::getBgBtn()
-{
-    return btn_bg;
-}
-
-void WTButton::updateColor()
-{
-    if (this->isActive() == true)
+    if (check)
     {
-        btn_bg->setStyleSheet(QString("QPushButton{color:%1;}").arg(m_activeColor));
+        if (!m_checkedTxt.isEmpty())
+            this->setText(m_checkedTxt);
+        if (!m_checkedTip.isEmpty())
+            this->setToolTip(m_checkedTip);
     }
     else
     {
-        btn_bg->setStyleSheet(QString("QPushButton{color:%1;}").arg(m_inactiveColor));
+        if (!m_uncheckedTxt.isEmpty())
+            this->setText(m_uncheckedTxt);
+        if (!m_uncheckedTip.isEmpty())
+            this->setToolTip(m_uncheckedTip);
     }
-}
-
-void WTButton::setChecked(bool check)
-{
-    QCheckBox::setChecked(check);
-}
-
-bool WTButton::isChecked() const
-{
-    return QCheckBox::isChecked();
-}
-
-void WTButton::setToolTip(const QString &tip)
-{
-    QCheckBox::setToolTip(tip);
-}
-
-void WTButton::slot_buttonStateChanged(int status)
-{
-    if (status == 0)
-    {
-        if (!m_inactiveTxt.isEmpty())
-            this->setText(m_inactiveTxt);
-        if (!m_inactiveTip.isEmpty())
-            this->setToolTip(m_inactiveTip);
-    }
-    else if (status == 2)
-    {
-        if (!m_activeTxt.isEmpty())
-            this->setText(m_activeTxt);
-        if (!m_activeTip.isEmpty())
-            this->setToolTip(m_activeTip);
-    }
-    updateColor();
 }

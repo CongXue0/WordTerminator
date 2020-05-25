@@ -24,24 +24,24 @@ void ForgetThread::stop()
 void ForgetThread::run()
 {
     QDateTime startDateTime, curDateTime;
-    while (m_isRun == true)
+    while (m_isRun)
     {
         startDateTime = QDateTime::currentDateTime();
         m_infoList = p_wordAdmin->getWordListWithinTime(60 * 24, false);
         m_nameList.clear();
-        for (int i = 0; i < m_infoList.size(); i++)
+        for (int i = 0; i < m_infoList.size(); ++i)
             m_nameList.append(m_infoList.at(i).m_name);
         DEBUG << "forgetInfoListSize: " << m_infoList.size();
-        while (m_isRun == true && startDateTime.secsTo(QDateTime::currentDateTime()) < 10 * 60)
+        while (m_isRun && startDateTime.secsTo(QDateTime::currentDateTime()) < 10 * 60)
         {
             if (m_infoList.size() > 0)
             {
                 m_mutex.lock();
                 curDateTime = QDateTime::currentDateTime();
-                for (int i = 0; m_isRun == true && i < m_infoList.size(); i++)
+                for (int i = 0; m_isRun && i < m_infoList.size(); ++i)
                 {
                     if (WTool::timesCanDecline(m_infoList.at(i).m_times, m_infoList.at(i).m_modifyTime,
-                        curDateTime) == true)
+                        curDateTime))
                     {
                         WTool::memoryDecline(m_infoList[i].m_times, m_infoList[i].m_modifyTime, curDateTime);
                         m_infoList[i].m_remember = (m_infoList[i].m_remember > 0) ? 2 : -1;

@@ -9,31 +9,28 @@ class ForgetThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit ForgetThread(QObject *parent = 0);
+    explicit ForgetThread(QObject *parent = nullptr);
 
 public slots:
     void start(Priority priority = InheritPriority);
     void stop();
 
-private:
+protected:
     void run();
+
+protected slots:
+    void slot_wordTimeIncrease(QString name);
 
 signals:
     void wordTimeDeclineSignal(QString name);
 
-
-private slots:
-    void slot_wordTimeIncrease(QString name);
-
-
-private:
+protected:
     bool m_isRun;
 
     QList<BriefWordInfo> m_infoList;
     QStringList m_nameList;
 
     QMutex m_mutex;
-
 };
 
 #endif // FORGETTHREAD_H

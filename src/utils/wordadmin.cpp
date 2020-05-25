@@ -9,7 +9,7 @@
 #include <QFile>
 
 BriefWordInfo WordAdmin::m_wordLib[MAX_WORD_NUM];
-WordAdmin *WordAdmin::m_wordAdmin = NULL;
+WordAdmin *WordAdmin::m_wordAdmin = nullptr;
 
 void BriefWordInfo::init()
 {
@@ -94,7 +94,7 @@ void WordInfo::arrange()
     m_pron_English = WTool::arrangeWord(m_pron_English, ';');
     m_art_Chinese = WTool::arrangeWord(m_art_Chinese, ';');
     m_art_English = WTool::arrangeWord(m_art_English, ';');
-    for (int i = 0, j = 0; i < 6; i++)
+    for (int i = 0, j = 0; i < 6; ++i)
     {
         m_exampleSentence[i] = m_exampleSentence[i].trimmed();
         if (!m_exampleSentence[i].isEmpty())
@@ -164,7 +164,7 @@ QString WordInfo::toText()
         text.append("art. " + m_art_Chinese + "\n");
     if (!m_art_English.isEmpty())
         text.append("art. " + m_art_English + "\n");
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; ++i)
     {
         if (m_exampleSentence[i].isEmpty())
             break;
@@ -174,7 +174,7 @@ QString WordInfo::toText()
     {
         text.append("同义词: ");
         QStringList list = m_synonym.split(';');
-        for (int i = 0; i < list.count(); i++)
+        for (int i = 0; i < list.count(); ++i)
         {
             if (i ==  list.count() - 1)
                 text.append(QString(list.at(i)).trimmed());
@@ -214,7 +214,7 @@ bool WordInfo::contains(QString str) const
 
 WordAdmin *WordAdmin::getInstance()
 {
-    if (m_wordAdmin == NULL)
+    if (m_wordAdmin == nullptr)
     {
         m_wordAdmin = new WordAdmin();
     }
@@ -231,16 +231,16 @@ bool WordAdmin::getWordInfo(QString name, WordInfo *word, int *offset)
     if (name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForRead();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
             bool ret = false;
-            if (word != NULL)
+            if (word != nullptr)
             {
                 ret = readWordInfo(name, word);
             }
-            if (offset != NULL)
+            if (offset != nullptr)
             {
                 *offset = i;
             }
@@ -254,11 +254,11 @@ bool WordAdmin::getWordInfo(QString name, WordInfo *word, int *offset)
 
 bool WordAdmin::insertWord(WordInfo *word)
 {
-    if (word == NULL || word->m_name == WORD_NAME_UNDEFINED)
+    if (word == nullptr || word->m_name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForWrite();
     int j = -1;
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == word->m_name)
         {
@@ -277,7 +277,7 @@ bool WordAdmin::insertWord(WordInfo *word)
         "\"%20\", \"%21\", \"%22\", \"%23\", \"%24\", \"%25\", \"%26\", \"%27\", \"%28\", \"%29\", \"%30\", \"%31\", "
         "\"%32\", \"%33\", \"%34\", \"%35\", \"%36\", \"%37\", \"%38\")")
         .arg(word->m_name).arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid)
-        .arg(word->m_remember).arg(((word->m_isPhrase == true) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
+        .arg(word->m_remember).arg(((word->m_isPhrase) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
         .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
         .arg(word->m_vt_Chinese).arg(word->m_vt_English).arg(word->m_vi_Chinese).arg(word->m_vi_English)
         .arg(word->m_pastTense).arg(word->m_pastParticiple).arg(word->m_presentParticiple)
@@ -310,10 +310,10 @@ bool WordAdmin::insertWord(WordInfo *word)
 
 bool WordAdmin::updateWord(WordInfo *word)
 {
-    if (word == NULL || word->m_name == WORD_NAME_UNDEFINED)
+    if (word == nullptr || word->m_name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForWrite();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == word->m_name)
         {
@@ -327,7 +327,7 @@ bool WordAdmin::updateWord(WordInfo *word)
                 "ExampleSentence1=\"%30\", ExampleSentence2=\"%31\", ExampleSentence3=\"%32\", ExampleSentence4=\"%33\", "
                 "ExampleSentence5=\"%34\", ExampleSentence6=\"%35\", Synonym=\"%36\", Antonym=\"%37\" where Name=\"%38\"")
                 .arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid).arg(word->m_remember)
-                .arg(((word->m_isPhrase == true) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
+                .arg(((word->m_isPhrase) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
                 .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
                 .arg(word->m_vt_Chinese).arg(word->m_vt_English).arg(word->m_vi_Chinese).arg(word->m_vi_English)
                 .arg(word->m_pastTense).arg(word->m_pastParticiple).arg(word->m_presentParticiple).arg(word->m_thirdPersonSingular)
@@ -360,7 +360,7 @@ bool WordAdmin::updateWord(QString name, QString field, QString value)
     if (name == WORD_NAME_UNDEFINED || field == "Name")
         return false;
     m_mutex.lockForWrite();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
@@ -393,7 +393,7 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
     if (name == WORD_NAME_UNDEFINED || field1 == "Name" || field2 == "Name" || field1 == field2)
         return false;
     m_mutex.lockForWrite();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
@@ -438,7 +438,7 @@ bool WordAdmin::updateWord(QString name, QString field1, QString value1, QString
         field1 == field2 || field2 == field3 || field1 == field3)
         return false;
     m_mutex.lockForWrite();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
@@ -494,7 +494,7 @@ bool WordAdmin::deleteWord(QString name)
     if (name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForWrite();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
@@ -528,14 +528,14 @@ int WordAdmin::resetAllWordRemerber(QWidget *parent)
 
     m_mutex.lockForWrite();
     dialog.show();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         dialog.setValue(i);
         QCoreApplication::processEvents();
         if (dialog.wasCanceled())
             break;
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED &&
-            WordAdmin::wordCanMemorize(m_wordLib[i].m_remember, m_wordLib[i].m_modifyTime) == false)
+            !WordAdmin::wordCanMemorize(m_wordLib[i].m_remember, m_wordLib[i].m_modifyTime))
         {
             m_wordLib[i].m_remember = (m_wordLib[i].m_remember > 0 ? 2 : -1);
             sql = QString("update WordLibrary set RememberState=\"%1\" where Name=\"%2\"")
@@ -556,11 +556,11 @@ bool WordAdmin::isWordExist(QString name, int *offset)
     if (name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForRead();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
-            if (offset != NULL)
+            if (offset != nullptr)
             {
                 *offset = i;
             }
@@ -577,15 +577,15 @@ bool WordAdmin::getWordBriefInfo(QString name, BriefWordInfo *word, int *offset)
     if (name == WORD_NAME_UNDEFINED)
         return false;
     m_mutex.lockForRead();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name == name)
         {
-            if (word != NULL)
+            if (word != nullptr)
             {
                 *word = m_wordLib[i];
             }
-            if (offset != NULL)
+            if (offset != nullptr)
             {
                 *offset = i;
             }
@@ -621,7 +621,7 @@ int WordAdmin::getWordNumFromTimes(int t1, int t2, int groupId, bool isRemember)
     m_mutex.lockForRead();
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
                 (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -630,7 +630,7 @@ int WordAdmin::getWordNumFromTimes(int t1, int t2, int groupId, bool isRemember)
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
                 (m_wordLib[i].m_remember > 0) == isRemember && (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -649,7 +649,7 @@ QStringList WordAdmin::getWordListFromTimes(int t1, int t2, int groupId, bool is
     m_mutex.lockForRead();
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
                 (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -658,7 +658,7 @@ QStringList WordAdmin::getWordListFromTimes(int t1, int t2, int groupId, bool is
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
                 (m_wordLib[i].m_remember > 0) == isRemember && (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -680,7 +680,7 @@ QStringList WordAdmin::getAllWordList(int groupId)
     }
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED)
                 list.append(m_wordLib[i].m_name);
@@ -688,7 +688,7 @@ QStringList WordAdmin::getAllWordList(int groupId)
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId)
                 list.append(m_wordLib[i].m_name);
@@ -703,10 +703,10 @@ QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes)
     QList<BriefWordInfo> list;
     m_mutex.lockForRead();
     QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + minutes * 60);
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED &&
-            WTool::timesCanDecline(m_wordLib[i].m_times, m_wordLib[i].m_modifyTime, end) == true)
+            WTool::timesCanDecline(m_wordLib[i].m_times, m_wordLib[i].m_modifyTime, end))
         {
             list.append(m_wordLib[i]);
         }
@@ -720,7 +720,7 @@ QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes, bool isRememb
     QList<BriefWordInfo> list;
     m_mutex.lockForRead();
     QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + minutes * 60);
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
             (m_wordLib[i].m_remember != -1 && m_wordLib[i].m_remember != 2))
@@ -742,7 +742,7 @@ QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
     QDateTime cur = QDateTime::currentDateTime();
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                 m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval()))
@@ -755,7 +755,7 @@ QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
                 ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
@@ -780,7 +780,7 @@ QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int g
     QDateTime cur = QDateTime::currentDateTime();
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember)
             {
@@ -797,7 +797,7 @@ QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int g
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
                 (m_wordLib[i].m_remember > 0) == isRemember)
@@ -826,7 +826,7 @@ int WordAdmin::getWordCanMemorizeNumFromTimes(int t1, int t2, int groupId, bool 
     QDateTime cur = QDateTime::currentDateTime();
     if (groupId == -1)
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
                 (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -849,7 +849,7 @@ int WordAdmin::getWordCanMemorizeNumFromTimes(int t1, int t2, int groupId, bool 
     }
     else
     {
-        for (int i = 0; i < m_currentTop; i++)
+        for (int i = 0; i < m_currentTop; ++i)
         {
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
                 (m_wordLib[i].m_remember > 0) == isRemember && (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
@@ -872,7 +872,7 @@ QList<BriefWordInfo> WordAdmin::getWordCannotMemorizeWithoutTime(uint minutes)
     QList<BriefWordInfo> list;
     m_mutex.lockForRead();
     QDateTime cur = QDateTime::currentDateTime();
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED)
         {
@@ -890,7 +890,7 @@ QList<BriefWordInfo> WordAdmin::getWordCannotMemorizeWithoutTime(uint minutes)
 int WordAdmin::searchWordTestList(QList<WordTest> list, QString name)
 {
     int ret = -1;
-    for (int i = 0; i < list.count(); i++)
+    for (int i = 0; i < list.count(); ++i)
     {
         if (list.at(i).m_info.m_name == name)
         {
@@ -1008,7 +1008,7 @@ bool WordAdmin::loadAllWord()
     if (query.exec("select * from WordLibrary"))
     {
         int i = 0;
-        while (query.next() == true)
+        while (query.next())
         {
             m_wordLib[i].m_name = query.value(0).toString();
             m_wordLib[i].m_times = query.value(1).toInt();
@@ -1036,7 +1036,7 @@ int WordAdmin::checkAllWordTimesDecline()
     QDateTime cur = QDateTime::currentDateTime();
     QSqlQuery query;
     QString sql;
-    for (int i = 0; i < m_currentTop; i++)
+    for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_remember <= 0 &&
             WTool::timesCanDecline(m_wordLib[i].m_times, m_wordLib[i].m_modifyTime, cur))
