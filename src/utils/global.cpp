@@ -30,6 +30,7 @@ XmlVar Global::m_groupName[21];
 XmlVar Global::m_groupIndexLib;
 XmlVar Global::m_groupIndexMemory;
 XmlVar Global::m_singleMemoryNum;
+XmlVar Global::m_autoSilderVolume;
 
 QString Global::m_path;
 QVector<XmlVar *> Global::m_varList;
@@ -162,6 +163,7 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_groupIndexLib);
     m_varList.append(&m_groupIndexMemory);
     m_varList.append(&m_singleMemoryNum);
+    m_varList.append(&m_autoSilderVolume);
 
     load();
 }
@@ -268,6 +270,7 @@ void Global::reset()
     m_groupIndexLib = XmlVar("GROUPINDEXLIB", "-1");
     m_groupIndexMemory = XmlVar("GROUPINDEXMEMORY", "-1");
     m_singleMemoryNum = XmlVar("SINGLEMEMORYNUM", "40");
+    m_autoSilderVolume = XmlVar("AUTOSILDERVOLUME", "10");
 }
 
 bool Global::saveXML(bool force)

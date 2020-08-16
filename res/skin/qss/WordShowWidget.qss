@@ -75,20 +75,18 @@ QPushButton#btn_reset {
 QPushButton#btn_reset:hover {
     background: url(:/main/res/skin/picture/reset_hover.png) #f0f0f0 no-repeat center center;
 }
-
-/**********WTButton**********/
-WTButton#wbtn_isRemember {
+QPushButton#btn_isRemember {
     background: url(:/main/res/skin/picture/notforever.png) #ffffff no-repeat center center;
     border: 2px solid #f5f6f7;
     border-radius: 6px;
 }
-WTButton#wbtn_isRemember:hover {
+QPushButton#btn_isRemember:hover {
     background: url(:/main/res/skin/picture/notforever_hover.png) #f0f0f0 no-repeat center center;
 }
-WTButton#wbtn_isRemember:checked {
+QPushButton#btn_isRemember:checked {
     background: url(:/main/res/skin/picture/forever.png) #ffffff no-repeat center center;
 }
-WTButton#wbtn_isRemember:checked:hover {
+QPushButton#btn_isRemember:checked:hover {
     background: url(:/main/res/skin/picture/forever_hover.png) #f0f0f0 no-repeat center center;
 }
 

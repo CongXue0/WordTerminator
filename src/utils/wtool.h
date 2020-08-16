@@ -38,6 +38,7 @@ public:
 
     /* QSize */
     static QSize getFontSize(const QFont &font, const QString &txt);
+    static int getFontHeight(const QFont &font);
     static int getFontLength(QFont font, QString txt);
     static int getTextLineNumber(QFont font, QString txt, int lineWidth);
 

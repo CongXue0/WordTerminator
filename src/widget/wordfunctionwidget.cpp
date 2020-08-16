@@ -34,6 +34,11 @@ WordFunctionWidget::WordFunctionWidget(QWidget *parent) :
     connect(ui->combox_script, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxScript_currentIndexChanged(int)));
 }
 
+WordFunctionWidget::~WordFunctionWidget()
+{
+    delete ui;
+}
+
 void WordFunctionWidget::recoveryInterface()
 {
 }

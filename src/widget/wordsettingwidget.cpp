@@ -2,6 +2,7 @@
 #include "ui_wordsettingwidget.h"
 #include "wtool.h"
 #include "global.h"
+#include "dispatcher.h"
 #include <QIntValidator>
 #include <QMessageBox>
 
@@ -43,6 +44,11 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) :
     ui->lineEdit_timesSet3->setValidator(v2);
 
     reloadGlobalValue();
+}
+
+WordSettingWidget::~WordSettingWidget()
+{
+    delete ui;
 }
 
 void WordSettingWidget::recoveryInterface()
@@ -189,7 +195,7 @@ void WordSettingWidget::saveGlobalValue()
 
     if (Global::saveXML())
     {
-        emit sendMessageSignal(WMessage("set reload flag", "true"));
+        emit Dispatch(this).signal_sendMessage(WMessage("set reload flag", "true"));
     }
 }
 
@@ -199,6 +205,6 @@ void WordSettingWidget::slot_btnReset_clicked()
     {
         Global::reset();
         Global::saveXML(true);
-        emit sendMessageSignal(WMessage("set reload flag", "true"));
+        emit Dispatch(this).signal_sendMessage(WMessage("set reload flag", "true"));
     }
 }

@@ -1,7 +1,6 @@
 #ifndef WORDSHOWWIDGET_H
 #define WORDSHOWWIDGET_H
 
-#include "wtbutton.h"
 #include "copylabel.h"
 #include "linklabel.h"
 #include "wordadmin.h"
@@ -21,21 +20,17 @@ class WordShowWidget : public QWidget
     Q_OBJECT
 public:
     explicit WordShowWidget(QWidget *parent = nullptr);
-    void keyPressEvent(QKeyEvent *event);
-
+    ~WordShowWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
     bool loadWordInfo(QString name);
 
 private:
+    void keyPressEvent(QKeyEvent *event);
     void setWordInfo();
     void reloadLayout();
     void setWordTimes(int times);
-
-signals:
-    void sendMessageSignal(WMessage message);
-    void wordTimeIncreaseSignal(QString name);
 
 private slots:
     void slot_btnReturn_Clicked();
@@ -46,7 +41,7 @@ private slots:
     void slot_btnDelete_Clicked();
     void slot_btnEdit_Clicked();
     void slot_btnReset_Clicked();
-    void slot_wbtnRemember_Clicked(bool active);
+    void slot_btnRemember_Clicked(bool active);
     void slot_comboxGroup_currentIndexChanged(int index);
     void slot_wordLinkPressed();
     void slot_wordTimeDecline(QString name);

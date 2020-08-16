@@ -1,0 +1,84 @@
+/***********QWidget***********/
+QWidget#widget_welcome {
+    border-image: url(:/main/res/skin/picture/bg_auto_mem_welcome.png);
+}
+
+/***********QLabel***********/
+QLabel#label_silderVolume,
+QLabel#label_singleNum {
+    font-size: 22px;
+}
+QLabel#label_statistics {
+    font-size: 33px;
+}
+QLabel#label_info {
+    font-size: 36px;
+    color: #c0c0c0;
+    margin-right: 10px;
+}
+
+/***********QCheckBox***********/
+QCheckBox#checkBox_range0,
+QCheckBox#checkBox_range1,
+QCheckBox#checkBox_range2,
+QCheckBox#checkBox_range3,
+QCheckBox#checkBox_forever {
+    font-size: 32px;
+    spacing: 10px;
+}
+QCheckBox::indicator {
+    width: 50px;
+    height: 50px;
+}
+QCheckBox#checkBox_range0::indicator::unchecked,
+QCheckBox#checkBox_range1::indicator::unchecked,
+QCheckBox#checkBox_range2::indicator::unchecked,
+QCheckBox#checkBox_range3::indicator::unchecked,
+QCheckBox#checkBox_forever::indicator::unchecked {
+    image: url(:/main/res/skin/picture/check1_inactive.png);
+}
+QCheckBox#checkBox_range0::indicator::checked,
+QCheckBox#checkBox_range1::indicator::checked,
+QCheckBox#checkBox_range2::indicator::checked,
+QCheckBox#checkBox_range3::indicator::checked,
+QCheckBox#checkBox_forever::indicator::checked {
+    image: url(:/main/res/skin/picture/check1_active.png);
+}
+
+/***********QComboBox***********/
+QComboBox#combox_group {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    font-size: 28px;
+}
+QComboBox::down-arrow {
+    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
+    padding: 0px;
+    width: 40px;
+    height: 25px;
+}
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    background-color: #f5f5f5;
+}
+
+/************QSpinBox************/
+QSpinBox#spinBox_singleNum,
+QSpinBox#spinBox_silderVolume {
+    font-size: 24px;
+}
+
+/**********QPushButton**********/
+QPushButton#btn_start {
+    border-radius: 6px;
+    border-image: url(:/main/res/skin/picture/blue.png);
+    font-size: 36px;
+    color: #ffffff;
+}
+QPushButton#btn_start:hover {
+    border-image: url(:/main/res/skin/picture/blue_hover.png);
+}
+

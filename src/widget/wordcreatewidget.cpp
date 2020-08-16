@@ -3,6 +3,7 @@
 #include "wtool.h"
 #include "global.h"
 #include "wordadmin.h"
+#include "dispatcher.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <QKeyEvent>
@@ -35,16 +36,9 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) :
     connect(ui->btn_confirm, SIGNAL(clicked()), this, SLOT(slot_btnConfirm_clicked()));
 }
 
-void WordCreateWidget::keyPressEvent(QKeyEvent *event)
+WordCreateWidget::~WordCreateWidget()
 {
-    if (event->key() == Qt::Key_Return && (event->modifiers() & Qt::ControlModifier))
-    {
-        slot_btnConfirm_clicked();
-    }
-    else if (event->key() == Qt::Key_Escape)
-    {
-        slot_btnCancel_clicked();
-    }
+    delete ui;
 }
 
 void WordCreateWidget::recoveryInterface()
@@ -159,6 +153,18 @@ bool WordCreateWidget::loadWordInfo(QString name)
         return false;
 }
 
+void WordCreateWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return && (event->modifiers() & Qt::ControlModifier))
+    {
+        slot_btnConfirm_clicked();
+    }
+    else if (event->key() == Qt::Key_Escape)
+    {
+        slot_btnCancel_clicked();
+    }
+}
+
 QString WordCreateWidget::inputCheck()
 {
     QString info = "";
@@ -221,7 +227,7 @@ QString WordCreateWidget::inputCheck()
 
 void WordCreateWidget::slot_btnCancel_clicked()
 {
-    emit sendMessageSignal(WMessage("cancel create", ""));
+    emit Dispatch(this).signal_sendMessage(WMessage("cancel create", ""));
 }
 
 void WordCreateWidget::slot_btnConfirm_clicked()
@@ -300,7 +306,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
         if (p_wordAdmin->insertWord(&wordInfo))
         {
             QMessageBox::about(this, "提示", wordInfo.m_name + " 创建成功");
-            emit sendMessageSignal(WMessage("create success", wordInfo.m_name));
+            emit Dispatch(this).signal_sendMessage(WMessage("create success", wordInfo.m_name));
         }
         else
         {
@@ -312,8 +318,8 @@ void WordCreateWidget::slot_btnConfirm_clicked()
         if (p_wordAdmin->updateWord(&wordInfo))
         {
             QMessageBox::about(this, "提示", wordInfo.m_name + " 修改成功");
-            emit sendMessageSignal(WMessage("modify success", wordInfo.m_name));
-            emit wordTimeIncreaseSignal(wordInfo.m_name);
+            emit Dispatch(this).signal_sendMessage(WMessage("modify success", wordInfo.m_name));
+            emit Dispatch(this).signal_wordTimeIncrease(wordInfo.m_name);
         }
         else
         {

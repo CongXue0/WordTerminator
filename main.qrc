@@ -2,11 +2,16 @@
     <qresource prefix="/main">
         <file>res/skin/picture/add.png</file>
         <file>res/skin/picture/add_hover.png</file>
+        <file>res/skin/picture/auto_memory.png</file>
+        <file>res/skin/picture/bg_auto_mem_start.png</file>
+        <file>res/skin/picture/bg_auto_mem_welcome.png</file>
         <file>res/skin/picture/bg_func.png</file>
         <file>res/skin/picture/bg_lib.png</file>
         <file>res/skin/picture/bg_mem_start.png</file>
         <file>res/skin/picture/bg_mem_welcome.png</file>
         <file>res/skin/picture/bg_wt.png</file>
+        <file>res/skin/picture/blue.png</file>
+        <file>res/skin/picture/blue_hover.png</file>
         <file>res/skin/picture/cha.png</file>
         <file>res/skin/picture/check1_active.png</file>
         <file>res/skin/picture/check1_inactive.png</file>
@@ -54,6 +59,7 @@
         <file>res/skin/picture/show_hover.png</file>
         <file>res/skin/picture/white.png</file>
         <file>res/skin/picture/white_hover.png</file>
+        <file>res/skin/qss/WordAutomatedMemorizeWidget.qss</file>
         <file>res/skin/qss/WordCreateWidget.qss</file>
         <file>res/skin/qss/WordFunctionWidget.qss</file>
         <file>res/skin/qss/WordLibraryWidget.qss</file>
@@ -61,6 +67,20 @@
         <file>res/skin/qss/WordSettingWidget.qss</file>
         <file>res/skin/qss/WordShowWidget.qss</file>
         <file>res/skin/qss/WordTerminator.qss</file>
-        <file>res/skin/qss/WordAutomatedMemorizeWidget.qss</file>
+        <file>res/skin/picture/auto_play_hover.png</file>
+        <file>res/skin/picture/auto_play.png</file>
+        <file>res/skin/picture/auto_pause_hover.png</file>
+        <file>res/skin/picture/auto_pause.png</file>
+        <file>res/skin/picture/auto_unvisible_hover.png</file>
+        <file>res/skin/picture/auto_unvisible.png</file>
+        <file>res/skin/picture/auto_visible_hover.png</file>
+        <file>res/skin/picture/auto_visible.png</file>
+        <file>res/skin/picture/auto_minus_hover.png</file>
+        <file>res/skin/picture/auto_minus.png</file>
+        <file>res/skin/picture/auto_plus_hover.png</file>
+        <file>res/skin/picture/auto_plus.png</file>
+        <file>res/skin/picture/auto_gou_hover.png</file>
+        <file>res/skin/picture/auto_gou.png</file>
+        <file>res/skin/picture/forever_disabled.png</file>
     </qresource>
 </RCC>

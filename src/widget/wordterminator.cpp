@@ -6,6 +6,7 @@
 #include "memorythread.h"
 #include "global.h"
 #include "src/utils/version.h"
+#include "dispatcher.h"
 #include <QLayout>
 #include <QDir>
 #include <QMessageBox>
@@ -16,47 +17,64 @@ extern WordAdmin *p_wordAdmin;
 extern ForgetThread *p_forgetThread;
 extern MemoryThread *p_memThread;
 
+WordTerminator *WordTerminator::m_self = nullptr;
+
 WordTerminator::WordTerminator(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WordTerminator)
 {
+    WordTerminator::m_self = this;
     setStyleSheet(WTool::getStyleQss("WordTerminator"));
     ui->setupUi(this);
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::Dialog);
-
     setWindowTitle("WordTerminator " + Version::getVersion());
+
+    ui->btn_lib->setProperty("index", Widget_WordLibrary);
+    ui->btn_autoMem->setProperty("index", Widget_AutomatedMemorize);
+    ui->btn_mem->setProperty("index", Widget_WordMemorize);
+    ui->btn_fun->setProperty("index", Widget_Function);
+    ui->btn_set->setProperty("index", Widget_Setting);
+
+    ui->btn_lib->setAutoCheck(false);
+    ui->btn_autoMem->setAutoCheck(false);
+    ui->btn_mem->setAutoCheck(false);
+    ui->btn_fun->setAutoCheck(false);
+    ui->btn_set->setAutoCheck(false);
+    m_btn_group[0] = ui->btn_lib;
+    m_btn_group[1] = ui->btn_autoMem;
+    m_btn_group[2] = ui->btn_mem;
+    m_btn_group[3] = ui->btn_fun;
+    m_btn_group[4] = ui->btn_set;
 
     m_first = true;
 
+    ui->stackedWidget->setCurrentIndex(Widget_WordLibrary);
     pushWidgetIndex(Widget_WordLibrary);
 
     p_forgetThread->start();
 
     connect(ui->btn_save, SIGNAL(clicked()), this, SLOT(slot_saveBtn_clicked()));
-    connect(ui->btn_lib, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-    connect(ui->btn_mem, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-    connect(ui->btn_fun, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
-    connect(ui->btn_set, SIGNAL(pressed()), this, SLOT(slot_wtbuttonPressed()));
+    connect(ui->btn_lib, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
+    connect(ui->btn_autoMem, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
+    connect(ui->btn_mem, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
+    connect(ui->btn_fun, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
+    connect(ui->btn_set, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
 
-    connect(ui->widget_wordLibrary, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(ui->widget_wordLibrary, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeDecline(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_sendMessage(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
 
-    connect(ui->widget_wordCreate, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(ui->widget_wordCreate, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeIncrease(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
+//    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeIncrease(QString)), p_memThread, SLOT(slot_wordTimeIncrease(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeIncrease(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeIncrease(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeIncrease(QString)), ui->widget_wordShow, SLOT(slot_wordTimeIncrease(QString)));
 
-    connect(ui->widget_wordShow, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
-    connect(ui->widget_wordShow, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(p_forgetThread, SIGNAL(wordTimeDeclineSignal(QString)), ui->widget_wordShow, SLOT(slot_wordTimeDecline(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeDecline(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeDecline(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordTimeDecline(QString)), ui->widget_wordShow, SLOT(slot_wordTimeDecline(QString)));
 
-//    connect(p_memThread, SIGNAL(wordCanMemorizeSignal(QString)), ui->widget_wordMemorize, SLOT(slot_wordCanMemorize(QString)));
-//    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_memThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), p_forgetThread, SLOT(slot_wordTimeIncrease(QString)));
-    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), ui->widget_wordLibrary, SLOT(slot_wordTimeIncrease(QString)));
-    connect(ui->widget_wordMemorize, SIGNAL(wordTimeIncreaseSignal(QString)), ui->widget_wordShow, SLOT(slot_wordTimeIncrease(QString)));
-    connect(this, SIGNAL(stopWordMemorizeSignal(bool*)), ui->widget_wordMemorize, SLOT(slot_stopWordMemorize(bool*)));
+//    connect(&Dispatcher::getInstance(), SIGNAL(signal_wordCanMemorize(QString)), ui->widget_wordMemorize, SLOT(slot_wordCanMemorize(QString)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_stopWordMemorize(bool*)), ui->widget_wordMemorize, SLOT(slot_stopWordMemorize(bool*)));
 
-    connect(ui->widget_wordSetting, SIGNAL(sendMessageSignal(WMessage)), this, SLOT(slot_handleMessage(WMessage)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_stopWordMemorize(bool*)), ui->widget_autoMemorize, SLOT(slot_stopWordMemorize(bool*)));
+    connect(&Dispatcher::getInstance(), SIGNAL(signal_memorizeFinished()), ui->widget_autoMemorize, SLOT(slot_memorizeFinished()));
 }
 
 WordTerminator::~WordTerminator()
@@ -139,6 +157,8 @@ void WordTerminator::slot_saveBtn_clicked()
         break;
     case Widget_WordShow:
         break;
+    case Widget_AutomatedMemorize:
+        break;
     case Widget_WordMemorize:
         break;
     case Widget_Function:
@@ -150,13 +170,12 @@ void WordTerminator::slot_saveBtn_clicked()
     }
 }
 
-void WordTerminator::slot_wtbuttonPressed()
+void WordTerminator::slot_switchButtonClicked()
 {
-    QString name = sender()->objectName();
+    auto btn = dynamic_cast<QPushButton *>(this->sender());
+    QString name = btn->objectName();
     int index = ui->stackedWidget->currentIndex();
-    if ((name == "btn_lib" && index == Widget_WordLibrary) || (name == "btn_mem" && index == Widget_WordMemorize) ||
-        (name == "btn_fun" && index == Widget_Function) || (name == "btn_set" && index == Widget_Setting))
-        return;
+    if (btn->property("index").toInt() == index) return;
 
     switch (index)//先处理
     {
@@ -166,11 +185,20 @@ void WordTerminator::slot_wtbuttonPressed()
         break;
     case Widget_WordShow:
         break;
+    case Widget_AutomatedMemorize:
+        if (ui->widget_autoMemorize->getMode() == WordAutomatedMemorizeWidget::MEMORY)
+        {
+            bool ret = false;
+            emit Dispatch(this).signal_stopWordMemorize(&ret);
+            if (!ret)
+                return;
+        }
+        break;
     case Widget_WordMemorize:
         if (ui->widget_wordMemorize->getMode() == WordMemorizeWidget::MEMORY)
         {
             bool ret = false;
-            emit stopWordMemorizeSignal(&ret);
+            emit Dispatch(this).signal_stopWordMemorize(&ret);
             if (!ret)
                 return;
         }
@@ -184,6 +212,8 @@ void WordTerminator::slot_wtbuttonPressed()
     clearWidgetIndex();
     if (name == "btn_lib")
         index = Widget_WordLibrary;
+    else if (name == "btn_autoMem")
+        index = Widget_AutomatedMemorize;
     else if (name == "btn_mem")
         index = Widget_WordMemorize;
     else if (name == "btn_fun")
@@ -197,6 +227,11 @@ void WordTerminator::slot_wtbuttonPressed()
         ui->widget_wordLibrary->clearSearch();
         ui->widget_wordLibrary->updateWordList();
         ui->widget_wordLibrary->updateWordStatistics();
+        break;
+    case Widget_AutomatedMemorize:
+        ui->widget_autoMemorize->reloadGlobalValue();
+        ui->widget_autoMemorize->recoveryInterface();
+        ui->widget_autoMemorize->updateWordStatistics();
         break;
     case Widget_WordMemorize:
         ui->widget_wordMemorize->reloadGlobalValue();
@@ -213,33 +248,9 @@ void WordTerminator::slot_wtbuttonPressed()
     pushWidgetIndex(index);
     ui->stackedWidget->setCurrentIndex(index);
 
-    if (name == "btn_lib")
+    for (int i = 0; i < 5; ++i)
     {
-        ui->btn_lib->setChecked(true);
-        ui->btn_mem->setChecked(false);
-        ui->btn_fun->setChecked(false);
-        ui->btn_set->setChecked(false);
-    }
-    else if (name == "btn_mem")
-    {
-        ui->btn_lib->setChecked(false);
-        ui->btn_mem->setChecked(true);
-        ui->btn_fun->setChecked(false);
-        ui->btn_set->setChecked(false);
-    }
-    else if (name == "btn_fun")
-    {
-        ui->btn_lib->setChecked(false);
-        ui->btn_mem->setChecked(false);
-        ui->btn_fun->setChecked(true);
-        ui->btn_set->setChecked(false);
-    }
-    else if (name == "btn_set")
-    {
-        ui->btn_lib->setChecked(false);
-        ui->btn_mem->setChecked(false);
-        ui->btn_fun->setChecked(false);
-        ui->btn_set->setChecked(true);
+        m_btn_group[i]->setChecked(m_btn_group[i] == btn);
     }
 }
 
@@ -248,7 +259,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
     int msgNum = message.getMessageNum();
     if (msgNum <= 0)
         return;
-    auto obj = this->sender();
+    auto obj = Dispatcher::senderObj();
     if (obj == ui->widget_wordLibrary)
     {
         if (msgNum == 1)

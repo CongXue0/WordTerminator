@@ -3,6 +3,8 @@
 #include "json.h"
 #include "memorythread.h"
 #include "global.h"
+#include "dispatcher.h"
+#include "wordterminator.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QKeyEvent>
@@ -22,16 +24,10 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) :
 
     m_mode = WELCOME;
     m_test = NONE;
-    m_propertyNum = 0;
-    m_exampleNum = 0;
-    m_synonymNum = 0;
-    m_antonymNum = 0;
-    m_testModeNum = 0;
     m_testNum = 0;
-    m_pastNum = 0;
+    m_passNum = 0;
     m_curIndex = -1;
     m_lastWord = "";
-    m_spacing = 10;
 
     ui->btn_right->setCheckable(true);
     ui->btn_right->setAutoCheck(false);
@@ -79,54 +75,16 @@ WordMemorizeWidget::WordMemorizeWidget(QWidget *parent) :
     connect(ui->btn_submit, SIGNAL(clicked()), this, SLOT(slot_btnSubmit_Clicked()));
 }
 
-void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
+WordMemorizeWidget::~WordMemorizeWidget()
 {
-    if (event->key() == Qt::Key_Return && (event->modifiers() == Qt::ControlModifier))
-    {
-        if (m_test == NONE)
-        {
-            if (ui->btn_start->isVisible())
-                slot_btnStart_Clicked();
-        }
-        else if (m_test == EXPLORATE)
-        {
-            if (ui->btn_know->isVisible())
-                slot_btnKnow_Clicked();
-            else if (ui->btn_next->isVisible())
-                slot_btnNext_Clicked();
-        }
-        else if (m_test == RECALL)
-        {
-            if (ui->btn_submit->isVisible())
-                slot_btnSubmit_Clicked();
-            else if (ui->btn_next->isVisible())
-                slot_btnNext_Clicked();
-        }
-    }
-    else if (event->key() == Qt::Key_Return && (event->modifiers() == Qt::AltModifier))
-    {
-        if (m_test == EXPLORATE)
-        {
-            if (ui->btn_notKnow->isVisible())
-                slot_btnNotKnow_Clicked();
-            else if (ui->btn_forever->isVisible())
-                slot_btnForever_Clicked();
-        }
-        else if (m_test == RECALL)
-        {
-            if (ui->btn_forever->isVisible())
-                slot_btnForever_Clicked();
-        }
-    }
+    delete ui;
 }
 
 void WordMemorizeWidget::recoveryInterface()
 {
     m_test = NONE;
-    m_propertyNum = 0;
-    m_testModeNum = 0;
     m_testNum = 0;
-    m_pastNum = 0;
+    m_passNum = 0;
     m_curIndex = -1;
     m_lastWord = "";
     m_testList.clear();
@@ -199,6 +157,47 @@ void WordMemorizeWidget::updateWordStatistics()
 int WordMemorizeWidget::getMode()
 {
     return m_mode;
+}
+
+void WordMemorizeWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return && (event->modifiers() == Qt::ControlModifier))
+    {
+        if (m_test == NONE)
+        {
+            if (ui->btn_start->isVisible())
+                slot_btnStart_Clicked();
+        }
+        else if (m_test == EXPLORATE)
+        {
+            if (ui->btn_know->isVisible())
+                slot_btnKnow_Clicked();
+            else if (ui->btn_next->isVisible())
+                slot_btnNext_Clicked();
+        }
+        else if (m_test == RECALL)
+        {
+            if (ui->btn_submit->isVisible())
+                slot_btnSubmit_Clicked();
+            else if (ui->btn_next->isVisible())
+                slot_btnNext_Clicked();
+        }
+    }
+    else if (event->key() == Qt::Key_Return && (event->modifiers() == Qt::AltModifier))
+    {
+        if (m_test == EXPLORATE)
+        {
+            if (ui->btn_notKnow->isVisible())
+                slot_btnNotKnow_Clicked();
+            else if (ui->btn_forever->isVisible())
+                slot_btnForever_Clicked();
+        }
+        else if (m_test == RECALL)
+        {
+            if (ui->btn_forever->isVisible())
+                slot_btnForever_Clicked();
+        }
+    }
 }
 
 void WordMemorizeWidget::setMode(int mode)
@@ -508,8 +507,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
         widget_explain[i++]->show();
     }
-    m_propertyNum = i;
-    m_lineNum += m_propertyNum;
+    m_lineNum += i;
 
     if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
         !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
@@ -527,8 +525,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
             else
                 break;
         }
-        m_exampleNum = i;
-        m_lineNum += m_exampleNum + 1;
+        m_lineNum += i + 1;
     }
     if (!m_word.m_synonym.isEmpty())
     {
@@ -543,13 +540,12 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
                 linkLabel_synonym[i]->show();
             }
         }
-        m_synonymNum = i;
-        if (m_synonymNum > 0) ui->widget_synonym0->show();
-        if (m_synonymNum > 4) ui->widget_synonym1->show();
+        if (i > 0) ui->widget_synonym0->show();
+        if (i > 4) ui->widget_synonym1->show();
 
-        if (m_synonymNum > 4)
+        if (i > 4)
             m_lineNum += 3;
-        else if (m_synonymNum > 0)
+        else if (i > 0)
             m_lineNum += 2;
     }
     if (!m_word.m_antonym.isEmpty())
@@ -565,13 +561,12 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
                 linkLabel_antonym[i]->show();
             }
         }
-        m_antonymNum = i;
-        if (m_antonymNum > 0) ui->widget_antonym0->show();
-        if (m_antonymNum > 4) ui->widget_antonym1->show();
+        if (i > 0) ui->widget_antonym0->show();
+        if (i > 4) ui->widget_antonym1->show();
 
-        if (m_antonymNum > 4)
+        if (i > 4)
             m_lineNum += 3;
-        else if (m_antonymNum > 0)
+        else if (i > 0)
             m_lineNum += 2;
     }
 }
@@ -898,14 +893,11 @@ void WordMemorizeWidget::chooseStrategy_level0()
             for (int i = 0; i < 10; ++i)
             {
                 int r = WTool::rand(0, m_testNum - 1);
-                if (m_nameList.contains(m_testList.at(r).m_info.m_name))
+                while (m_nameList.contains(m_testList.at(r).m_info.m_name))
                 {
-                    do
-                    {
-                        r++;
-                        if (r >= m_testNum)
-                            r = 0;
-                    } while (m_nameList.contains(m_testList.at(r).m_info.m_name));
+                    r++;
+                    if (r >= m_testNum)
+                        r = 0;
                 }
                 m_nameList.append(m_testList.at(r).m_info.m_name);
             }
@@ -974,40 +966,32 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
     if (!ui->checkBox_range0->isChecked() && !ui->checkBox_range1->isChecked() && !ui->checkBox_range2->isChecked() &&
         !ui->checkBox_range3->isChecked() && !ui->checkBox_forever->isChecked())
     {
-        m_testList = p_wordAdmin->getAllWordCanMemorizeList(m_curGroupId);
+        m_testList = p_wordAdmin->getAllWordCanMemorizeList(m_curGroupId, 2);
     }
     else
     {
         if (ui->checkBox_range0->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked(), 2);
         if (ui->checkBox_range1->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked(), 2);
         if (ui->checkBox_range2->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked(), 2);
         if (ui->checkBox_range3->isChecked())
-            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked());
+            m_testList += p_wordAdmin->getWordCanMemorizeListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked(), 2);
     }
     if (m_testList.size() > 0)
     {
         m_testList = m_testList.mid(0, Global::m_singleMemoryNum.getValueInt());
 
 //        p_memThread->start();
-        m_testModeNum = 0;
-        if (ui->checkBox_test0->isChecked())
-            m_testModeNum++;
-        if (ui->checkBox_test1->isChecked())
-            m_testModeNum++;
-        if (m_testModeNum > 0)
+        if (ui->checkBox_test0->isChecked() || ui->checkBox_test1->isChecked())
         {
             m_testNum = m_testList.size();
-            m_pastNum = 0;
-            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+            m_passNum = 0;
+            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_passNum).arg(m_testNum));
             this->testListInit();
             DEBUG << "m_testNum:" << m_testNum;
-            if (m_testNum > 0)
-                this->loadTestInfo();
-            else
-                QMessageBox::about(this, "提示", "没有要记忆的单词");
+            this->loadTestInfo();
         }
         else
             QMessageBox::about(this, "提示", "没有选择记忆模式");
@@ -1040,8 +1024,8 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
         }
 
         m_testNum--;
-        m_pastNum++;
-        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+        m_passNum++;
+        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_passNum).arg(m_testNum));
 
         m_word.m_modifyTime = QDateTime::currentDateTime();
         if (m_word.m_remember == -1 || m_word.m_remember == 2)
@@ -1057,7 +1041,7 @@ void WordMemorizeWidget::slot_btnKnow_Clicked()
         m_nameList.removeAll(m_testList.at(m_curIndex).m_info.m_name);
         DEBUG<<"name:"<<m_testList.at(m_curIndex).m_info.m_name<<", remove:"<<m_nameList;
         m_testList.removeAt(m_curIndex);
-        emit wordTimeIncreaseSignal(m_word.m_name);
+        emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
     {
@@ -1085,7 +1069,7 @@ void WordMemorizeWidget::slot_btnForever_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
+        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1102,7 +1086,7 @@ void WordMemorizeWidget::slot_btnNotForever_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
+        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1118,7 +1102,7 @@ void WordMemorizeWidget::slot_btnNext_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_pastNum));
+        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1155,8 +1139,8 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
             }
 
             m_testNum--;
-            m_pastNum++;
-            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+            m_passNum++;
+            ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_passNum).arg(m_testNum));
 
             m_word.m_modifyTime = QDateTime::currentDateTime();
             if (m_word.m_remember == -1 || m_word.m_remember == 2)
@@ -1172,7 +1156,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
             m_nameList.removeAll(m_testList.at(m_curIndex).m_info.m_name);
             DEBUG<<"name:"<<m_testList.at(m_curIndex).m_info.m_name<<", remove:"<<m_nameList;
             m_testList.removeAt(m_curIndex);
-            emit wordTimeIncreaseSignal(m_word.m_name);
+            emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
         }
         else
         {
@@ -1200,7 +1184,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
 //            return;
 //    }
 
-//    WordTest test;
+//    WordTest test(2);
 //    if (p_wordAdmin->getWordBriefInfo(name, &test.m_info))
 //    {
 //        int times = test.m_info.m_times;
@@ -1222,7 +1206,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
 //        }
 //        m_testList.append(test);
 //        m_testNum++;
-//        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_pastNum).arg(m_testNum));
+//        ui->label_info->setText(QString("已记忆：%1    未记忆：%2").arg(m_passNum).arg(m_testNum));
 //    }
 //    else
 //        DEBUG << "wordCanMemorize get word fail";
@@ -1245,6 +1229,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
 
 void WordMemorizeWidget::slot_stopWordMemorize(bool *ret)
 {
+    if (WordTerminator::instance()->getCurrentWidgetIndex() != WordTerminator::Widget_WordMemorize) return;
     if (QMessageBox::question(this, "queation", "是否停止记忆?", QMessageBox::Yes,
         QMessageBox::No) == QMessageBox::Yes)
     {

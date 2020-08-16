@@ -70,7 +70,7 @@
        </widget>
       </item>
       <item>
-       <widget class="WTButton" name="btn_lib">
+       <widget class="DtcpImageButton" name="btn_lib">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -98,7 +98,32 @@
        </widget>
       </item>
       <item>
-       <widget class="WTButton" name="btn_mem">
+       <widget class="DtcpImageButton" name="btn_autoMem">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>自动化记忆</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="DtcpImageButton" name="btn_mem">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -123,7 +148,7 @@
        </widget>
       </item>
       <item>
-       <widget class="WTButton" name="btn_fun">
+       <widget class="DtcpImageButton" name="btn_fun">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -148,7 +173,7 @@
        </widget>
       </item>
       <item>
-       <widget class="WTButton" name="btn_set">
+       <widget class="DtcpImageButton" name="btn_set">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -269,6 +294,28 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="WordAutomatedMemorizeWidget" name="widget_autoMemorize" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_4">
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <property name="spacing">
         <number>0</number>
@@ -290,7 +337,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_4">
+     <widget class="QWidget" name="page_5">
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <property name="spacing">
         <number>0</number>
@@ -312,7 +359,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_5">
+     <widget class="QWidget" name="page_6">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="spacing">
         <number>0</number>
@@ -340,11 +387,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>WTButton</class>
-   <extends>QPushButton</extends>
-   <header>wtbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>WordLibraryWidget</class>
    <extends>QWidget</extends>
@@ -380,6 +422,17 @@
    <extends>QWidget</extends>
    <header>wordsettingwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WordAutomatedMemorizeWidget</class>
+   <extends>QWidget</extends>
+   <header>wordautomatedmemorizewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DtcpImageButton</class>
+   <extends>QPushButton</extends>
+   <header>dtcp_tool_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

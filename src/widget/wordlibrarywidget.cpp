@@ -1,9 +1,10 @@
 #include "wordlibrarywidget.h"
 #include "ui_wordlibrarywidget.h"
-#include <QDebug>
-#include <QKeyEvent>
 #include "wordadmin.h"
 #include "global.h"
+#include "dispatcher.h"
+#include <QDebug>
+#include <QKeyEvent>
 #include <QApplication>
 #include <QMessageBox>
 
@@ -53,6 +54,11 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     connect(ui->checkBox_forever, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
 }
 
+WordLibraryWidget::~WordLibraryWidget()
+{
+    delete ui;
+}
+
 void WordLibraryWidget::recoveryInterface()
 {
     clearSearch();
@@ -94,7 +100,7 @@ void WordLibraryWidget::reloadGlobalValue()
             ui->comboBox_group->addItem(list.at(i));
         }
         ui->comboBox_group->setCurrentIndex(Global::m_groupIndexLib.getValueInt() + 1);
-        m_curGroupId = 0;
+        m_curGroupId = WTool::getGroupNo(ui->comboBox_group->currentText());
 
         ui->label_statistics->setText(QString("statistics:\n"
             "%1~%2 : \n"
@@ -186,7 +192,7 @@ void WordLibraryWidget::slot_menu1Triggered(QAction *act)
                 if (p_wordAdmin->updateWord(word.m_name, "Times", QString::number(word.m_times), "ModifyTime",
                     word.m_modifyTime.toString(TIMEFORMAT), "RememberState", QString::number(word.m_remember)))
                 {
-                    emit wordTimeIncreaseSignal(word.m_name);
+                    emit Dispatch(this).signal_wordTimeIncrease(word.m_name);
                 }
             }
         }
@@ -210,7 +216,7 @@ void WordLibraryWidget::slot_menu1Triggered(QAction *act)
                 if (p_wordAdmin->updateWord(word.m_name, "ModifyTime", word.m_modifyTime.toString(TIMEFORMAT),
                     "RememberState", QString::number(word.m_remember)))
                 {
-                    emit wordTimeIncreaseSignal(word.m_name);
+                    emit Dispatch(this).signal_wordTimeIncrease(word.m_name);
                 }
             }
         }
@@ -228,7 +234,7 @@ void WordLibraryWidget::slot_menu1Triggered(QAction *act)
                 name = m_modelList.at(i).data().toString();
                 if (p_wordAdmin->deleteWord(name))
                 {
-                    emit wordTimeIncreaseSignal(name);
+                    emit Dispatch(this).signal_wordTimeIncrease(name);
                 }
             }
             this->updateWordList();
@@ -248,7 +254,7 @@ void WordLibraryWidget::slot_menu1Triggered(QAction *act)
                 if (p_wordAdmin->updateWord(word.m_name, "Times", QString::number(word.m_times), "ModifyTime",
                     word.m_modifyTime.toString(TIMEFORMAT), "RememberState", QString::number(word.m_remember)))
                 {
-                    emit wordTimeIncreaseSignal(word.m_name);
+                    emit Dispatch(this).signal_wordTimeIncrease(word.m_name);
                 }
             }
         }
@@ -273,7 +279,7 @@ void WordLibraryWidget::slot_menu2Triggered(QAction *act)
             if (p_wordAdmin->updateWord(word.m_name, "ModifyTime", word.m_modifyTime.toString(TIMEFORMAT),
                 "Groupid", QString::number(word.m_groupId), "RememberState", QString::number(word.m_remember)))
             {
-                emit wordTimeIncreaseSignal(word.m_name);
+                emit Dispatch(this).signal_wordTimeIncrease(word.m_name);
             }
         }
     }
@@ -307,13 +313,13 @@ void WordLibraryWidget::slot_btnSearch_clicked()
 
 void WordLibraryWidget::slot_btnCreate_clicked()
 {
-    emit sendMessageSignal(WMessage("create word", ""));
+    emit Dispatch(this).signal_sendMessage(WMessage("create word", ""));
 }
 
 void WordLibraryWidget::slot_itemDoubleClicked(QModelIndex index)
 {
     QString name = index.data().toString();
-    emit sendMessageSignal(WMessage("show word", name));
+    emit Dispatch(this).signal_sendMessage(WMessage("show word", name));
 }
 
 void WordLibraryWidget::slot_checkBoxClicked()
@@ -343,6 +349,7 @@ void WordLibraryWidget::slot_wordTimeDecline(QString name)
 
 void WordLibraryWidget::slot_wordTimeIncrease(QString name)
 {
+    if (Dispatcher::senderObj() == this) return;
     if (m_wordList.contains(name))
     {
         updateWordList();

@@ -20,9 +20,6 @@ protected:
 protected slots:
     void slot_wordTimeIncrease(QString name);
 
-signals:
-    void wordCanMemorizeSignal(QString name);
-
 protected:
     bool m_isRun;
 

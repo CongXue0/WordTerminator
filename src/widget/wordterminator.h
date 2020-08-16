@@ -2,6 +2,7 @@
 #define WORDTERMINATOR_H
 
 #include "wmessage.h"
+#include "dtcp_tool_button.h"
 #include <QDialog>
 #include <QVector>
 
@@ -18,9 +19,9 @@ public:
         Widget_WordLibrary, Widget_WordCreate, Widget_WordShow, Widget_AutomatedMemorize,
         Widget_WordMemorize, Widget_Function, Widget_Setting
     };
-
     explicit WordTerminator(QWidget *parent = nullptr);
     ~WordTerminator();
+    static WordTerminator *instance() { return m_self; }
 
     int getCurrentWidgetIndex();
 
@@ -35,17 +36,16 @@ protected:
 
 protected slots:
     void slot_saveBtn_clicked();
-    void slot_wtbuttonPressed();
+    void slot_switchButtonClicked();
     void slot_handleMessage(WMessage message);
 
-signals:
-    void stopWordMemorizeSignal(bool *ret);
-
 protected:
+    static WordTerminator *m_self;
     Ui::WordTerminator *ui;
     bool m_first;
 
     QVector<int> m_widgets;
+    QPushButton *m_btn_group[5];
 };
 
 #endif // WORDTERMINATOR_H

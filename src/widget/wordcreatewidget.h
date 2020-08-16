@@ -22,7 +22,7 @@ class WordCreateWidget : public QWidget
     Q_OBJECT
 public:
     explicit WordCreateWidget(QWidget *parent = nullptr);
-    void keyPressEvent(QKeyEvent *event);
+    ~WordCreateWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
@@ -30,15 +30,12 @@ public:
     bool loadWordInfo(QString name);
 
 private:
+    void keyPressEvent(QKeyEvent *event);
     QString inputCheck();
 
 private slots:
     void slot_btnCancel_clicked();
     void slot_btnConfirm_clicked();
-
-signals:
-    void sendMessageSignal(WMessage message);
-    void wordTimeIncreaseSignal(QString name);
 
 private:
     Ui::WordCreateWidget *ui;

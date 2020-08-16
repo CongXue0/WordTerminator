@@ -14,15 +14,13 @@ class WordSettingWidget : public QWidget
     Q_OBJECT
 public:
     explicit WordSettingWidget(QWidget *parent = nullptr);
+    ~WordSettingWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void saveGlobalValue();
 
 private slots:
     void slot_btnReset_clicked();
-
-signals:
-    void sendMessageSignal(WMessage message);
 
 private:
     Ui::WordSettingWidget *ui;

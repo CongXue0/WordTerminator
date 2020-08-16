@@ -13,14 +13,12 @@
 WordAdmin *p_wordAdmin = nullptr;
 ForgetThread *p_forgetThread = nullptr;
 MemoryThread *p_memThread = nullptr;
-WordTerminator *p_wordTerm = nullptr;
 
 int main(int argc, char *argv[])
 {
     p_wordAdmin = nullptr;
     p_forgetThread = nullptr;
     p_memThread = nullptr;
-    p_wordTerm = nullptr;
 
     qsrand(time(nullptr));
 
@@ -37,7 +35,6 @@ int main(int argc, char *argv[])
     p_memThread = new MemoryThread();
 
     WordTerminator w;
-    p_wordTerm = &w;
     w.show();
 
     return a.exec();

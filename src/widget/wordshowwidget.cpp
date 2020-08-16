@@ -3,6 +3,7 @@
 #include "wtool.h"
 #include "global.h"
 #include "wordterminator.h"
+#include "dispatcher.h"
 #include <QDebug>
 #include <QThread>
 #include <QScrollBar>
@@ -11,7 +12,6 @@
 #include <QTimer>
 
 extern WordAdmin *p_wordAdmin;
-extern WordTerminator *p_wordTerm;
 
 WordShowWidget::WordShowWidget(QWidget *parent) :
     QWidget(parent),
@@ -25,8 +25,8 @@ WordShowWidget::WordShowWidget(QWidget *parent) :
     m_synonymNum = 0;
     m_antonymNum = 0;
 
-    ui->wbtn_isRemember->setCheckedTip("set to not forever");
-    ui->wbtn_isRemember->setUncheckedTip("set to forever");
+    ui->btn_isRemember->setCheckedTip("set to not forever");
+    ui->btn_isRemember->setUncheckedTip("set to forever");
 
     //CopyLabel
     for (int i = 0; i < PROPERTY_NUM; ++i)
@@ -66,16 +66,13 @@ WordShowWidget::WordShowWidget(QWidget *parent) :
     connect(ui->btn_delete, SIGNAL(clicked()), this, SLOT(slot_btnDelete_Clicked()));
     connect(ui->btn_edit, SIGNAL(clicked()), this, SLOT(slot_btnEdit_Clicked()));
     connect(ui->btn_reset, SIGNAL(clicked()), this, SLOT(slot_btnReset_Clicked()));
-    connect(ui->wbtn_isRemember, SIGNAL(clicked(bool)), this, SLOT(slot_wbtnRemember_Clicked(bool)));
+    connect(ui->btn_isRemember, SIGNAL(clicked(bool)), this, SLOT(slot_btnRemember_Clicked(bool)));
     connect(ui->combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
 }
 
-void WordShowWidget::keyPressEvent(QKeyEvent *event)
+WordShowWidget::~WordShowWidget()
 {
-    if (event->key() == Qt::Key_Escape)
-    {
-        slot_btnReturn_Clicked();
-    }
+    delete ui;
 }
 
 void WordShowWidget::recoveryInterface()
@@ -157,6 +154,14 @@ bool WordShowWidget::loadWordInfo(QString name)
         return false;
 }
 
+void WordShowWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        slot_btnReturn_Clicked();
+    }
+}
+
 void WordShowWidget::setWordInfo()
 {
     QSignalBlocker sb(ui->combox_group);
@@ -177,7 +182,7 @@ void WordShowWidget::setWordInfo()
         ui->copyLabel_phoneticSymbol->show();
     }
     ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
-    ui->wbtn_isRemember->setChecked(m_word.m_remember > 0);
+    ui->btn_isRemember->setChecked(m_word.m_remember > 0);
     int i = 0;
     if (!m_word.m_adj_Chinese.isEmpty())
     {
@@ -519,14 +524,14 @@ void WordShowWidget::setWordTimes(int times)
             ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
             int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
             ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
-            emit wordTimeIncreaseSignal(m_word.m_name);
+            emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
         }
     }
 }
 
 void WordShowWidget::slot_btnReturn_Clicked()
 {
-    emit sendMessageSignal(WMessage("return", ""));
+    emit Dispatch(this).signal_sendMessage(WMessage("return", ""));
 }
 
 void WordShowWidget::slot_btnMin_Clicked()
@@ -554,7 +559,7 @@ void WordShowWidget::slot_btnAdd_Clicked()
         ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
         int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
         ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
-        emit wordTimeIncreaseSignal(m_word.m_name);
+        emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
 }
 
@@ -565,8 +570,8 @@ void WordShowWidget::slot_btnDelete_Clicked()
     {
         if (p_wordAdmin->deleteWord(m_word.m_name))
         {
-            emit sendMessageSignal(WMessage("delete success", m_word.m_name));
-            emit wordTimeIncreaseSignal(m_word.m_name);
+            emit Dispatch(this).signal_sendMessage(WMessage("delete success", m_word.m_name));
+            emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
         }
         else
             QMessageBox::about(this, "提示", QString("delete %1 fail").arg(m_word.m_name));
@@ -575,7 +580,7 @@ void WordShowWidget::slot_btnDelete_Clicked()
 
 void WordShowWidget::slot_btnEdit_Clicked()
 {
-    emit sendMessageSignal(WMessage("edit word", m_word.m_name));
+    emit Dispatch(this).signal_sendMessage(WMessage("edit word", m_word.m_name));
 }
 
 void WordShowWidget::slot_btnReset_Clicked()
@@ -586,20 +591,20 @@ void WordShowWidget::slot_btnReset_Clicked()
     if (p_wordAdmin->updateWord(&m_word))
     {
         ui->copyLabel_times->setText("T:0");
-        emit wordTimeIncreaseSignal(m_word.m_name);
+        emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
         QMessageBox::about(this, "提示", "重置单词失败");
 }
 
-void WordShowWidget::slot_wbtnRemember_Clicked(bool active)
+void WordShowWidget::slot_btnRemember_Clicked(bool checked)
 {
-    m_word.m_remember = active ? 2 : -1;
+    m_word.m_remember = checked ? 2 : -1;
     m_word.m_modifyTime = QDateTime::currentDateTime();
     if (p_wordAdmin->updateWord(m_word.m_name, "RememberState", QString::number(m_word.m_remember),
         "ModifyTime", m_word.m_modifyTime.toString(TIMEFORMAT)))
     {
-        emit wordTimeIncreaseSignal(m_word.m_name);
+        emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
         QMessageBox::about(this, "提示", "设为记住失败");
@@ -608,7 +613,7 @@ void WordShowWidget::slot_wbtnRemember_Clicked(bool active)
 void WordShowWidget::slot_comboxGroup_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
-    if (p_wordTerm != nullptr && p_wordTerm->getCurrentWidgetIndex() == WordTerminator::Widget_WordShow)
+    if (WordTerminator::instance()->getCurrentWidgetIndex() == WordTerminator::Widget_WordShow)
     {
         m_word.m_groupid = WTool::getGroupNo(ui->combox_group->currentText());
         m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
@@ -633,6 +638,7 @@ void WordShowWidget::slot_wordTimeDecline(QString name)
 
 void WordShowWidget::slot_wordTimeIncrease(QString name)
 {
+    if (Dispatcher::senderObj() == this) return;
     if (m_word.m_name == name)
     {
         p_wordAdmin->getWordInfo(name, &m_word);

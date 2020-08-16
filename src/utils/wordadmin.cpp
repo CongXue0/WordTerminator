@@ -201,6 +201,102 @@ QString WordInfo::toText()
     return text;
 }
 
+int WordInfo::toMsecs()
+{
+    int msecs = 0, tmp = 0;
+    if (m_name.isEmpty())
+        return msecs;
+    if (!m_phoneticSymbol.isEmpty())
+        msecs += 500;
+    if (!m_adj_Chinese.isEmpty() || !m_adj_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_adj_Chinese + m_adj_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_adv_Chinese.isEmpty() || !m_adv_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_adv_Chinese + m_adv_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_vt_Chinese.isEmpty() || !m_vt_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_vt_Chinese + m_vt_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_vi_Chinese.isEmpty() || !m_vi_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_vi_Chinese + m_vi_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_pastTense.isEmpty() || !m_pastParticiple.isEmpty() || !m_presentParticiple.isEmpty() || !m_thirdPersonSingular.isEmpty())
+    {
+        tmp = int(2000.0 * (m_pastTense + m_pastParticiple + m_presentParticiple + m_thirdPersonSingular).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 5000) tmp = 5000;
+        msecs += tmp;
+    }
+    if (!m_noun_Chinese.isEmpty() || !m_noun_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_noun_Chinese + m_noun_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_prep_Chinese.isEmpty() || !m_prep_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_prep_Chinese + m_prep_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_conj_Chinese.isEmpty() || !m_conj_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_conj_Chinese + m_conj_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_pron_Chinese.isEmpty() || !m_pron_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_pron_Chinese + m_pron_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    if (!m_art_Chinese.isEmpty() || !m_art_English.isEmpty())
+    {
+        tmp = int(2000.0 * (m_art_Chinese + m_art_English).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 4000) tmp = 4000;
+        msecs += tmp;
+    }
+    for (int i = 0; i < 6; ++i)
+    {
+        if (m_exampleSentence[i].isEmpty())
+            break;
+        tmp = int(2000.0 * m_exampleSentence[i].size() / 14.0);
+        if (tmp < 1000) tmp = 1000;
+        if (tmp > 3000) tmp = 3000;
+        msecs += tmp;
+    }
+    if (!m_synonym.isEmpty() || !m_antonym.isEmpty())
+    {
+        tmp = int(2000.0 * (m_synonym + m_antonym).size() / 7.0);
+        if (tmp < 1500) tmp = 1500;
+        if (tmp > 5000) tmp = 5000;
+        msecs += tmp;
+    }
+    return msecs;
+}
+
 bool WordInfo::contains(QString str) const
 {
     if (str.isEmpty())
@@ -210,6 +306,76 @@ bool WordInfo::contains(QString str) const
         m_noun_Chinese.contains(str) || m_noun_English.contains(str) || m_prep_Chinese.contains(str) || m_prep_English.contains(str) ||
         m_conj_Chinese.contains(str) || m_conj_English.contains(str) || m_pron_Chinese.contains(str) || m_pron_English.contains(str) ||
         m_art_Chinese.contains(str) || m_art_English.contains(str);
+}
+
+WordTest::WordTest(int testSize)
+{
+    if (testSize < 1) testSize = 1;
+    m_isPass = QVector<bool>(testSize, true);
+    m_visible = true;
+    m_speed = 0;
+    m_loopNum = 0;
+}
+
+bool WordTest::isPass() const
+{
+    bool pass = true;
+    for (int i = 0; i < m_isPass.size(); ++i)
+    {
+        pass = pass && m_isPass[i];
+    }
+    return pass;
+}
+
+bool WordTest::isVisible() const
+{
+    return m_visible;
+}
+
+void WordTest::setSpeed(int speed)
+{
+    if (speed < -5)
+        speed = -5;
+    if (speed > 5)
+        speed = 5;
+    m_speed = speed;
+}
+
+int WordTest::getSpeed() const
+{
+    return m_speed;
+}
+
+int WordTest::notPassNum() const
+{
+    int num = 0;
+    for (int i = 0; i < m_isPass.size(); ++i)
+    {
+        if (!m_isPass[i])
+            num++;
+    }
+    return num;
+}
+
+int WordTest::toMsecs() const
+{
+    WordInfo wordInfo;
+    if (WordAdmin::getInstance()->getWordInfo(m_info.m_name, &wordInfo))
+    {
+        int msecs = wordInfo.toMsecs();
+        if (m_speed > 0)
+        {
+            double p = 1 - 0.12 * m_speed;
+            msecs = int(msecs * p);
+        }
+        else if (m_speed < 0)
+        {
+            double p = 1 - 0.2 * m_speed;
+            msecs = int(msecs * p);
+        }
+        return msecs;
+    }
+    return 4000;
 }
 
 WordAdmin *WordAdmin::getInstance()
@@ -702,7 +868,7 @@ QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes)
 {
     QList<BriefWordInfo> list;
     m_mutex.lockForRead();
-    QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + minutes * 60);
+    QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + uint(minutes) * 60);
     for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED &&
@@ -719,7 +885,7 @@ QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes, bool isRememb
 {
     QList<BriefWordInfo> list;
     m_mutex.lockForRead();
-    QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + minutes * 60);
+    QDateTime end = QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() + uint(minutes) * 60);
     for (int i = 0; i < m_currentTop; ++i)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
@@ -735,7 +901,7 @@ QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes, bool isRememb
     return list;
 }
 
-QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
+QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId, int testSize)
 {
     QList<WordTest> list;
     m_mutex.lockForRead();
@@ -747,7 +913,7 @@ QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
             if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                 m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval()))
             {
-                WordTest test;
+                WordTest test(testSize);
                 test.m_info = m_wordLib[i];
                 list.append(test);
             }
@@ -761,7 +927,7 @@ QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
                 ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                 m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval()))
             {
-                WordTest test;
+                WordTest test(testSize);
                 test.m_info = m_wordLib[i];
                 list.append(test);
             }
@@ -771,7 +937,7 @@ QList<WordTest> WordAdmin::getAllWordCanMemorizeList(int groupId)
     return list;
 }
 
-QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int groupId, bool isRemember)
+QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int groupId, bool isRemember, int testSize)
 {
     QList<WordTest> list;
     if (t1 < 0 || t2 < 0 || t1 > t2)
@@ -788,7 +954,7 @@ QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int g
                     ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                     m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval()))
                 {
-                    WordTest test;
+                    WordTest test(testSize);
                     test.m_info = m_wordLib[i];
                     list.append(test);
                 }
@@ -806,7 +972,7 @@ QList<WordTest> WordAdmin::getWordCanMemorizeListFromTimes(int t1, int t2, int g
                     ((m_wordLib[i].m_remember == -1 || m_wordLib[i].m_remember == 2) ||
                     m_wordLib[i].m_modifyTime.secsTo(cur) >= WTool::getMemoryInterval()))
                 {
-                    WordTest test;
+                    WordTest test(testSize);
                     test.m_info = m_wordLib[i];
                     list.append(test);
                 }
@@ -876,7 +1042,7 @@ QList<BriefWordInfo> WordAdmin::getWordCannotMemorizeWithoutTime(uint minutes)
     {
         if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED)
         {
-            uint sec = m_wordLib[i].m_modifyTime.secsTo(cur);
+            uint sec = uint(m_wordLib[i].m_modifyTime.secsTo(cur));
             if (sec < WTool::getMemoryInterval() && sec >= (WTool::getMemoryInterval() - minutes * 60))
             {
                 list.append(m_wordLib[i]);

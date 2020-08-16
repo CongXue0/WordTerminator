@@ -1,6 +1,6 @@
 #include "memorythread.h"
-#include <QDebug>
 #include "wtool.h"
+#include "dispatcher.h"
 
 extern WordAdmin *p_wordAdmin;
 
@@ -40,7 +40,7 @@ void MemoryThread::run()
                 {
                     if (m_infoList.at(i).m_modifyTime.secsTo(QDateTime::currentDateTime()) >= WTool::getMemoryInterval())
                     {
-                        emit wordCanMemorizeSignal(m_infoList.at(i).m_name);
+                        emit Dispatch(this).signal_wordCanMemorize(m_infoList.at(i).m_name);
                         m_nameList.removeAt(i);
                         m_infoList.removeAt(i);
                         i--;

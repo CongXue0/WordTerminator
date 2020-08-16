@@ -1,6 +1,7 @@
 #include "forgetthread.h"
-#include <QDateTime>
 #include "wtool.h"
+#include "dispatcher.h"
+#include <QDateTime>
 #include <QDebug>
 
 extern WordAdmin *p_wordAdmin;
@@ -51,7 +52,7 @@ void ForgetThread::run()
                             QString::number(m_infoList[i].m_remember)))
                         {
                             DEBUG << m_infoList.at(i).m_name << " forget times";
-                            emit wordTimeDeclineSignal(m_infoList.at(i).m_name);
+                            emit Dispatch(this).signal_wordTimeDecline(m_infoList.at(i).m_name);
                             m_nameList.removeAt(i);
                             m_infoList.removeAt(i);
                             i--;

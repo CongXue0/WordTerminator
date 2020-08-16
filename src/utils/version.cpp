@@ -1,6 +1,6 @@
 #include "version.h"
 
-#define MAIN_NUM "1.0"
+#define MAIN_NUM "2.0"
 
 QString Version::getVersion()
 {

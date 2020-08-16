@@ -88,7 +88,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="WTButton" name="wbtn_isRemember">
+         <widget class="DtcpImageButton" name="btn_isRemember">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -103,6 +103,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -1808,9 +1811,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WTButton</class>
+   <class>DtcpImageButton</class>
    <extends>QPushButton</extends>
-   <header>wtbutton.h</header>
+   <header>dtcp_tool_button.h</header>
   </customwidget>
   <customwidget>
    <class>CopyLabel</class>

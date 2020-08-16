@@ -13,6 +13,7 @@ class WordFunctionWidget : public QWidget
     Q_OBJECT
 public:
     explicit WordFunctionWidget(QWidget *parent = nullptr);
+    ~WordFunctionWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void saveGlobalValue();

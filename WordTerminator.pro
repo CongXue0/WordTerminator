@@ -25,12 +25,16 @@ RC_FILE += myapp.rc
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+CONFIG += c++14
+
 INCLUDEPATH += "./src/utils"
 INCLUDEPATH += "./src/view"
 INCLUDEPATH += "./src/widget"
 SOURCES += main.cpp\
+    src/utils/scenenode.cpp \
+    src/widget/wordautomatedmemorizescenegraphview.cpp \
     src/widget/wordautomatedmemorizewidget.cpp \
-        src/widget/wordterminator.cpp \
+    src/widget/wordterminator.cpp \
     src/widget/wordlibrarywidget.cpp \
     src/widget/wordcreatewidget.cpp \
     src/widget/wordshowwidget.cpp \
@@ -45,12 +49,14 @@ SOURCES += main.cpp\
     src/utils/json.cpp \
     src/utils/global.cpp \
     src/utils/version.cpp \
-    src/view/wtbutton.cpp \
+    src/utils/dispatcher.cpp \
     src/view/copylabel.cpp \
     src/view/linklabel.cpp \
     src/view/dtcp_tool_button.cpp
 
-HEADERS  += src/widget/wordterminator.h \
+HEADERS += src/widget/wordterminator.h \
+    src/utils/scenenode.h \
+    src/widget/wordautomatedmemorizescenegraphview.h \
     src/widget/wordautomatedmemorizewidget.h \
     src/widget/wordlibrarywidget.h \
     src/widget/wordcreatewidget.h \
@@ -66,12 +72,12 @@ HEADERS  += src/widget/wordterminator.h \
     src/utils/json.h \
     src/utils/global.h \
     src/utils/version.h \
-    src/view/wtbutton.h \
+    src/utils/dispatcher.h \
     src/view/copylabel.h \
     src/view/linklabel.h \
     src/view/dtcp_tool_button.h
 
-FORMS    += src/widget/wordterminator.ui \
+FORMS += src/widget/wordterminator.ui \
     src/widget/wordautomatedmemorizewidget.ui \
     src/widget/wordlibrarywidget.ui \
     src/widget/wordcreatewidget.ui \

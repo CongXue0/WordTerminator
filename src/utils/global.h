@@ -80,6 +80,7 @@ public:
     static XmlVar m_groupIndexLib;
     static XmlVar m_groupIndexMemory;
     static XmlVar m_singleMemoryNum;
+    static XmlVar m_autoSilderVolume;
 
 protected:
     static QString m_path;

@@ -167,6 +167,11 @@ QSize WTool::getFontSize(const QFont &font, const QString &txt)
     return QFontMetrics(font).boundingRect(txt).size();
 }
 
+int WTool::getFontHeight(const QFont &font)
+{
+    return QFontMetrics(font).height();
+}
+
 int WTool::getFontLength(QFont font, QString txt)
 {
     return QFontMetrics(font).width(txt);

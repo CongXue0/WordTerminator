@@ -2219,6 +2219,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>DtcpImageButton</class>
+   <extends>QPushButton</extends>
+   <header>dtcp_tool_button.h</header>
+  </customwidget>
+  <customwidget>
    <class>CopyLabel</class>
    <extends>QTextEdit</extends>
    <header>copylabel.h</header>
@@ -2227,11 +2232,6 @@
    <class>LinkLabel</class>
    <extends>QLineEdit</extends>
    <header>linklabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>DtcpImageButton</class>
-   <extends>QPushButton</extends>
-   <header>dtcp_tool_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

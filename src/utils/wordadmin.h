@@ -5,6 +5,7 @@
 #include <QMutex>
 #include <QDateTime>
 #include <QReadWriteLock>
+#include <QVector>
 
 #define MAX_WORD_NUM 200000
 #define WORD_NAME_UNDEFINED "-1"
@@ -25,6 +26,8 @@ public:
     int m_groupId;
     int m_remember;
     bool m_isPhrase;
+private:
+    char m_pad[3] = { 0 };
 };
 
 class WordInfo
@@ -33,6 +36,7 @@ public:
     void init();
     void arrange();
     QString toText();
+    int toMsecs();
     bool contains(QString str) const;
 
     QString m_name;
@@ -73,30 +77,21 @@ public:
 class WordTest
 {
 public:
-    WordTest()
-    {
-        m_isPass[0] = true;
-        m_isPass[1] = true;
-    }
-
-    bool isPass() const
-    {
-        return m_isPass[0] && m_isPass[1];
-    }
-
-    int notPassNum() const
-    {
-        int j = 0;
-        for (int i = 0; i < 2; ++i)
-        {
-            if (!m_isPass[i])
-                j++;
-        }
-        return j;
-    }
+    WordTest(int testSize = 1);
+    bool isPass() const;
+    bool isVisible() const;
+    void setSpeed(int speed);
+    int getSpeed() const;
+    int notPassNum() const;
+    int toMsecs() const;
 
     BriefWordInfo m_info;
-    bool m_isPass[2];
+    QVector<bool> m_isPass;
+    bool m_visible;
+    int m_loopNum;
+
+private:
+    int m_speed;
 };
 
 class WordAdmin : public QObject
@@ -125,8 +120,8 @@ public:
     QStringList getAllWordList(int groupId);
     QList<BriefWordInfo> getWordListWithinTime(int minutes);
     QList<BriefWordInfo> getWordListWithinTime(int minutes, bool isRemember);
-    QList<WordTest> getAllWordCanMemorizeList(int groupId);
-    QList<WordTest> getWordCanMemorizeListFromTimes(int t1, int t2, int groupId, bool isRemember);
+    QList<WordTest> getAllWordCanMemorizeList(int groupId, int testSize);
+    QList<WordTest> getWordCanMemorizeListFromTimes(int t1, int t2, int groupId, bool isRemember, int testSize);
     int getWordCanMemorizeNumFromTimes(int t1, int t2, int groupId, bool isRemember);
     QList<BriefWordInfo> getWordCannotMemorizeWithoutTime(uint minutes);
 

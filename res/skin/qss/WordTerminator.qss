@@ -6,7 +6,6 @@
 /***********LinkLabel***********/
 /**********QLineEdit**********/
 /**********QPushButton**********/
-/**********WTButton**********/
 /**********QRadioButton**********/
 /***********QCheckBox***********/
 /************QListView************/
@@ -41,42 +40,49 @@ QPushButton#btn_save:hover {
 QPushButton#btn_save:pressed {
     background: url(:/main/res/skin/picture/save.png) transparent no-repeat center center;
 }
-
-/**********WTButton**********/
-WTButton#btn_lib {
+QPushButton#btn_lib {
     font-size: 24px;
     color: #ffffff;
     border: none;
     background: url(:/main/res/skin/picture/dictionary.png) transparent no-repeat left center;
 }
-WTButton#btn_mem {
+QPushButton#btn_autoMem {
+    font-size: 24px;
+    color: #ffffff;
+    border: none;
+    padding-left: 22px;
+    background: url(:/main/res/skin/picture/auto_memory.png) transparent no-repeat left center;
+}
+QPushButton#btn_mem {
     font-size: 24px;
     color: #ffffff;
     border: none;
     background: url(:/main/res/skin/picture/memory.png) transparent no-repeat left center;
 }
-WTButton#btn_fun {
+QPushButton#btn_fun {
     font-size: 24px;
     color: #ffffff;
     border: none;
     background: url(:/main/res/skin/picture/function.png) transparent no-repeat left center;
 }
-WTButton#btn_set {
+QPushButton#btn_set {
     font-size: 24px;
     color: #ffffff;
     border: none;
     background: url(:/main/res/skin/picture/setting.png) transparent no-repeat left center;
 }
-WTButton#btn_lib:hover,
-WTButton#btn_mem:hover,
-WTButton#btn_fun:hover,
-WTButton#btn_set:hover {
+QPushButton#btn_lib:hover,
+QPushButton#btn_autoMem:hover,
+QPushButton#btn_mem:hover,
+QPushButton#btn_fun:hover,
+QPushButton#btn_set:hover {
     background-color: #2f88d5;
 }
-WTButton#btn_lib:checked,
-WTButton#btn_mem:checked,
-WTButton#btn_fun:checked,
-WTButton#btn_set:checked {
+QPushButton#btn_lib:checked,
+QPushButton#btn_autoMem:checked,
+QPushButton#btn_mem:checked,
+QPushButton#btn_fun:checked,
+QPushButton#btn_set:checked {
     background-color: #4595d9;
 }
 

@@ -2,15 +2,8 @@
 #define WORDMEMORIZEWIDGET_H
 
 #include <QWidget>
-#include <QLabel>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QScrollArea>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QSpinBox>
-#include "copylabel.h"
 #include "wordadmin.h"
+#include "copylabel.h"
 #include "linklabel.h"
 #include "wtool.h"
 
@@ -34,7 +27,7 @@ public:
     };
 
     explicit WordMemorizeWidget(QWidget *parent = nullptr);
-    void keyPressEvent(QKeyEvent *event);
+    ~WordMemorizeWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
@@ -42,6 +35,7 @@ public:
     int getMode();
 
 private:
+    void keyPressEvent(QKeyEvent *event);
     void setMode(int mode);
     void testListInit();
     void loadTestInfo();
@@ -67,26 +61,17 @@ private slots:
 //    void slot_wordTimeDecline(QString name);
     void slot_stopWordMemorize(bool *ret);
 
-signals:
-    void wordTimeIncreaseSignal(QString name);
-
 private:
     Ui::WordMemorizeWidget *ui;
     int m_mode;
     int m_test;
-    int m_propertyNum;
-    int m_exampleNum;
-    int m_synonymNum;
-    int m_antonymNum;
     int m_lineNum;
     int m_container_height_;
 
-    int m_testModeNum;
     int m_testNum;
-    int m_pastNum;
+    int m_passNum;
     int m_curIndex;
     QString m_lastWord;
-    int m_spacing;
 
     bool m_reloadFlag;
     int m_curGroupId;
@@ -94,8 +79,6 @@ private:
     QList<WordTest> m_testList;
     QStringList m_nameList;
     WordInfo m_word;
-
-    QMutex m_mutex;
 
     CopyLabel *copyLabel_property[PROPERTY_NUM];
     CopyLabel *copyLabel_explain[PROPERTY_NUM];

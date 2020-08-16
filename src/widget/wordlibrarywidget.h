@@ -23,6 +23,7 @@ class WordLibraryWidget : public QWidget
     Q_OBJECT
 public:
     explicit WordLibraryWidget(QWidget *parent = nullptr);
+    ~WordLibraryWidget();
     void recoveryInterface();
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
@@ -44,10 +45,6 @@ private slots:
     void slot_comboxGroup_currentIndexChanged(int index);
     void slot_wordTimeDecline(QString name);
     void slot_wordTimeIncrease(QString name);
-
-signals:
-    void sendMessageSignal(WMessage message);
-    void wordTimeIncreaseSignal(QString name);
 
 private:
     Ui::WordLibraryWidget *ui;
