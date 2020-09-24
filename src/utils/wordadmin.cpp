@@ -206,8 +206,6 @@ int WordInfo::toMsecs()
     int msecs = 0, tmp = 0;
     if (m_name.isEmpty())
         return msecs;
-    if (!m_phoneticSymbol.isEmpty())
-        msecs += 500;
     if (!m_adj_Chinese.isEmpty() || !m_adj_English.isEmpty())
     {
         tmp = int(2000.0 * (m_adj_Chinese + m_adj_English).size() / 7.0);
@@ -294,6 +292,10 @@ int WordInfo::toMsecs()
         if (tmp > 5000) tmp = 5000;
         msecs += tmp;
     }
+    if (msecs < 2000)
+        msecs = 2000;
+    if (!m_phoneticSymbol.isEmpty())
+        msecs += 500;
     return msecs;
 }
 

@@ -26,8 +26,9 @@ public:
     int getCurrentWidgetIndex();
 
 protected:
-    virtual void showEvent(QShowEvent *);
-    virtual void closeEvent(QCloseEvent *event);
+    virtual void showEvent(QShowEvent *) override;
+    virtual void closeEvent(QCloseEvent *event) override;
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     int topWidgetIndex();
     void pushWidgetIndex(int index);

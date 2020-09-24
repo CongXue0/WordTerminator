@@ -53,6 +53,8 @@ WordTerminator::WordTerminator(QWidget *parent) :
 
     p_forgetThread->start();
 
+    installEventFilter(this);
+
     connect(ui->btn_save, SIGNAL(clicked()), this, SLOT(slot_saveBtn_clicked()));
     connect(ui->btn_lib, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
     connect(ui->btn_autoMem, SIGNAL(clicked()), this, SLOT(slot_switchButtonClicked()));
@@ -116,6 +118,19 @@ void WordTerminator::closeEvent(QCloseEvent *event)
     }
     else
         event->ignore();
+}
+
+bool WordTerminator::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == this && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Escape)
+        {
+            return true;
+        }
+    }
+    return QDialog::eventFilter(obj, event);
 }
 
 int WordTerminator::topWidgetIndex()

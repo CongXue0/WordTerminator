@@ -195,7 +195,7 @@ void SceneWordScrollbar::advance(BriefWordInfo *wordInfo)
 
         if (m_silderIndex == m_volume)//to volume end
         {
-            if (index == 0)//删除为第一个元素
+            if (m_silderIndex == 0)//删除为第一个元素
             {
                 m_volume++;
                 m_operation.enqueue(std::make_tuple(Down, 300));

@@ -52,6 +52,7 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     connect(ui->checkBox_range2, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
     connect(ui->checkBox_range3, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
     connect(ui->checkBox_forever, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
+    connect(ui->comboBox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
 }
 
 WordLibraryWidget::~WordLibraryWidget()
@@ -283,6 +284,8 @@ void WordLibraryWidget::slot_menu2Triggered(QAction *act)
             }
         }
     }
+    this->updateWordList();
+    this->updateWordStatistics();
 }
 
 void WordLibraryWidget::slot_btnSearch_clicked()
