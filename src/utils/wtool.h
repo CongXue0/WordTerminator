@@ -5,17 +5,28 @@
 #include <QFont>
 #include <QDebug>
 #include <QLayout>
+#include <QMessageBox>
 
 #define BOOLSTR(a) ((a) ? "true" : "false")
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
 #define DEBUG qDebug() << QString("%1 %2:%3 ").arg(QString(__FILE__).split(QString(__FILE__).contains("/") ? "/" : "\\").last()).arg(__FUNCTION__).arg(__LINE__)
 #define DTEST DEBUG
 
+#define MESSAGE(txt) WTool::messageBox(txt)
+#define WARNING(txt) WTool::warningBox(txt)
+#define ERRORBOX(txt) WTool::errorBox(txt)
+#define QUESTION(txt) WTool::questionBox(txt)
+#define QUESTION_ISNO(txt) (WTool::questionBox(txt) != QMessageBox::Yes)
+#define QUESTION_ISYES(txt) (WTool::questionBox(txt) == QMessageBox::Yes)
+#define QUESTIONALL(txt) WTool::questionBoxAll(txt)
+
 #define ALL_GROUP ("all group")
 
 class WTool
 {
 public:
+    static QWidget *topWidget_;
+
     /* 其他 */
     static void dirInit();//初始化文件夹
     static QRect getScreenGeometry();
@@ -35,6 +46,16 @@ public:
     static void writeFileInfo(QString path, QString info);
     static bool makePath(QString path);
     static bool makeDir(QString path);
+
+    //QMessageBox
+    static void messageBox(const QString& text, const QString& title = QObject::tr("message"));
+    static void opacityMessageBox(const QString& text, const QString& title = QObject::tr("message"), double opacity = 1, int msecs = 1000);
+    static void warningBox(const QString& text, const QString& title = QObject::tr("warning"));
+    static void opacityWarningBox(const QString& text, const QString& title = QObject::tr("warning"), double opacity = 1, int msecs = 1000);
+    static void errorBox(const QString& text, const QString& title = QObject::tr("error"));
+    static void opacityErrorBox(const QString& text, const QString& title = QObject::tr("error"), double opacity = 1, int msecs = 1000);
+    static int questionBox(const QString& text, const QString& title = QObject::tr("question"));
+    static int questionBoxAll(const QString& text, const QString& title = QObject::tr("question"));
 
     /* QSize */
     static QSize getFontSize(const QFont &font, const QString &txt);

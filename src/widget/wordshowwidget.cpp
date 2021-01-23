@@ -7,7 +7,6 @@
 #include <QDebug>
 #include <QThread>
 #include <QScrollBar>
-#include <QMessageBox>
 #include <QKeyEvent>
 #include <QTimer>
 
@@ -565,8 +564,7 @@ void WordShowWidget::slot_btnAdd_Clicked()
 
 void WordShowWidget::slot_btnDelete_Clicked()
 {
-    if (QMessageBox::question(this, "question", QString("是否删除 %1?").arg(m_word.m_name),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+    if (QUESTION_ISYES(QString("是否删除 %1?").arg(m_word.m_name)))
     {
         if (p_wordAdmin->deleteWord(m_word.m_name))
         {
@@ -574,7 +572,7 @@ void WordShowWidget::slot_btnDelete_Clicked()
             emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
         }
         else
-            QMessageBox::about(this, "提示", QString("delete %1 fail").arg(m_word.m_name));
+            MESSAGE(QString("delete %1 fail").arg(m_word.m_name));
     }
 }
 
@@ -594,7 +592,7 @@ void WordShowWidget::slot_btnReset_Clicked()
         emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
-        QMessageBox::about(this, "提示", "重置单词失败");
+        MESSAGE("重置单词失败");
 }
 
 void WordShowWidget::slot_btnRemember_Clicked(bool checked)
@@ -607,7 +605,7 @@ void WordShowWidget::slot_btnRemember_Clicked(bool checked)
         emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
-        QMessageBox::about(this, "提示", "设为记住失败");
+        MESSAGE("设为记住失败");
 }
 
 void WordShowWidget::slot_comboxGroup_currentIndexChanged(int index)

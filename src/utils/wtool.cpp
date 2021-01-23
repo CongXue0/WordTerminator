@@ -7,13 +7,15 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSqlDatabase>
-#include <QMessageBox>
 #include <QDateTime>
 #include <QThread>
 #include <QTextCodec>
 #include <QQueue>
 #include <QScreen>
+#include <QPropertyAnimation>
+#include <QPushButton>
 
+QWidget *WTool::topWidget_ = nullptr;
 QString WTool::m_uniStr = QString(QString("？！。，：、（）·").unicode());
 
 extern WordAdmin *p_wordAdmin;
@@ -160,6 +162,98 @@ bool WTool::makeDir(QString path)
         return dir.mkdir(path);
     }
     return true;
+}
+
+void WTool::messageBox(const QString &text, const QString &title)
+{
+    QMessageBox mbox(QMessageBox::Information, title, text, QMessageBox::Yes, topWidget_);
+    mbox.setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+    mbox.exec();
+}
+
+void WTool::opacityMessageBox(const QString &text, const QString &title, double opacity, int msecs)
+{
+    QMessageBox *mbox = new QMessageBox(QMessageBox::Information, title, text, QMessageBox::Yes, topWidget_);
+    mbox->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    if (auto *btnYes = mbox->button(QMessageBox::Yes))
+    {
+        btnYes->hide();
+    }
+    mbox->show();
+
+    QPropertyAnimation *pAnimation = new QPropertyAnimation(mbox, "windowOpacity");
+    pAnimation->setDuration(msecs);
+    pAnimation->setKeyValueAt(0, opacity);
+    pAnimation->setKeyValueAt(1, 0);
+    pAnimation->setEasingCurve(QEasingCurve::InCubic);
+    pAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    QObject::connect(pAnimation, &QAbstractAnimation::finished, mbox, &QObject::deleteLater);
+}
+
+void WTool::warningBox(const QString &text, const QString &title)
+{
+    QMessageBox mbox(QMessageBox::Warning, title, text, QMessageBox::Yes, topWidget_);
+    mbox.setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+    mbox.exec();
+}
+
+void WTool::opacityWarningBox(const QString &text, const QString &title, double opacity, int msecs)
+{
+    QMessageBox *mbox = new QMessageBox(QMessageBox::Warning, title, text, QMessageBox::Yes, topWidget_);
+    mbox->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    if (auto *btnYes = mbox->button(QMessageBox::Yes))
+    {
+        btnYes->hide();
+    }
+    mbox->show();
+
+    QPropertyAnimation *pAnimation = new QPropertyAnimation(mbox, "windowOpacity");
+    pAnimation->setDuration(msecs);
+    pAnimation->setKeyValueAt(0, opacity);
+    pAnimation->setKeyValueAt(1, 0);
+    pAnimation->setEasingCurve(QEasingCurve::InCubic);
+    pAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    QObject::connect(pAnimation, &QAbstractAnimation::finished, mbox, &QObject::deleteLater);
+}
+
+void WTool::errorBox(const QString &text, const QString &title)
+{
+    QMessageBox mbox(QMessageBox::Critical, title, text, QMessageBox::Yes, topWidget_);
+    mbox.setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+    mbox.exec();
+}
+
+void WTool::opacityErrorBox(const QString &text, const QString &title, double opacity, int msecs)
+{
+    QMessageBox *mbox = new QMessageBox(QMessageBox::Critical, title, text, QMessageBox::Yes, topWidget_);
+    mbox->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    if (auto *btnYes = mbox->button(QMessageBox::Yes))
+    {
+        btnYes->hide();
+    }
+    mbox->show();
+
+    QPropertyAnimation *pAnimation = new QPropertyAnimation(mbox, "windowOpacity");
+    pAnimation->setDuration(msecs);
+    pAnimation->setKeyValueAt(0, opacity);
+    pAnimation->setKeyValueAt(1, 0);
+    pAnimation->setEasingCurve(QEasingCurve::InCubic);
+    pAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    QObject::connect(pAnimation, &QAbstractAnimation::finished, mbox, &QObject::deleteLater);
+}
+
+int WTool::questionBox(const QString &text, const QString &title)
+{
+    QMessageBox qbox(QMessageBox::Question, title, text, QMessageBox::Yes | QMessageBox::No, topWidget_);
+    qbox.setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+    return qbox.exec();
+}
+
+int WTool::questionBoxAll(const QString &text, const QString &title)
+{
+    QMessageBox qbox(QMessageBox::Question, title, text, QMessageBox::YesToAll | QMessageBox::NoToAll |QMessageBox::Yes | QMessageBox::No, topWidget_);
+    qbox.setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+    return qbox.exec();
 }
 
 QSize WTool::getFontSize(const QFont &font, const QString &txt)

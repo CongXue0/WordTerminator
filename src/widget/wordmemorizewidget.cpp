@@ -5,7 +5,6 @@
 #include "global.h"
 #include "dispatcher.h"
 #include "wordterminator.h"
-#include <QMessageBox>
 #include <QDebug>
 #include <QKeyEvent>
 #include <QScrollBar>
@@ -108,7 +107,7 @@ void WordMemorizeWidget::reloadGlobalValue()
             ui->combox_group->addItem(list.at(i));
         }
         ui->combox_group->setCurrentIndex(Global::m_groupIndexMemory.getValueInt() + 1);
-        m_curGroupId = 0;
+        m_curGroupId = WTool::getGroupNo(ui->combox_group->currentText());
 
         ui->checkBox_range0->setText(QString("times %1~%2")
             .arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
@@ -321,7 +320,7 @@ void WordMemorizeWidget::loadTestInfo()
         }
     }
     else
-        QMessageBox::about(this, "提示", QString("记忆模式加载 %1 失败").arg(m_testList.at(m_curIndex).m_info.m_name));
+        MESSAGE(QString("记忆模式加载 %1 失败").arg(m_testList.at(m_curIndex).m_info.m_name));
 }
 
 void WordMemorizeWidget::setWordInfo(bool isShield)
@@ -994,10 +993,10 @@ void WordMemorizeWidget::slot_btnStart_Clicked()
             this->loadTestInfo();
         }
         else
-            QMessageBox::about(this, "提示", "没有选择记忆模式");
+            MESSAGE("没有选择记忆模式");
     }
     else
-        QMessageBox::about(this, "提示", "没有要记忆的单词");
+        MESSAGE("没有要记忆的单词");
 }
 
 void WordMemorizeWidget::slot_btnKnow_Clicked()
@@ -1069,7 +1068,7 @@ void WordMemorizeWidget::slot_btnForever_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
+        MESSAGE("本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1086,7 +1085,7 @@ void WordMemorizeWidget::slot_btnNotForever_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
+        MESSAGE("本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1102,7 +1101,7 @@ void WordMemorizeWidget::slot_btnNext_Clicked()
     {
 //        p_memThread->stop();
 //        p_memThread->wait();
-        QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_passNum));
+        MESSAGE("本次记忆单词数 " + QString::number(m_passNum));
         this->recoveryInterface();
         this->updateWordStatistics();
     }
@@ -1230,8 +1229,7 @@ void WordMemorizeWidget::slot_btnSubmit_Clicked()
 void WordMemorizeWidget::slot_stopWordMemorize(bool *ret)
 {
     if (WordTerminator::instance()->getCurrentWidgetIndex() != WordTerminator::Widget_WordMemorize) return;
-    if (QMessageBox::question(this, "queation", "是否停止记忆?", QMessageBox::Yes,
-        QMessageBox::No) == QMessageBox::Yes)
+    if (QUESTION_ISYES("是否停止记忆?"))
     {
 //        p_memThread->stop();
 //        p_memThread->wait();

@@ -652,6 +652,11 @@ void SceneText::setGeometry(QRect r)
     emit updateSignal();
 }
 
+QRect SceneText::geometry() const
+{
+    return m_rect;
+}
+
 void SceneText::eraseShow()
 {
     if (m_visible) return;

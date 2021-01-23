@@ -3,7 +3,6 @@
 #include "wtool.h"
 #include "wordadmin.h"
 #include "global.h"
-#include <QMessageBox>
 #include <QInputDialog>
 #include <QStandardPaths>
 #include <QFile>
@@ -105,7 +104,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        QMessageBox::warning(this, "file write", "can't open", QMessageBox::Yes);
+        WARNING("file can't open");
     }
     QTextStream in(&file);
     QTextCodec *code = QTextCodec::codecForName("utf8");
@@ -150,7 +149,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     {
         in << "There are no words.";
     }
-    QMessageBox::about(this, "提示", "导出单词数 " + QString::number(count));
+    MESSAGE("导出单词数 " + QString::number(count));
     file.close();
     file.setPermissions(QFile::ReadOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
 }
@@ -158,7 +157,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
 void WordFunctionWidget::slot_btnRefresh_clicked()
 {
     int num = p_wordAdmin->resetAllWordRemerber(this);
-    QMessageBox::about(this, "提示", "ok " + QString::number(num));
+    MESSAGE("ok " + QString::number(num));
 }
 
 void WordFunctionWidget::slot_btnExport_clicked()
@@ -167,7 +166,7 @@ void WordFunctionWidget::slot_btnExport_clicked()
     QString script = ui->lineEdit_script->text().trimmed();
     if (script.isEmpty())
     {
-        QMessageBox::about(this, "error", "输入不能为空");
+        ERRORBOX("输入不能为空");
         return;
     }
     QRegExp reg("((-1,-1|\\d+,\\d+),(-1|\\d+),(-1|\\d+);)+");
@@ -187,7 +186,7 @@ void WordFunctionWidget::slot_btnExport_clicked()
     }
     else
     {
-        QMessageBox::about(this, "error", "格式错误");
+        ERRORBOX("格式错误");
     }
 }
 

@@ -4,7 +4,6 @@
 #include "global.h"
 #include "dispatcher.h"
 #include <QIntValidator>
-#include <QMessageBox>
 
 WordSettingWidget::WordSettingWidget(QWidget *parent) :
     QWidget(parent),
@@ -167,7 +166,7 @@ void WordSettingWidget::saveGlobalValue()
     if (ui->lineEdit_range1Right->text().toInt() > ui->lineEdit_range2Left->text().toInt() || ui->lineEdit_range2Right->text().toInt() > ui->lineEdit_range3Left->text().toInt() ||
         ui->lineEdit_range3Right->text().toInt() > ui->lineEdit_range4Left->text().toInt())
     {
-        QMessageBox::about(this, "error", "次数区间只能为递增");
+        ERRORBOX("次数区间只能为递增");
         return;
     }
 
@@ -201,7 +200,7 @@ void WordSettingWidget::saveGlobalValue()
 
 void WordSettingWidget::slot_btnReset_clicked()
 {
-    if (QMessageBox::question(this, "question", "Are you sure to reset all configs?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    if (QUESTION_ISYES("Are you sure to reset all configs?"))
     {
         Global::reset();
         Global::saveXML(true);

@@ -5,7 +5,6 @@
 #include "wordadmin.h"
 #include "dispatcher.h"
 #include <QDebug>
-#include <QMessageBox>
 #include <QKeyEvent>
 #include <QScrollBar>
 
@@ -235,14 +234,14 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     QString checkInfo = inputCheck();
     if (!checkInfo.isEmpty())
     {
-        QMessageBox::about(this, "提示", checkInfo);
+        MESSAGE(checkInfo);
         return;
     }
     if (!m_edit)
     {
         if (p_wordAdmin->isWordExist(ui->lineEdit_word->text().trimmed()))
         {
-            QMessageBox::about(this, "提示", "无法创建已存在的单词");
+            MESSAGE("无法创建已存在的单词");
             return;
         }
     }
@@ -250,7 +249,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     {
         if (!p_wordAdmin->isWordExist(ui->lineEdit_word->text().trimmed()))
         {
-            QMessageBox::about(this, "提示", "无法编辑不存在的单词");
+            MESSAGE("无法编辑不存在的单词");
             return;
         }
     }
@@ -305,25 +304,25 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     {
         if (p_wordAdmin->insertWord(&wordInfo))
         {
-            QMessageBox::about(this, "提示", wordInfo.m_name + " 创建成功");
+            MESSAGE(wordInfo.m_name + " 创建成功");
             emit Dispatch(this).signal_sendMessage(WMessage("create success", wordInfo.m_name));
         }
         else
         {
-            QMessageBox::about(this, "提示", "单词创建失败");
+            MESSAGE("单词创建失败");
         }
     }
     else
     {
         if (p_wordAdmin->updateWord(&wordInfo))
         {
-            QMessageBox::about(this, "提示", wordInfo.m_name + " 修改成功");
+            MESSAGE(wordInfo.m_name + " 修改成功");
             emit Dispatch(this).signal_sendMessage(WMessage("modify success", wordInfo.m_name));
             emit Dispatch(this).signal_wordTimeIncrease(wordInfo.m_name);
         }
         else
         {
-            QMessageBox::about(this, "提示", "单词修改失败");
+            MESSAGE("单词修改失败");
         }
     }
 }

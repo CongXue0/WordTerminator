@@ -5,7 +5,6 @@
 #include "global.h"
 #include "dispatcher.h"
 #include "wordterminator.h"
-#include <QMessageBox>
 
 extern WordAdmin *p_wordAdmin;
 extern MemoryThread *p_memThread;
@@ -56,7 +55,7 @@ void WordAutomatedMemorizeWidget::reloadGlobalValue()
             ui->combox_group->addItem(list.at(i));
         }
         ui->combox_group->setCurrentIndex(Global::m_groupIndexMemory.getValueInt() + 1);
-        m_curGroupId = 0;
+        m_curGroupId = WTool::getGroupNo(ui->combox_group->currentText());
 
         ui->checkBox_range0->setText(QString("times %1~%2")
             .arg(Global::m_range1Left.getValueStr()).arg(Global::m_range1Right.getValueStr()));
@@ -177,7 +176,7 @@ void WordAutomatedMemorizeWidget::slot_btnStart_Clicked()
         setMode(MEMORY);
     }
     else
-        QMessageBox::about(this, "提示", "没有要记忆的单词");
+        MESSAGE("没有要记忆的单词");
 }
 
 void WordAutomatedMemorizeWidget::slot_memorizeFinished()
@@ -202,8 +201,7 @@ void WordAutomatedMemorizeWidget::slot_stopWordMemorize(bool *ret)
             run = true;
             ani->pause();
         }
-        if (QMessageBox::question(this, "queation", "是否停止记忆?", QMessageBox::Yes,
-            QMessageBox::No) == QMessageBox::Yes)
+        if (QUESTION_ISYES("是否停止记忆?"))
         {
             if (ret != nullptr)
             {

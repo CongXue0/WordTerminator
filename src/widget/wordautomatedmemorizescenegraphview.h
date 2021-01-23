@@ -21,6 +21,7 @@ public:
 private:
     virtual void paintEvent(QPaintEvent *) override;
     virtual void resizeEvent(QResizeEvent *) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
     void updatePosition();
 
 private slots:

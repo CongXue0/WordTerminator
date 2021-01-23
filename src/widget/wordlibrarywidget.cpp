@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QApplication>
-#include <QMessageBox>
 
 extern WordAdmin *p_wordAdmin;
 
@@ -226,8 +225,7 @@ void WordLibraryWidget::slot_menu1Triggered(QAction *act)
     }
     else if (operation == "Delete")
     {
-        if (QMessageBox::question(this, "question", QString("是否删除?"),
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+        if (QUESTION_ISYES("是否删除?"))
         {
             QString name;
             for (int i = 0; i < m_modelList.count(); ++i)

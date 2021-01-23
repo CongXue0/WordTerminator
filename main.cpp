@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
     WordTerminator w;
     w.show();
+    WTool::topWidget_ = &w;
 
     return a.exec();
 }

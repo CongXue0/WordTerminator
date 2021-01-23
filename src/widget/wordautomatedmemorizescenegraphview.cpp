@@ -2,8 +2,10 @@
 #include "wtool.h"
 #include "global.h"
 #include "dispatcher.h"
-#include <QMessageBox>
 #include <QTimer>
+#include <QMouseEvent>
+#include <QApplication>
+#include <QClipboard>
 
 extern WordAdmin *p_wordAdmin;
 
@@ -263,7 +265,7 @@ void WordAutomatedMemorizeSceneGraphView::setState(int state)
             }
             if (m_node_wordBar->isEnd())
             {
-                QMessageBox::about(this, "提示", "本次记忆单词数 " + QString::number(m_node_wordBar->getPassNum()));
+                MESSAGE("本次记忆单词数 " + QString::number(m_node_wordBar->getPassNum()));
                 emit Dispatch(this).signal_memorizeFinished();
             }
         }
@@ -333,6 +335,16 @@ void WordAutomatedMemorizeSceneGraphView::paintEvent(QPaintEvent *)
 void WordAutomatedMemorizeSceneGraphView::resizeEvent(QResizeEvent *)
 {
     updatePosition();
+}
+
+void WordAutomatedMemorizeSceneGraphView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (m_node_word->isVisible() && !m_node_word->text().isEmpty() && m_node_word->geometry().contains(event->pos()))
+    {
+        QClipboard *clip= QApplication::clipboard();
+        clip->setText(m_node_word->text().split('\n')[0]);
+        WTool::opacityMessageBox("Copy", "", 0.1, 100);
+    }
 }
 
 void WordAutomatedMemorizeSceneGraphView::updatePosition()

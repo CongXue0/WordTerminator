@@ -111,6 +111,7 @@ public:
     void setFont(QFont f);
     void setColor(QColor color);
     void setGeometry(QRect r);
+    QRect geometry() const;
     QPropertyAnimation *getAnimation() { return m_pAnimation; }
     void eraseShow();
 

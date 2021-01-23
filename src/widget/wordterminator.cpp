@@ -9,7 +9,6 @@
 #include "dispatcher.h"
 #include <QLayout>
 #include <QDir>
-#include <QMessageBox>
 #include <QCloseEvent>
 #include <QProgressDialog>
 
@@ -108,7 +107,7 @@ void WordTerminator::showEvent(QShowEvent *)
 
 void WordTerminator::closeEvent(QCloseEvent *event)
 {
-    if (QMessageBox::question(this, "question", "is close WT?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    if (QUESTION_ISYES("is close WT?"))
     {
         p_forgetThread->stop();
         p_forgetThread->wait();
@@ -299,7 +298,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
                 }
                 else
                 {
-                    QMessageBox::about(this, "提示", "获取单词信息失败");
+                    MESSAGE("获取单词信息失败");
                 }
             }
         }
@@ -339,7 +338,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
                     }
                     else
                     {
-                        QMessageBox::about(this, "提示", "获取单词信息失败");
+                        MESSAGE("获取单词信息失败");
                         popWidgetIndex();
                         if (topWidgetIndex() == Widget_WordLibrary)
                         {
@@ -388,7 +387,7 @@ void WordTerminator::slot_handleMessage(WMessage message)
                     ui->stackedWidget->setCurrentIndex(Widget_WordCreate);
                 }
                 else
-                    QMessageBox::about(this, "提示", "获取单词信息失败");
+                    MESSAGE("获取单词信息失败");
             }
         }
 //        else if (msgNum > 1) {}
