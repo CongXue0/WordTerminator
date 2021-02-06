@@ -115,13 +115,38 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     QTextCodec *code = QTextCodec::codecForName("utf8");
     in.setCodec(code);
 
-    QStringList list;
+    QVector<BriefWordInfo> list;
     if (remember == 0)
-        list = p_wordAdmin->getWordListFromTimes(left, right, group, false);
+        list = p_wordAdmin->getBriefWordInfoListFromTimes(left, right, group, false);
     else if (remember == 1)
-        list = p_wordAdmin->getWordListFromTimes(left, right, group, true);
+        list = p_wordAdmin->getBriefWordInfoListFromTimes(left, right, group, true);
     else if (remember == -1)
-        list = p_wordAdmin->getAllWordList(group);
+        list = p_wordAdmin->getAllBriefWordInfoList(group);
+    int type = Global::m_sortType.getValueInt();
+    if (type > 0)//0 None, 1 Name, 2 Times, 3 ModifyTime
+    {
+        bool descend = Global::m_sortDescend.getValueInt() == 0;
+        std::sort(list.begin(), list.end(), [&](const BriefWordInfo& t1, const BriefWordInfo& t2) {
+            if (type == 1)
+            {
+                bool b1 = t1.m_name.compare(t2.m_name, Qt::CaseInsensitive) >= 0;
+                return descend ? b1 : !b1;
+            }
+            else if (type == 2)
+            {
+                bool b1 = t1.m_times >= t2.m_times;
+                return descend ? b1 : !b1;
+            }
+            else if (type == 3)
+            {
+                bool b1 = t1.m_modifyTime >= t2.m_modifyTime;
+                return descend ? b1 : !b1;
+            }
+            else
+                return true;
+        });
+    }
+
     int count = list.count();
     if (count > 0)
     {
@@ -136,7 +161,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
             QCoreApplication::processEvents();
             if (dialog.wasCanceled())
                 break;
-            if (p_wordAdmin->getWordInfo(list.at(i), &wordInfo))
+            if (p_wordAdmin->getWordInfo(list[i].m_name, &wordInfo))
             {
                 if (i == count - 1)
                     in << wordInfo.toText();
@@ -145,7 +170,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
             }
             else
             {
-                in << list.at(i) + " " << "get fail\n";
+                in << list[i].m_name + " " << "get fail\n";
             }
         }
         dialog.setValue(count);
