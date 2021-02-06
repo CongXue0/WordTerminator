@@ -118,6 +118,8 @@ public:
     int getWordNumFromTimes(int t1, int t2, int groupId, bool isRemember);
     QStringList getWordListFromTimes(int t1, int t2, int groupId, bool isRemember);
     QStringList getAllWordList(int groupId);
+    QVector<BriefWordInfo> getBriefWordInfoListFromTimes(int t1, int t2, int groupId, bool isRemember);
+    QVector<BriefWordInfo> getAllBriefWordInfoList(int groupId);
     QList<BriefWordInfo> getWordListWithinTime(int minutes);
     QList<BriefWordInfo> getWordListWithinTime(int minutes, bool isRemember);
     QList<WordTest> getAllWordCanMemorizeList(int groupId, int testSize);

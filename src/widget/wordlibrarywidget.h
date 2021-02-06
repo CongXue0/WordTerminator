@@ -40,9 +40,14 @@ private slots:
     void slot_menu2Triggered(QAction *act);
     void slot_btnSearch_clicked();
     void slot_btnCreate_clicked();
+    void slot_btnDescend_clicked();
+    void slot_btnPrev_clicked();
+    void slot_btnNext_clicked();
     void slot_itemDoubleClicked(QModelIndex index);
     void slot_checkBoxClicked();
     void slot_comboxGroup_currentIndexChanged(int index);
+    void slot_comboxSort_currentIndexChanged(int index);
+    void slot_comboxPage_currentIndexChanged(int index);
     void slot_wordTimeDecline(QString name);
     void slot_wordTimeIncrease(QString name);
 

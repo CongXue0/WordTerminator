@@ -31,6 +31,9 @@ XmlVar Global::m_groupIndexLib;
 XmlVar Global::m_groupIndexMemory;
 XmlVar Global::m_singleMemoryNum;
 XmlVar Global::m_autoSilderVolume;
+XmlVar Global::m_sortType;
+XmlVar Global::m_sortDescend;
+XmlVar Global::m_pageVolume;
 
 QString Global::m_path;
 QVector<XmlVar *> Global::m_varList;
@@ -164,6 +167,9 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_groupIndexMemory);
     m_varList.append(&m_singleMemoryNum);
     m_varList.append(&m_autoSilderVolume);
+    m_varList.append(&m_sortType);
+    m_varList.append(&m_sortDescend);
+    m_varList.append(&m_pageVolume);
 
     load();
 }
@@ -271,6 +277,9 @@ void Global::reset()
     m_groupIndexMemory = XmlVar("GROUPINDEXMEMORY", "-1");
     m_singleMemoryNum = XmlVar("SINGLEMEMORYNUM", "40");
     m_autoSilderVolume = XmlVar("AUTOSILDERVOLUME", "10");
+    m_sortType = XmlVar("SORTTYPE", "0");
+    m_sortDescend = XmlVar("SORTDESCEND", "0");
+    m_pageVolume = XmlVar("PAGEVOLUME", "200");
 }
 
 bool Global::saveXML(bool force)

@@ -521,8 +521,9 @@ void WordShowWidget::setWordTimes(int times)
         if (p_wordAdmin->updateWord(&m_word))
         {
             ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
-            int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
-            ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
+//            int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
+//            ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
+            reloadLayout();
             emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
         }
     }
@@ -556,8 +557,9 @@ void WordShowWidget::slot_btnAdd_Clicked()
     if (p_wordAdmin->updateWord(&m_word))
     {
         ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
-        int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
-        ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
+//        int len = WTool::getFontLength(ui->copyLabel_times->font(), ui->copyLabel_times->text()) + 8;
+//        ui->copyLabel_times->setGeometry(790 - len, 15, len, 44);
+        reloadLayout();
         emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
 }
@@ -589,6 +591,7 @@ void WordShowWidget::slot_btnReset_Clicked()
     if (p_wordAdmin->updateWord(&m_word))
     {
         ui->copyLabel_times->setText("T:0");
+        reloadLayout();
         emit Dispatch(this).signal_wordTimeIncrease(m_word.m_name);
     }
     else
@@ -631,6 +634,7 @@ void WordShowWidget::slot_wordTimeDecline(QString name)
     {
         p_wordAdmin->getWordInfo(name, &m_word);
         ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
+        reloadLayout();
     }
 }
 
@@ -641,5 +645,6 @@ void WordShowWidget::slot_wordTimeIncrease(QString name)
     {
         p_wordAdmin->getWordInfo(name, &m_word);
         ui->copyLabel_times->setText(QString("T:%1").arg(m_word.m_times));
+        reloadLayout();
     }
 }

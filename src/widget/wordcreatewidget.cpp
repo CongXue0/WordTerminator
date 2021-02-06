@@ -31,6 +31,7 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) :
     m_reloadFlag = true;
     reloadGlobalValue();
 
+    connect(ui->lineEdit_word, SIGNAL(editingFinished()), this, SLOT(slot_wordCheck()));
     connect(ui->btn_cancel, SIGNAL(clicked()), this, SLOT(slot_btnCancel_clicked()));
     connect(ui->btn_confirm, SIGNAL(clicked()), this, SLOT(slot_btnConfirm_clicked()));
 }
@@ -45,6 +46,7 @@ void WordCreateWidget::recoveryInterface()
     ui->scrollArea->verticalScrollBar()->setValue(0);
     ui->lineEdit_word->clear();
     ui->lineEdit_word->setReadOnly(m_edit);
+    ui->label_hint->clear();
     ui->lineEdit_phoneticSymbol->clear();
     ui->lineEdit_adj_Chinese->clear();
     ui->lineEdit_adj_English->clear();
@@ -222,6 +224,14 @@ QString WordCreateWidget::inputCheck()
     if (!info.isEmpty() && info.at(info.length() - 1) == '\n')
         info = info.mid(0, info.length() - 1);
     return info;
+}
+
+void WordCreateWidget::slot_wordCheck()
+{
+    if (!m_edit && p_wordAdmin->isWordExist(ui->lineEdit_word->text().trimmed()))
+        ui->label_hint->setText("单词已存在");
+    else
+        ui->label_hint->clear();
 }
 
 void WordCreateWidget::slot_btnCancel_clicked()

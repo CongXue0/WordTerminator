@@ -866,6 +866,63 @@ QStringList WordAdmin::getAllWordList(int groupId)
     return list;
 }
 
+QVector<BriefWordInfo> WordAdmin::getBriefWordInfoListFromTimes(int t1, int t2, int groupId, bool isRemember)
+{
+    QVector<BriefWordInfo> list;
+    if (t1 < 0 || t2 < 0 || t1 > t2)
+        return list;
+    m_mutex.lockForRead();
+    if (groupId == -1)
+    {
+        for (int i = 0; i < m_currentTop; ++i)
+        {
+            if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && (m_wordLib[i].m_remember > 0) == isRemember &&
+                (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
+                list.append(m_wordLib[i]);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < m_currentTop; ++i)
+        {
+            if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId &&
+                (m_wordLib[i].m_remember > 0) == isRemember && (m_wordLib[i].m_times >= t1 && m_wordLib[i].m_times <= t2))
+                list.append(m_wordLib[i]);
+        }
+    }
+    m_mutex.unlock();
+    return list;
+}
+
+QVector<BriefWordInfo> WordAdmin::getAllBriefWordInfoList(int groupId)
+{
+    QVector<BriefWordInfo> list;
+    m_mutex.lockForRead();
+    if (m_currentNum <= 0)
+    {
+        m_mutex.unlock();
+        return list;
+    }
+    if (groupId == -1)
+    {
+        for (int i = 0; i < m_currentTop; ++i)
+        {
+            if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED)
+                list.append(m_wordLib[i]);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < m_currentTop; ++i)
+        {
+            if (m_wordLib[i].m_name != WORD_NAME_UNDEFINED && m_wordLib[i].m_groupId == groupId)
+                list.append(m_wordLib[i]);
+        }
+    }
+    m_mutex.unlock();
+    return list;
+}
+
 QList<BriefWordInfo> WordAdmin::getWordListWithinTime(int minutes)
 {
     QList<BriefWordInfo> list;

@@ -80,6 +80,11 @@ void WordFunctionWidget::saveGlobalValue()
 
 void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
 {
+    if (t1 == -1 && t2 == -1)
+    {
+        t1 = 0;
+        t2 = MAX_TIMES;
+    }
     int left = t1, right = t2;
     if (left > right)
     {

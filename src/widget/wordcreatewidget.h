@@ -34,6 +34,7 @@ private:
     QString inputCheck();
 
 private slots:
+    void slot_wordCheck();
     void slot_btnCancel_clicked();
     void slot_btnConfirm_clicked();
 

@@ -706,7 +706,7 @@ bool WTool::isChineseChar(QChar ch)
         return false;
 }
 
-QStringList WTool::filterWordFromList(QStringList list, QString txt, QString strategy)
+QStringList WTool::filterWordFromList(const QStringList &list, QString txt, QString strategy)
 {
     int count = list.size();
     if (count == 0 || txt.isEmpty())
@@ -747,6 +747,54 @@ QStringList WTool::filterWordFromList(QStringList list, QString txt, QString str
         {
             tmp = list.at(i);
             p_wordAdmin->getWordInfo(tmp, &wordInfo);
+            if (wordInfo.contains(txt))
+                wordList.append(tmp);
+        }
+    }
+    return wordList;
+}
+
+QVector<BriefWordInfo> WTool::filterWordFromList(const QVector<BriefWordInfo> &list, QString txt, QString strategy)
+{
+    int count = list.size();
+    if (count == 0 || txt.isEmpty())
+        return list;
+    QVector<BriefWordInfo> wordList;
+    BriefWordInfo tmp;
+    if (strategy == "prefix")
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            tmp = list.at(i);
+            if (tmp.m_name.startsWith(txt))
+                wordList.append(tmp);
+        }
+    }
+    else if (strategy == "suffix")
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            tmp = list.at(i);
+            if (tmp.m_name.endsWith(txt))
+                wordList.append(tmp);
+        }
+    }
+    else if (strategy == "contain")
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            tmp = list.at(i);
+            if (tmp.m_name.contains(txt))
+                wordList.append(tmp);
+        }
+    }
+    else if (strategy == "interpretation")
+    {
+        WordInfo wordInfo;
+        for (int i = 0; i < count; ++i)
+        {
+            tmp = list.at(i);
+            p_wordAdmin->getWordInfo(tmp.m_name, &wordInfo);
             if (wordInfo.contains(txt))
                 wordList.append(tmp);
         }

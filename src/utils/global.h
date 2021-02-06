@@ -81,6 +81,9 @@ public:
     static XmlVar m_groupIndexMemory;
     static XmlVar m_singleMemoryNum;
     static XmlVar m_autoSilderVolume;
+    static XmlVar m_sortType;// 0 None, 1 Name, 2 Times, 3 ModifyTime
+    static XmlVar m_sortDescend;// 0 下降, 1 上升
+    static XmlVar m_pageVolume;
 
 protected:
     static QString m_path;

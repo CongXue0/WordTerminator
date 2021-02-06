@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QApplication>
+#include <cmath>
 
 extern WordAdmin *p_wordAdmin;
 
@@ -33,6 +34,13 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     ui->comboBox_search->addItem("contain");
     ui->comboBox_search->addItem("interpretation");
 
+    ui->comboBox_sort->addItem("None");
+    ui->comboBox_sort->addItem("Name");
+    ui->comboBox_sort->addItem("Times");
+    ui->comboBox_sort->addItem("ModifyTime");
+
+    ui->btn_descend->setChecked(false);
+
     m_reloadFlag = true;
     reloadGlobalValue();
     updateWordList();
@@ -43,6 +51,9 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
 
     connect(ui->btn_search, SIGNAL(clicked()), this, SLOT(slot_btnSearch_clicked()));
     connect(ui->btn_create, SIGNAL(clicked()), this, SLOT(slot_btnCreate_clicked()));
+    connect(ui->btn_descend, SIGNAL(clicked()), this, SLOT(slot_btnDescend_clicked()));
+    connect(ui->btn_prev, SIGNAL(clicked()), this, SLOT(slot_btnPrev_clicked()));
+    connect(ui->btn_next, SIGNAL(clicked()), this, SLOT(slot_btnNext_clicked()));
 
     connect(ui->wordList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_itemDoubleClicked(QModelIndex)));
 
@@ -52,6 +63,8 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     connect(ui->checkBox_range3, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
     connect(ui->checkBox_forever, SIGNAL(clicked()), this, SLOT(slot_checkBoxClicked()));
     connect(ui->comboBox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
+    connect(ui->comboBox_sort, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxSort_currentIndexChanged(int)));
+    connect(ui->comboBox_page, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxPage_currentIndexChanged(int)));
 }
 
 WordLibraryWidget::~WordLibraryWidget()
@@ -92,15 +105,23 @@ void WordLibraryWidget::reloadGlobalValue()
         m_menu1->addAction(QString("Delete"))->setObjectName("menu1");
         m_menu1->addAction(QString("Clear times"))->setObjectName("menu1");
 
-        QSignalBlocker sb(ui->comboBox_group);
-        ui->comboBox_group->clear();
-        ui->comboBox_group->addItem(ALL_GROUP);
-        for (int i = 0; i < list.count(); ++i)
         {
-            ui->comboBox_group->addItem(list.at(i));
+            QSignalBlocker sb(ui->comboBox_group);
+            ui->comboBox_group->clear();
+            ui->comboBox_group->addItem(ALL_GROUP);
+            for (int i = 0; i < list.count(); ++i)
+            {
+                ui->comboBox_group->addItem(list.at(i));
+            }
+            ui->comboBox_group->setCurrentIndex(Global::m_groupIndexLib.getValueInt() + 1);
+            m_curGroupId = WTool::getGroupNo(ui->comboBox_group->currentText());
         }
-        ui->comboBox_group->setCurrentIndex(Global::m_groupIndexLib.getValueInt() + 1);
-        m_curGroupId = WTool::getGroupNo(ui->comboBox_group->currentText());
+
+        {
+            QSignalBlocker sb(ui->comboBox_sort);
+            ui->comboBox_sort->setCurrentIndex(Global::m_sortType.getValueInt());
+            ui->btn_descend->setChecked(Global::m_sortDescend.getValueInt() == 1);
+        }
 
         ui->label_statistics->setText(QString("statistics:\n"
             "%1~%2 : \n"
@@ -289,32 +310,92 @@ void WordLibraryWidget::slot_menu2Triggered(QAction *act)
 void WordLibraryWidget::slot_btnSearch_clicked()
 {
     m_wordList.clear();
+    QVector<BriefWordInfo> tmpList;
     if (!ui->checkBox_range0->isChecked() && !ui->checkBox_range1->isChecked() && !ui->checkBox_range2->isChecked() &&
         !ui->checkBox_range3->isChecked() && !ui->checkBox_forever->isChecked())
     {
-        m_wordList = p_wordAdmin->getAllWordList(m_curGroupId);
+        tmpList = p_wordAdmin->getAllBriefWordInfoList(m_curGroupId);
     }
     else
     {
         if (ui->checkBox_range0->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            tmpList += p_wordAdmin->getBriefWordInfoListFromTimes(Global::m_range1Left.getValueInt(), Global::m_range1Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
         if (ui->checkBox_range1->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            tmpList += p_wordAdmin->getBriefWordInfoListFromTimes(Global::m_range2Left.getValueInt(), Global::m_range2Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
         if (ui->checkBox_range2->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
+            tmpList += p_wordAdmin->getBriefWordInfoListFromTimes(Global::m_range3Left.getValueInt(), Global::m_range3Right.getValueInt(), m_curGroupId, ui->checkBox_forever->isChecked());
         if (ui->checkBox_range3->isChecked())
-            m_wordList += p_wordAdmin->getWordListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked());
+            tmpList += p_wordAdmin->getBriefWordInfoListFromTimes(Global::m_range4Left.getValueInt(), MAX_TIMES, m_curGroupId, ui->checkBox_forever->isChecked());
     }
     if (!ui->lineEdit_search->text().isEmpty())
     {
-        m_wordList = WTool::filterWordFromList(m_wordList, ui->lineEdit_search->text(), ui->comboBox_search->currentText());
+        tmpList = WTool::filterWordFromList(tmpList, ui->lineEdit_search->text(), ui->comboBox_search->currentText());
     }
-    m_model->setStringList(m_wordList);
+
+    if (ui->comboBox_sort->currentIndex() > 0)//0 None, 1 Name, 2 Times, 3 ModifyTime
+    {
+        bool descend = !ui->btn_descend->isChecked();
+        std::sort(tmpList.begin(), tmpList.end(), [&](const BriefWordInfo& t1, const BriefWordInfo& t2) {
+            if (ui->comboBox_sort->currentIndex() == 1)
+            {
+                bool b1 = t1.m_name.compare(t2.m_name, Qt::CaseInsensitive) >= 0;
+                return descend ? b1 : !b1;
+            }
+            else if (ui->comboBox_sort->currentIndex() == 2)
+            {
+                bool b1 = t1.m_times >= t2.m_times;
+                return descend ? b1 : !b1;
+            }
+            else if (ui->comboBox_sort->currentIndex() == 3)
+            {
+                bool b1 = t1.m_modifyTime >= t2.m_modifyTime;
+                return descend ? b1 : !b1;
+            }
+            else
+                return true;
+        });
+    }
+    for (int i = 0; i < tmpList.size(); ++i)
+        m_wordList.append(tmpList[i].m_name);
+
+    {
+        QSignalBlocker sb(ui->comboBox_page);
+        ui->comboBox_page->clear();
+        int volume = Global::m_pageVolume.getValueInt();
+        int pageCount = int(std::ceil(1.0 * m_wordList.size() / volume));
+        if (pageCount == 0)
+            pageCount = 1;
+        for (int i = 0; i < pageCount; ++i)
+            ui->comboBox_page->addItem(QString::number(i + 1));
+        ui->label_record->setText(QString("Search %1 record, total %2 page").arg(m_wordList.size()).arg(pageCount));
+    }
+    slot_comboxPage_currentIndexChanged(0);
 }
 
 void WordLibraryWidget::slot_btnCreate_clicked()
 {
     emit Dispatch(this).signal_sendMessage(WMessage("create word", ""));
+}
+
+void WordLibraryWidget::slot_btnDescend_clicked()
+{
+    updateWordList();
+    Global::m_sortDescend.setValue(ui->btn_descend->isChecked() ? 1 : 0);
+    Global::saveXML();
+}
+
+void WordLibraryWidget::slot_btnPrev_clicked()
+{
+    int index = ui->comboBox_page->currentIndex();
+    if (index > 0)
+        ui->comboBox_page->setCurrentIndex(index - 1);
+}
+
+void WordLibraryWidget::slot_btnNext_clicked()
+{
+    int index = ui->comboBox_page->currentIndex();
+    if (index < ui->comboBox_page->count() - 1)
+        ui->comboBox_page->setCurrentIndex(index + 1);
 }
 
 void WordLibraryWidget::slot_itemDoubleClicked(QModelIndex index)
@@ -337,6 +418,29 @@ void WordLibraryWidget::slot_comboxGroup_currentIndexChanged(int index)
     updateWordStatistics();
     Global::m_groupIndexLib.setValue(m_curGroupId);
     Global::saveXML();
+}
+
+void WordLibraryWidget::slot_comboxSort_currentIndexChanged(int index)
+{
+    updateWordList();
+    Global::m_sortType.setValue(index);
+    Global::saveXML();
+}
+
+void WordLibraryWidget::slot_comboxPage_currentIndexChanged(int index)
+{
+    if (m_wordList.empty())
+    {
+        m_model->setStringList(m_wordList);
+    }
+    else
+    {
+        int volume = Global::m_pageVolume.getValueInt();
+        int left = index * volume, right = (index + 1) * volume - 1;
+        if (right > m_wordList.size() - 1)
+            right = m_wordList.size() - 1;
+        m_model->setStringList(m_wordList.mid(left, right - left + 1));
+    }
 }
 
 void WordLibraryWidget::slot_wordTimeDecline(QString name)

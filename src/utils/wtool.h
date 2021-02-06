@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QLayout>
 #include <QMessageBox>
+#include "wordadmin.h"
 
 #define BOOLSTR(a) ((a) ? "true" : "false")
 #define TIMEFORMAT ("yyyy-MM-dd hh:mm:ss")
@@ -82,7 +83,8 @@ public:
     static bool isEnglishSentence(QString txt, char fl = ' ');
     static bool isWritting(QString txt);
     static bool isChineseChar(QChar ch);
-    static QStringList filterWordFromList(QStringList list, QString txt, QString strategy = "prefix");
+    static QStringList filterWordFromList(const QStringList &list, QString txt, QString strategy = "prefix");
+    static QVector<BriefWordInfo> filterWordFromList(const QVector<BriefWordInfo> &list, QString txt, QString strategy = "prefix");
     static QString shieldWord(QString txt, QString word);
 
     /* 遗忘算法 */

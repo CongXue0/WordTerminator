@@ -2,6 +2,9 @@
 QWidget#widget_bg {
     border-image: url(:/main/res/skin/picture/bg_lib.png);
 }
+QWidget#widget_record {
+    background-color: #e8e8e8;
+}
 
 /***********QLabel***********/
 QLabel#label_statistics {
@@ -37,16 +40,34 @@ QPushButton#btn_create {
 QPushButton#btn_create:hover {
     background: url(:/main/res/skin/picture/create.png) #dddddd no-repeat left center;
 }
+QPushButton#btn_descend {
+    background: url(:/main/res/skin/picture/sort_descend.png) transparent no-repeat center center;
+}
+QPushButton#btn_descend:checked {
+    background: url(:/main/res/skin/picture/sort_ascend.png) transparent no-repeat center center;
+}
+QPushButton#btn_next,
+QPushButton#btn_prev {
+    border: 2px solid #b0c4de;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: transparent;
+}
+QPushButton#btn_next:hover,
+QPushButton#btn_prev:hover {
+    background-color: white;
+}
 
 /************QListView************/
 QListView#wordList {
-    background-color: transparent;
+    background-color: #2e2f30/*transparent*/;
+	color: #d6cf9a/*black*/;
     border: none;
-    font-size: 32px;
+    font-size: 31px;
     padding-left: 5px;
 }
 QListView#wordList::item {
-    height: 52px;
+    height: 50px;
 }
 
 /***********QCheckBox***********/
@@ -56,12 +77,12 @@ QCheckBox#checkBox_range2,
 QCheckBox#checkBox_range3,
 QCheckBox#checkBox_forever {
     /*background: #005656;*/
-    font-size: 32px;
+    font-size: 28px;
     spacing: 10px;
 }
 QCheckBox::indicator {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 QCheckBox::indicator::unchecked {
     image: url(:/main/res/skin/picture/check2_inactive.png);
@@ -72,22 +93,30 @@ QCheckBox::indicator::checked {
 
 /***********QComboBox***********/
 QComboBox#comboBox_group,
-QComboBox#comboBox_search {
+QComboBox#comboBox_search,
+QComboBox#comboBox_sort {
     border: 2px solid #b0c4de;
     background-color: transparent;
     font-size: 28px;
 }
-QComboBox::down-arrow {
-    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
-    padding: 0px;
-    width: 40px;
-    height: 25px;
-}
 QComboBox::drop-down {
-    border: none;
-    background-color: transparent;
+    width: 30px;
+    margin: 5px;
+    subcontrol-position: right center;
+    border-image: url(:/main/res/skin/picture/combox_arrow.png);
 }
 QComboBox QAbstractItemView {
     background-color: #f5f5f5;
+}
+QComboBox#comboBox_page {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    font-size: 12px;
+}
+QComboBox#comboBox_page::drop-down {
+    width: 15px;
+    margin: 5px;
+    subcontrol-position: right center;
+    border-image: url(:/main/res/skin/picture/combox_arrow.png);
 }
 

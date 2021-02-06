@@ -42,6 +42,9 @@ WordSettingWidget::WordSettingWidget(QWidget *parent) :
     ui->lineEdit_timesSet2->setValidator(v2);
     ui->lineEdit_timesSet3->setValidator(v2);
 
+    QValidator *v3 = new QIntValidator(10, 10000000, this);
+    ui->lineEdit_pageVolume->setValidator(v3);
+
     reloadGlobalValue();
 }
 
@@ -73,6 +76,7 @@ void WordSettingWidget::reloadGlobalValue()
     ui->lineEdit_timesSet1->setText(Global::m_timesSet1.getValueStr());
     ui->lineEdit_timesSet2->setText(Global::m_timesSet2.getValueStr());
     ui->lineEdit_timesSet3->setText(Global::m_timesSet3.getValueStr());
+    ui->lineEdit_pageVolume->setText(Global::m_pageVolume.getValueStr());
     for (int i = 0; i < 21; ++i)
     {
         lineEdit_groupName[i]->setText(Global::m_groupName[i].getValueStr());
@@ -136,6 +140,10 @@ void WordSettingWidget::saveGlobalValue()
     {
         ui->lineEdit_timesSet3->setText("0");
     }
+    if (ui->lineEdit_pageVolume->text().toInt() < 0)
+    {
+        ui->lineEdit_pageVolume->setText("10");
+    }
     for (int i = 0; i < 21; ++i)
     {
         lineEdit_groupName[i]->setText(lineEdit_groupName[i]->text().trimmed());
@@ -187,6 +195,7 @@ void WordSettingWidget::saveGlobalValue()
     Global::m_timesSet1.setValue(ui->lineEdit_timesSet1->text());
     Global::m_timesSet2.setValue(ui->lineEdit_timesSet2->text());
     Global::m_timesSet3.setValue(ui->lineEdit_timesSet3->text());
+    Global::m_pageVolume.setValue(ui->lineEdit_pageVolume->text());
     for (int i = 0; i < 21; ++i)
     {
         Global::m_groupName[i].setValue(lineEdit_groupName[i]->text());

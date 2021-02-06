@@ -14,7 +14,8 @@ QLabel {
     font-size: 28px;
     color: #666666;
 }
-QLabel#label_word {
+QLabel#label_word,
+QLabel#label_hint {
     color: #fc4343;
 }
 

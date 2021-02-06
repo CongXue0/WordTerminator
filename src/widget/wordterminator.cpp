@@ -114,6 +114,7 @@ void WordTerminator::closeEvent(QCloseEvent *event)
         p_memThread->stop();
         p_memThread->wait();
         event->accept();
+        QApplication::quit();
     }
     else
         event->ignore();
