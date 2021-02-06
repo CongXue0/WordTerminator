@@ -46,6 +46,8 @@ void WordFunctionWidget::reloadGlobalValue()
 {
     ui->combox_script->setCurrentIndex(Global::m_curScript.getValueInt());
     slot_comboxScript_currentIndexChanged(ui->combox_script->currentIndex());
+
+    ui->spinBox_spaceNum->setValue(Global::m_exportSpaceNum.getValueInt());
 }
 
 void WordFunctionWidget::saveGlobalValue()
@@ -75,6 +77,7 @@ void WordFunctionWidget::saveGlobalValue()
         Global::m_script4.setValue(ui->lineEdit_script->text());
         break;
     }
+    Global::m_exportSpaceNum.setValue(ui->spinBox_spaceNum->value());
     Global::saveXML();
 }
 
@@ -150,6 +153,9 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     int count = list.count();
     if (count > 0)
     {
+        QString spaceStr;
+        for (int i = 0; i < ui->spinBox_spaceNum->value(); ++i)
+            spaceStr.append(" ");
         WordInfo wordInfo;
         QProgressDialog dialog("单词导出进度", "取消", 0, count, this);
         dialog.setWindowTitle(tr("单词导出对话框"));
@@ -162,11 +168,22 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
             if (dialog.wasCanceled())
                 break;
             if (p_wordAdmin->getWordInfo(list[i].m_name, &wordInfo))
-            {
+            {                
+                QStringList tmpList = wordInfo.toText().split('\n');
+                QString txt;
+                for (int j = 0; j < tmpList.size(); ++j)
+                {
+                    if (j == 0 || j == tmpList.size() - 1)
+                        txt.append(tmpList[j]);
+                    else
+                        txt.append(spaceStr + tmpList[j]);
+                    if (j < tmpList.size() - 1)
+                        txt.append('\n');
+                }
                 if (i == count - 1)
-                    in << wordInfo.toText();
+                    in << txt;
                 else
-                    in << wordInfo.toText() + "\n";
+                    in << txt + "\n";
             }
             else
             {

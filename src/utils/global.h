@@ -76,6 +76,7 @@ public:
     static XmlVar m_script2;
     static XmlVar m_script3;
     static XmlVar m_script4;
+    static XmlVar m_exportSpaceNum;
     static XmlVar m_groupName[21];
     static XmlVar m_groupIndexLib;
     static XmlVar m_groupIndexMemory;

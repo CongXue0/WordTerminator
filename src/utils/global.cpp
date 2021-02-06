@@ -26,6 +26,7 @@ XmlVar Global::m_script1;
 XmlVar Global::m_script2;
 XmlVar Global::m_script3;
 XmlVar Global::m_script4;
+XmlVar Global::m_exportSpaceNum;
 XmlVar Global::m_groupName[21];
 XmlVar Global::m_groupIndexLib;
 XmlVar Global::m_groupIndexMemory;
@@ -142,6 +143,7 @@ void Global::init(const QString &configPath)
     m_varList.append(&m_script2);
     m_varList.append(&m_script3);
     m_varList.append(&m_script4);
+    m_varList.append(&m_exportSpaceNum);
     m_varList.append(&m_groupName[0]);
     m_varList.append(&m_groupName[1]);
     m_varList.append(&m_groupName[2]);
@@ -252,6 +254,7 @@ void Global::reset()
     m_script2 = XmlVar("SCRIPT2", "");
     m_script3 = XmlVar("SCRIPT3", "");
     m_script4 = XmlVar("SCRIPT4", "");
+    m_exportSpaceNum = XmlVar("EXPORTSPACENUM", "0");
     m_groupName[0] = XmlVar("GROUP0NAME", "default");
     m_groupName[1] = XmlVar("GROUP1NAME", "");
     m_groupName[2] = XmlVar("GROUP2NAME", "");

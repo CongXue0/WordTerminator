@@ -6,6 +6,7 @@ QWidget#widget_center {
 /***********QLabel***********/
 QLabel#label_refresh,
 QLabel#label_exportRule,
+QLabel#label_space,
 QLabel#label_export {
     font-size: 33px;
     color: #666666;
@@ -52,6 +53,11 @@ QComboBox QAbstractItemView {
 
 /**********QLineEdit**********/
 QLineEdit#lineEdit_script {
+    font-size: 32px;
+}
+
+/************QSpinBox************/
+QSpinBox#spinBox_spaceNum {
     font-size: 32px;
 }
 
