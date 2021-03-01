@@ -52,7 +52,8 @@ SOURCES += main.cpp\
     src/utils/dispatcher.cpp \
     src/view/copylabel.cpp \
     src/view/linklabel.cpp \
-    src/view/dtcp_tool_button.cpp
+    src/view/dtcp_tool_button.cpp \
+    src/view/dtcp_input_dialog.cpp
 
 HEADERS += src/widget/wordterminator.h \
     src/utils/scenenode.h \
@@ -75,7 +76,8 @@ HEADERS += src/widget/wordterminator.h \
     src/utils/dispatcher.h \
     src/view/copylabel.h \
     src/view/linklabel.h \
-    src/view/dtcp_tool_button.h
+    src/view/dtcp_tool_button.h \
+    src/view/dtcp_input_dialog.h
 
 FORMS += src/widget/wordterminator.ui \
     src/widget/wordautomatedmemorizewidget.ui \

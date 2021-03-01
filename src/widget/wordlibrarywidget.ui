@@ -50,7 +50,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_search">
+        <widget class="QPushButton" name="btn_locate">
          <property name="minimumSize">
           <size>
            <width>55</width>
@@ -62,6 +62,9 @@
            <width>55</width>
            <height>55</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Ctrl + F</string>
          </property>
          <property name="text">
           <string/>
@@ -226,6 +229,9 @@
           <width>0</width>
           <height>50</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Ctrl + Enter</string>
         </property>
         <property name="text">
          <string>    New Word</string>

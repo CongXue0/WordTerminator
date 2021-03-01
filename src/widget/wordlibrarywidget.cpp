@@ -3,6 +3,7 @@
 #include "wordadmin.h"
 #include "global.h"
 #include "dispatcher.h"
+#include "dtcp_input_dialog.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QApplication>
@@ -23,7 +24,6 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     m_menu2 = new QMenu("set group", this);
     m_menu2->setObjectName("m_menu2");
 
-    m_wordList.clear();
     m_model = new QStringListModel();
 
     ui->wordList->setModel(m_model);
@@ -49,7 +49,8 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     connect(m_menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu1Triggered(QAction *)));
     connect(m_menu2, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu2Triggered(QAction *)));
 
-    connect(ui->btn_search, SIGNAL(clicked()), this, SLOT(slot_btnSearch_clicked()));
+    connect(ui->lineEdit_search, SIGNAL(returnPressed()), this, SLOT(slot_lineEditSearch_editingFinished()));
+    connect(ui->btn_locate, SIGNAL(clicked()), this, SLOT(slot_btnLocate_clicked()));
     connect(ui->btn_create, SIGNAL(clicked()), this, SLOT(slot_btnCreate_clicked()));
     connect(ui->btn_descend, SIGNAL(clicked()), this, SLOT(slot_btnDescend_clicked()));
     connect(ui->btn_prev, SIGNAL(clicked()), this, SLOT(slot_btnPrev_clicked()));
@@ -155,7 +156,7 @@ void WordLibraryWidget::clearSearch()
 
 void WordLibraryWidget::updateWordList()
 {
-    slot_btnSearch_clicked();
+    slot_lineEditSearch_editingFinished();
 }
 
 void WordLibraryWidget::updateWordStatistics()
@@ -174,14 +175,18 @@ void WordLibraryWidget::updateWordStatistics()
 
 void WordLibraryWidget::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Return && (event->modifiers() & Qt::ControlModifier))
+    if (event->modifiers() & Qt::ControlModifier)
     {
-        slot_btnCreate_clicked();
+        if (event->key() == Qt::Key_Return)
+        {
+            slot_btnCreate_clicked();
+        }
+        else if (event->key() == Qt::Key_F)
+        {
+            slot_btnLocate_clicked();
+        }
     }
-    else if (ui->lineEdit_search->hasFocus() && event->key() == Qt::Key_Return)
-    {
-        slot_btnSearch_clicked();
-    }
+
 }
 
 bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
@@ -307,7 +312,7 @@ void WordLibraryWidget::slot_menu2Triggered(QAction *act)
     this->updateWordStatistics();
 }
 
-void WordLibraryWidget::slot_btnSearch_clicked()
+void WordLibraryWidget::slot_lineEditSearch_editingFinished()
 {
     m_wordList.clear();
     QVector<BriefWordInfo> tmpList;
@@ -360,6 +365,8 @@ void WordLibraryWidget::slot_btnSearch_clicked()
 
     {
         QSignalBlocker sb(ui->comboBox_page);
+        int cur_index = ui->comboBox_page->currentIndex();
+        if (cur_index < 0) cur_index = 0;
         ui->comboBox_page->clear();
         int volume = Global::m_pageVolume.getValueInt();
         int pageCount = int(std::ceil(1.0 * m_wordList.size() / volume));
@@ -367,9 +374,26 @@ void WordLibraryWidget::slot_btnSearch_clicked()
             pageCount = 1;
         for (int i = 0; i < pageCount; ++i)
             ui->comboBox_page->addItem(QString::number(i + 1));
+        if (cur_index < ui->comboBox_page->count())
+            ui->comboBox_page->setCurrentIndex(cur_index);
         ui->label_record->setText(QString("Search %1 record, total %2 page").arg(m_wordList.size()).arg(pageCount));
     }
-    slot_comboxPage_currentIndexChanged(0);
+    slot_comboxPage_currentIndexChanged(ui->comboBox_page->currentIndex());
+}
+
+void WordLibraryWidget::slot_btnLocate_clicked()
+{
+    QString name = dtcp::InputDialog::getText("Locate", "Word name:");
+    if (name.isEmpty() || !m_wordList.contains(name)) return;
+    int index = m_wordList.indexOf(name);
+    int volume = Global::m_pageVolume.getValueInt();
+    int page_index = index / volume;
+    int left = page_index * volume, right = (page_index + 1) * volume - 1;
+    if (right > m_wordList.size() - 1)
+        right = m_wordList.size() - 1;
+    index = index - left;
+    m_model->setStringList(m_wordList.mid(left, right - left + 1));
+    ui->wordList->setCurrentIndex(m_model->index(index));
 }
 
 void WordLibraryWidget::slot_btnCreate_clicked()

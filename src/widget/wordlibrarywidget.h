@@ -38,7 +38,8 @@ private:
 private slots:
     void slot_menu1Triggered(QAction *act);
     void slot_menu2Triggered(QAction *act);
-    void slot_btnSearch_clicked();
+    void slot_lineEditSearch_editingFinished();
+    void slot_btnLocate_clicked();
     void slot_btnCreate_clicked();
     void slot_btnDescend_clicked();
     void slot_btnPrev_clicked();

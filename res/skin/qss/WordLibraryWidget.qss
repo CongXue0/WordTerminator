@@ -21,14 +21,14 @@ QLineEdit#lineEdit_search {
 }
 
 /**********QPushButton**********/
-QPushButton#btn_search {
-    background: url(:/main/res/skin/picture/search.png) #299585 no-repeat center center;
+QPushButton#btn_locate {
+    background: url(:/main/res/skin/picture/locate.png) #299585 no-repeat center center;
 }
-QPushButton#btn_search:hover {
-    background: url(:/main/res/skin/picture/search.png) #2ca190 no-repeat center center;
+QPushButton#btn_locate:hover {
+    background: url(:/main/res/skin/picture/locate.png) #2ca190 no-repeat center center;
 }
-QPushButton#btn_search:pressed {
-    background: url(:/main/res/skin/picture/search.png) #21776a no-repeat center center;
+QPushButton#btn_locate:pressed {
+    background: url(:/main/res/skin/picture/locate.png) #21776a no-repeat center center;
 }
 QPushButton#btn_create {
     /*background-color: #00ffea;*/

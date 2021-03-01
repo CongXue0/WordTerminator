@@ -76,6 +76,7 @@
         <file>res/skin/picture/sort_descend.png</file>
         <file>res/skin/picture/white.png</file>
         <file>res/skin/picture/white_hover.png</file>
+        <file>res/skin/picture/locate.png</file>
         <file>res/skin/qss/WordAutomatedMemorizeWidget.qss</file>
         <file>res/skin/qss/WordCreateWidget.qss</file>
         <file>res/skin/qss/WordFunctionWidget.qss</file>
