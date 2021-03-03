@@ -2,6 +2,7 @@
 #include "wtool.h"
 #include "global.h"
 #include "dispatcher.h"
+#include "wordterminator.h"
 #include <QTimer>
 #include <QMouseEvent>
 #include <QApplication>
@@ -69,76 +70,100 @@ WordAutomatedMemorizeSceneGraphView::WordAutomatedMemorizeSceneGraphView(QWidget
     m_btn_ok->setCheckable(true);
     m_btn_ok->setAutoCheck(false);
 
-    setStyleSheet(QString::fromUtf8(
-        "/**********QPushButton**********/\n"
-        "QPushButton#btn_pause {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_play.png);\n"
-        "}\n"
-        "QPushButton#btn_pause:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_play_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_pause:checked {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_pause.png);\n"
-        "}\n"
-        "QPushButton#btn_pause:checked:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_pause_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_visible {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_visible.png);\n"
-        "}\n"
-        "QPushButton#btn_visible:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_visible_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_visible:checked {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_unvisible.png);\n"
-        "}\n"
-        "QPushButton#btn_visible:checked:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_unvisible_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_minus {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_minus.png);\n"
-        "}\n"
-        "QPushButton#btn_minus:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_minus_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_plus {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_plus.png);\n"
-        "}\n"
-        "QPushButton#btn_plus:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_plus_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_forever {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/notforever.png);\n"
-        "}\n"
-        "QPushButton#btn_forever:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/notforever_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_forever:checked {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/forever.png);\n"
-        "}\n"
-        "QPushButton#btn_forever:checked:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/forever_hover.png);\n"
-        "}\n"
-        "QPushButton#btn_forever:disabled {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/forever_disabled.png);\n"
-        "}\n"
-        "QPushButton#btn_ok {\n"
-        "    border: none;\n"
-        "    border-image: url(:/main/res/skin/picture/auto_gou.png);\n"
-        "}\n"
-        "QPushButton#btn_ok:hover {\n"
-        "    border-image: url(:/main/res/skin/picture/auto_gou_hover.png);\n"
-        "}\n"
-    ));
+    m_combox_group = new QComboBox(this);
+    m_combox_group->setObjectName("combox_group");
+
+    setStyleSheet(QString::fromUtf8(u8R"(
+/**********QPushButton**********/
+QPushButton#btn_pause {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_play.png);
+}
+QPushButton#btn_pause:hover {
+    border-image: url(:/main/res/skin/picture/auto_play_hover.png);
+}
+QPushButton#btn_pause:checked {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_pause.png);
+}
+QPushButton#btn_pause:checked:hover {
+    border-image: url(:/main/res/skin/picture/auto_pause_hover.png);
+}
+QPushButton#btn_visible {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_visible.png);
+}
+QPushButton#btn_visible:hover {
+    border-image: url(:/main/res/skin/picture/auto_visible_hover.png);
+}
+QPushButton#btn_visible:checked {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_unvisible.png);
+}
+QPushButton#btn_visible:checked:hover {
+    border-image: url(:/main/res/skin/picture/auto_unvisible_hover.png);
+}
+QPushButton#btn_minus {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_minus.png);
+}
+QPushButton#btn_minus:hover {
+    border-image: url(:/main/res/skin/picture/auto_minus_hover.png);
+}
+QPushButton#btn_plus {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_plus.png);
+}
+QPushButton#btn_plus:hover {
+    border-image: url(:/main/res/skin/picture/auto_plus_hover.png);
+}
+QPushButton#btn_forever {
+    border: none;
+    border-image: url(:/main/res/skin/picture/notforever.png);
+}
+QPushButton#btn_forever:hover {
+    border-image: url(:/main/res/skin/picture/notforever_hover.png);
+}
+QPushButton#btn_forever:checked {
+    border: none;
+    border-image: url(:/main/res/skin/picture/forever.png);
+}
+QPushButton#btn_forever:checked:hover {
+    border-image: url(:/main/res/skin/picture/forever_hover.png);
+}
+QPushButton#btn_forever:disabled {
+    border: none;
+    border-image: url(:/main/res/skin/picture/forever_disabled.png);
+}
+QPushButton#btn_ok {
+    border: none;
+    border-image: url(:/main/res/skin/picture/auto_gou.png);
+}
+QPushButton#btn_ok:hover {
+    border-image: url(:/main/res/skin/picture/auto_gou_hover.png);
+}
+
+/***********QComboBox***********/
+QComboBox#combox_group {
+    border: 2px solid #b0c4de;
+    background-color: transparent;
+    color: #656669;
+    font-size: 18px;
+}
+QComboBox::down-arrow {
+    background: url(:/main/res/skin/picture/combox_arrow.png) transparent no-repeat left center;
+    padding: 0px;
+    width: 40px;
+    height: 25px;
+}
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    background-color: #f5f5f5;
+}
+)"));
 
     updatePosition();
 
@@ -156,6 +181,7 @@ WordAutomatedMemorizeSceneGraphView::WordAutomatedMemorizeSceneGraphView(QWidget
     connect(m_btn_plus, SIGNAL(clicked()), this, SLOT(OnBtnPlusClicked()));
     connect(m_btn_forever, SIGNAL(clicked()), this, SLOT(OnBtnForeverClicked()));
     connect(m_btn_ok, SIGNAL(clicked()), this, SLOT(OnBtnOkClicked()));
+    connect(m_combox_group, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboxGroup_currentIndexChanged(int)));
 }
 
 void WordAutomatedMemorizeSceneGraphView::initiate(QList<WordTest> testList)
@@ -180,6 +206,14 @@ void WordAutomatedMemorizeSceneGraphView::initiate(QList<WordTest> testList)
     m_node_word->setVisible(false);
     m_node_timer->setDuration(10 * 1000);
 
+    QSignalBlocker sb(m_combox_group);
+    m_combox_group->clear();
+    QStringList groupList = WTool::getGroupList();
+    for (int i = 0; i < groupList.count(); ++i)
+    {
+        m_combox_group->addItem(groupList.at(i));
+    }
+
     m_state = State_Init;
 }
 
@@ -203,10 +237,16 @@ void WordAutomatedMemorizeSceneGraphView::setState(int state)
             WordInfo wordInfo;
             if (p_wordAdmin->getWordInfo(m_node_wordBar->getCurrentWord()->m_info.m_name, &wordInfo))
             {
-                if (m_node_wordBar->getCurrentWord()->m_info.m_remember > 0)
-                    m_btn_forever->setChecked(true);
-                else
-                    m_btn_forever->setChecked(false);
+                m_btn_forever->setChecked(m_node_wordBar->getCurrentWord()->m_info.m_remember > 0);
+                QSignalBlocker sb(m_combox_group);
+                for (int i = 0; i < m_combox_group->count(); ++i)
+                {
+                    if (Global::m_groupName[wordInfo.m_groupid].getValueStr() == m_combox_group->itemText(i))
+                    {
+                        m_combox_group->setCurrentIndex(i);
+                        break;
+                    }
+                }
 
                 m_node_word->setVisible(false);
                 if (m_node_wordBar->getCurrentWord()->isVisible())
@@ -284,10 +324,16 @@ void WordAutomatedMemorizeSceneGraphView::setState(int state)
             WordInfo wordInfo;
             if (p_wordAdmin->getWordInfo(m_node_wordBar->getCurrentWord()->m_info.m_name, &wordInfo))
             {
-                if (m_node_wordBar->getCurrentWord()->m_info.m_remember > 0)
-                    m_btn_forever->setChecked(true);
-                else
-                    m_btn_forever->setChecked(false);
+                m_btn_forever->setChecked(m_node_wordBar->getCurrentWord()->m_info.m_remember > 0);
+                QSignalBlocker sb(m_combox_group);
+                for (int i = 0; i < m_combox_group->count(); ++i)
+                {
+                    if (Global::m_groupName[wordInfo.m_groupid].getValueStr() == m_combox_group->itemText(i))
+                    {
+                        m_combox_group->setCurrentIndex(i);
+                        break;
+                    }
+                }
 
                 m_node_word->setVisible(false);
                 if (m_node_wordBar->getCurrentWord()->isVisible())
@@ -362,7 +408,7 @@ void WordAutomatedMemorizeSceneGraphView::updatePosition()
     m_node_timer->setSize(QSize(h, h));
 
     m_btn_pause->setGeometry(this->width() - h - 80 - ((h - 80) / 2) * 2 / 3, 60 + (h - 80) / 2, 80, 80);
-    int x = 230 + 80, y = 60 + h + 400 + 40, spacing = 20;
+    int x = 230 + 20, y = 60 + h + 400 + 40, spacing = 20;
     m_btn_visible->setGeometry(x, y, 50, 50);
     x += 50 + spacing;
     m_btn_minus->setGeometry(x, y, 50, 50);
@@ -372,6 +418,8 @@ void WordAutomatedMemorizeSceneGraphView::updatePosition()
     m_btn_forever->setGeometry(x, y, 50, 50);
     x += 50 + spacing;
     m_btn_ok->setGeometry(x, y, 50, 50);
+    x += 50 + spacing;
+    m_combox_group->setGeometry(x, y + 5, 200, 40);
 }
 
 void WordAutomatedMemorizeSceneGraphView::OnWordBarAnimationFinished()
@@ -466,5 +514,16 @@ void WordAutomatedMemorizeSceneGraphView::OnBtnOkClicked()
     {
         m_node_wordBar->passCurrentWord();
         m_node_timer->resetDuration(m_node_wordBar->getCurrentWord()->toMsecs() / 2);
+    }
+}
+
+void WordAutomatedMemorizeSceneGraphView::slot_comboxGroup_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if (WordTerminator::instance()->getCurrentWidgetIndex() == WordTerminator::Widget_AutomatedMemorize)
+    {
+        m_node_wordBar->getCurrentWord()->m_info.m_groupId = WTool::getGroupNo(m_combox_group->currentText());
+        p_wordAdmin->updateWord(m_node_wordBar->getCurrentWord()->m_info.m_name, "Groupid",
+            QString::number(m_node_wordBar->getCurrentWord()->m_info.m_groupId));
     }
 }

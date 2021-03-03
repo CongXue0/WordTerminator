@@ -616,10 +616,11 @@ void WordShowWidget::slot_comboxGroup_currentIndexChanged(int index)
     Q_UNUSED(index);
     if (WordTerminator::instance()->getCurrentWidgetIndex() == WordTerminator::Widget_WordShow)
     {
+        m_word.m_modifyTime = QDateTime::currentDateTime();
         m_word.m_groupid = WTool::getGroupNo(ui->combox_group->currentText());
         m_word.m_remember = (m_word.m_remember > 0 ? 2 : -1);
-        p_wordAdmin->updateWord(m_word.m_name, "Groupid", QString::number(m_word.m_groupid),
-            "RememberState", QString::number(m_word.m_remember));
+        p_wordAdmin->updateWord(m_word.m_name, "ModifyTime", m_word.m_modifyTime.toString(TIMEFORMAT),
+            "Groupid", QString::number(m_word.m_groupid), "RememberState", QString::number(m_word.m_remember));
     }
 }
 

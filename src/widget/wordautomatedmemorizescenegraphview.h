@@ -2,6 +2,7 @@
 #define WORDAUTOMATEDMEMORIZESCENEGRAPHVIEW_H
 
 #include <QWidget>
+#include <QComboBox>
 #include "scenenode.h"
 #include "wordadmin.h"
 #include "dtcp_tool_button.h"
@@ -34,6 +35,7 @@ private slots:
     void OnBtnPlusClicked();
     void OnBtnForeverClicked();
     void OnBtnOkClicked();
+    void slot_comboxGroup_currentIndexChanged(int index);
 
 private:
     int m_state;
@@ -50,6 +52,7 @@ private:
     DtcpImageButton *m_btn_plus;
     DtcpImageButton *m_btn_forever;
     DtcpImageButton *m_btn_ok;
+    QComboBox *m_combox_group;
 };
 
 #endif // WORDAUTOMATEDMEMORIZESCENEGRAPHVIEW_H
