@@ -8,6 +8,9 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <cmath>
+#include <QHelpEvent>
+#include <QToolTip>
+#include <QCursor>
 
 extern WordAdmin *p_wordAdmin;
 
@@ -26,7 +29,13 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
 
     m_model = new QStringListModel();
 
+    m_hideTipTimer = new QTimer(this);
+    m_hideTipTimer->setSingleShot(true);
+    m_showTipTimer = new QTimer(this);
+    m_showTipTimer->setSingleShot(true);
+
     ui->wordList->setModel(m_model);
+    ui->wordList->viewport()->setMouseTracking(true);
     ui->wordList->viewport()->installEventFilter(this);
 
     ui->comboBox_search->addItem("prefix");
@@ -46,6 +55,8 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
     updateWordList();
     updateWordStatistics();
 
+    connect(m_hideTipTimer, SIGNAL(timeout()), this, SLOT(slot_hideTipTimeout()));
+    connect(m_showTipTimer, SIGNAL(timeout()), this, SLOT(slot_showTipTimeout()));
     connect(m_menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu1Triggered(QAction *)));
     connect(m_menu2, SIGNAL(triggered(QAction *)), this, SLOT(slot_menu2Triggered(QAction *)));
 
@@ -191,12 +202,50 @@ void WordLibraryWidget::keyPressEvent(QKeyEvent *event)
 
 bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
 {
-    if (obj == ui->wordList->viewport() && e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent *>(e)->button() == Qt::RightButton)
+    if (obj == ui->wordList->viewport())
     {
-        m_modelList = ui->wordList->selectionModel()->selectedIndexes();
-        m_menu1->exec(QCursor::pos());
+        if (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent *>(e)->button() == Qt::RightButton)
+        {
+            m_modelList = ui->wordList->selectionModel()->selectedIndexes();
+            m_menu1->exec(QCursor::pos());
+        }
+        else if (e->type() == QEvent::MouseMove)
+        {
+//            if (QToolTip::isVisible() && !m_hideTipTimer->isActive())
+//                m_hideTipTimer->start(100);
+            if (QToolTip::isVisible())
+                slot_hideTipTimeout();
+            m_showTipTimer->start(20);
+        }
     }
     return QWidget::eventFilter(obj, e);
+}
+
+void WordLibraryWidget::slot_hideTipTimeout()
+{
+    QToolTip::hideText();
+}
+
+void WordLibraryWidget::slot_showTipTimeout()
+{
+    auto pos = ui->wordList->mapFromGlobal(QCursor::pos());
+    if (pos.x() >= ui->wordList->width() / 2)
+    {
+        auto index = ui->wordList->indexAt(pos);
+        QString name = index.data().toString();
+        if (!name.isEmpty())
+        {
+            WordInfo wordInfo;
+            if (p_wordAdmin->getWordInfo(name, &wordInfo))
+            {
+                QString txt = wordInfo.toText();
+                txt = txt.mid(txt.indexOf("\n") + 1);
+                if (txt[txt.size() - 1] == QChar('\n'))
+                    txt = txt.mid(0, txt.size() - 1);
+                QToolTip::showText(QCursor::pos(), txt);
+            }
+        }
+    }
 }
 
 void WordLibraryWidget::slot_menu1Triggered(QAction *act)
@@ -388,6 +437,8 @@ void WordLibraryWidget::slot_btnLocate_clicked()
     int index = m_wordList.indexOf(name);
     int volume = Global::m_pageVolume.getValueInt();
     int page_index = index / volume;
+    QSignalBlocker sb(ui->comboBox_page);
+    ui->comboBox_page->setCurrentIndex(page_index);
     int left = page_index * volume, right = (page_index + 1) * volume - 1;
     if (right > m_wordList.size() - 1)
         right = m_wordList.size() - 1;

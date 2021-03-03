@@ -38,9 +38,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>801</width>
-        <height>2836</height>
+        <y>-2052</y>
+        <width>797</width>
+        <height>2840</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -822,6 +822,9 @@
                <height>100</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string>Esc</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -840,6 +843,9 @@
                <width>100</width>
                <height>100</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Ctrl + Enter</string>
              </property>
              <property name="text">
               <string/>

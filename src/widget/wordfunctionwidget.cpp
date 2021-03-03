@@ -154,13 +154,19 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
     if (count > 0)
     {
         QString spaceStr;
+        QString splitStr = "--------------------";
         for (int i = 0; i < ui->spinBox_spaceNum->value(); ++i)
+        {
             spaceStr.append(" ");
+            splitStr.append("-");
+        }
+
         WordInfo wordInfo;
         QProgressDialog dialog("单词导出进度", "取消", 0, count, this);
         dialog.setWindowTitle(tr("单词导出对话框"));
         dialog.setWindowModality(Qt::WindowModal);
         dialog.show();
+        int pageVolume = Global::m_pageVolume.getValueInt();
         for (int i = 0; i < count; ++i)
         {
             dialog.setValue(i);
@@ -180,6 +186,8 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
                     if (j < tmpList.size() - 1)
                         txt.append('\n');
                 }
+                if (pageVolume > 0 && i != 0 && i % pageVolume == 0)
+                    in << splitStr + "\n\n";
                 if (i == count - 1)
                     in << txt;
                 else

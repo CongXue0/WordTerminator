@@ -1,6 +1,8 @@
 #ifndef WORDLIBRARYWIDGET_H
 #define WORDLIBRARYWIDGET_H
 
+#include "wmessage.h"
+#include "wtool.h"
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
@@ -8,10 +10,9 @@
 #include <QStringListModel>
 #include <QLineEdit>
 #include <QRadioButton>
-#include "wmessage.h"
 #include <QComboBox>
-#include "wtool.h"
 #include <QMenu>
+#include <QTimer>
 
 namespace Ui
 {
@@ -36,6 +37,8 @@ private:
     bool eventFilter(QObject *obj, QEvent *e);
 
 private slots:
+    void slot_hideTipTimeout();
+    void slot_showTipTimeout();
     void slot_menu1Triggered(QAction *act);
     void slot_menu2Triggered(QAction *act);
     void slot_lineEditSearch_editingFinished();
@@ -57,6 +60,8 @@ private:
     bool m_reloadFlag;
     int m_curGroupId;
     QModelIndexList m_modelList;
+    QTimer *m_hideTipTimer;
+    QTimer *m_showTipTimer;
 
     QMenu *m_menu1;
     QMenu *m_menu2;

@@ -55,6 +55,85 @@ QDateTime WTool::getCurDateTimeMinus(uint sec)
     return QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t() - sec);
 }
 
+QString WTool::keyStr(int key)
+{
+    switch (key)
+    {
+    case Qt::Key_0:
+        return "Key_0";
+    case Qt::Key_1:
+        return "Key_1";
+    case Qt::Key_2:
+        return "Key_2";
+    case Qt::Key_3:
+        return "Key_3";
+    case Qt::Key_4:
+        return "Key_4";
+    case Qt::Key_5:
+        return "Key_5";
+    case Qt::Key_6:
+        return "Key_6";
+    case Qt::Key_7:
+        return "Key_7";
+    case Qt::Key_8:
+        return "Key_8";
+    case Qt::Key_9:
+        return "Key_9";
+    case Qt::Key_Up:
+        return "Key_Up";
+    case Qt::Key_Down:
+        return "Key_Down";
+    case Qt::Key_Left:
+        return "Key_Left";
+    case Qt::Key_Right:
+        return "Key_Right";
+    case Qt::Key_Tab:
+        return "Key_Tab";
+    case Qt::Key_Backtab:
+        return "Key_Backtab";
+    case Qt::Key_Backspace:
+        return "Key_Backspace";
+    case Qt::Key_Enter:
+        return "Key_Enter";
+    case Qt::Key_Return:
+        return "Key_Return";
+    case Qt::Key_Escape:
+        return "Key_Escape";
+    case Qt::Key_F1:
+        return "Key_F1";
+    case Qt::Key_F2:
+        return "Key_F2";
+    case Qt::Key_F3:
+        return "Key_F3";
+    case Qt::Key_F4:
+        return "Key_F4";
+    case Qt::Key_F5:
+        return "Key_F5";
+    case Qt::Key_F6:
+        return "Key_F6";
+    case Qt::Key_F7:
+        return "Key_F7";
+    case Qt::Key_F8:
+        return "Key_F8";
+    case Qt::Key_F9:
+        return "Key_F9";
+    case Qt::Key_F10:
+        return "Key_F10";
+    case Qt::Key_F11:
+        return "Key_F11";
+    case Qt::Key_F12:
+        return "Key_F12";
+    case Qt::Key_Space:
+        return "Key_Space";
+    case Qt::Key_PowerDown:
+        return "Key_PowerDown";
+    case Qt::Key_PowerOff:
+        return "Key_PowerOff";
+    default:
+        return "otherkey";
+    }
+}
+
 QStringList WTool::getGroupList()
 {
     QStringList list;

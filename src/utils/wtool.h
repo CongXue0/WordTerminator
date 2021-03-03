@@ -35,6 +35,7 @@ public:
     static QString getWordDBFilePath();
     static int rand(int a, int b);//得到一个 [a, b] 范围内的随机数
     static QDateTime getCurDateTimeMinus(uint sec);
+    static QString keyStr(int key);
 
     /* 组相关 */
     static QStringList getGroupList();
