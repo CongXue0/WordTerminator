@@ -77,17 +77,17 @@ WordAutomatedMemorizeSceneGraphView::WordAutomatedMemorizeSceneGraphView(QWidget
 /**********QPushButton**********/
 QPushButton#btn_pause {
     border: none;
-    border-image: url(:/main/res/skin/picture/auto_play.png);
+    border-image: url(:/main/res/skin/picture/auto_pause.png);
 }
 QPushButton#btn_pause:hover {
-    border-image: url(:/main/res/skin/picture/auto_play_hover.png);
+    border-image: url(:/main/res/skin/picture/auto_pause_hover.png);
 }
 QPushButton#btn_pause:checked {
     border: none;
-    border-image: url(:/main/res/skin/picture/auto_pause.png);
+    border-image: url(:/main/res/skin/picture/auto_play.png);
 }
 QPushButton#btn_pause:checked:hover {
-    border-image: url(:/main/res/skin/picture/auto_pause_hover.png);
+    border-image: url(:/main/res/skin/picture/auto_play_hover.png);
 }
 QPushButton#btn_visible {
     border: none;
