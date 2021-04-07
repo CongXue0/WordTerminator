@@ -21,6 +21,10 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) :
     m_times = 0;
     m_remember = 0;
 
+    ui->lineEdit_synonym->setPlaceholderText(QString("同义词最多为%1个，中间用 ';' 隔开").arg(RELATED_NUM));
+    ui->lineEdit_antonym->setPlaceholderText(QString("反义词最多为%1个，中间用 ';' 隔开").arg(RELATED_NUM));
+    ui->lineEdit_derivative->setPlaceholderText(QString("派生词最多为%1个，中间用 ';' 隔开").arg(RELATED_NUM));
+
     textEdit_exampleSentence.append(ui->textEdit_exampleSentence0);
     textEdit_exampleSentence.append(ui->textEdit_exampleSentence1);
     textEdit_exampleSentence.append(ui->textEdit_exampleSentence2);
@@ -47,6 +51,7 @@ void WordCreateWidget::recoveryInterface()
     ui->lineEdit_word->clear();
     ui->lineEdit_word->setReadOnly(m_edit);
     ui->label_hint->clear();
+    ui->combox_group->setCurrentIndex(0);
     ui->lineEdit_phoneticSymbol->clear();
     ui->lineEdit_adj_Chinese->clear();
     ui->lineEdit_adj_English->clear();
@@ -72,6 +77,7 @@ void WordCreateWidget::recoveryInterface()
     ui->lineEdit_art_English->clear();
     ui->lineEdit_synonym->clear();
     ui->lineEdit_antonym->clear();
+    ui->lineEdit_derivative->clear();
     ui->checkBox_phrase->setChecked(false);
     for(int i = 0; i < 6; ++i)
         textEdit_exampleSentence[i]->clear();
@@ -137,6 +143,7 @@ bool WordCreateWidget::loadWordInfo(QString name)
         ui->lineEdit_art_English->setText(word.m_art_English);
         ui->lineEdit_synonym->setText(word.m_synonym);
         ui->lineEdit_antonym->setText(word.m_antonym);
+        ui->lineEdit_derivative->setText(word.m_derivative);
         ui->checkBox_phrase->setChecked(word.m_isPhrase);
         for (int i = 0; i < m_groupList.count(); ++i)
         {
@@ -221,6 +228,8 @@ QString WordCreateWidget::inputCheck()
         info.append("同义词输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_antonym->text(), ';'))
         info.append("反义词输入错误\n");
+    if (!WTool::isLetter(ui->lineEdit_derivative->text(), ';'))
+        info.append("派生词输入错误\n");
     if (!info.isEmpty() && info.at(info.length() - 1) == '\n')
         info = info.mid(0, info.length() - 1);
     return info;
@@ -308,6 +317,7 @@ void WordCreateWidget::slot_btnConfirm_clicked()
         wordInfo.m_exampleSentence[i] = textEdit_exampleSentence[i]->toPlainText();
     wordInfo.m_synonym = ui->lineEdit_synonym->text();
     wordInfo.m_antonym = ui->lineEdit_antonym->text();
+    wordInfo.m_derivative = ui->lineEdit_derivative->text();
     wordInfo.arrange();
 
     if (!m_edit)

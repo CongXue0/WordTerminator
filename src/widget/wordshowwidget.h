@@ -25,6 +25,7 @@ public:
     void reloadGlobalValue();
     void setReloadFlag(bool flag);
     bool loadWordInfo(QString name);
+    WordInfo currentWordInfo();
 
 private:
     void keyPressEvent(QKeyEvent *event);
@@ -54,6 +55,7 @@ private:
     int m_exampleNum;
     int m_synonymNum;
     int m_antonymNum;
+    int m_derivativeNum;
     int m_lineNum;
 
     QStringList m_groupList;
@@ -68,6 +70,7 @@ private:
 
     LinkLabel *linkLabel_synonym[RELATED_NUM];
     LinkLabel *linkLabel_antonym[RELATED_NUM];
+    LinkLabel *linkLabel_derivative[RELATED_NUM];
 };
 
 #endif // WORDSHOWWIDGET_H

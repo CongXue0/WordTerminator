@@ -4,6 +4,7 @@
 #include "global.h"
 #include "dispatcher.h"
 #include "dtcp_input_dialog.h"
+#include "dtcp_tool_tip.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QApplication>
@@ -211,11 +212,14 @@ bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
         }
         else if (e->type() == QEvent::MouseMove)
         {
-//            if (QToolTip::isVisible() && !m_hideTipTimer->isActive())
-//                m_hideTipTimer->start(100);
-            if (QToolTip::isVisible())
-                slot_hideTipTimeout();
             m_showTipTimer->start(20);
+        }
+        else if (e->type() == QEvent::Leave)
+        {
+            if (m_showTipTimer->isActive())
+                m_showTipTimer->stop();
+            if (DtcpToolTip::isVisible())
+                slot_hideTipTimeout();
         }
     }
     return QWidget::eventFilter(obj, e);
@@ -223,7 +227,8 @@ bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
 
 void WordLibraryWidget::slot_hideTipTimeout()
 {
-    QToolTip::hideText();
+    DtcpToolTip::hideText();
+//    QCoreApplication::processEvents();
 }
 
 void WordLibraryWidget::slot_showTipTimeout()
@@ -242,9 +247,13 @@ void WordLibraryWidget::slot_showTipTimeout()
                 txt = txt.mid(txt.indexOf("\n") + 1);
                 if (txt[txt.size() - 1] == QChar('\n'))
                     txt = txt.mid(0, txt.size() - 1);
-                QToolTip::showText(QCursor::pos(), txt);
+                DtcpToolTip::showText(QCursor::pos(), txt);
             }
         }
+    }
+    else
+    {
+        DtcpToolTip::hideText();
     }
 }
 

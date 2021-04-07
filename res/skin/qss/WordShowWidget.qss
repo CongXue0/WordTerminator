@@ -190,7 +190,8 @@ CopyLabel#copyLabel_example3,
 CopyLabel#copyLabel_example4,
 CopyLabel#copyLabel_example5,
 CopyLabel#copyLabel_synonym,
-CopyLabel#copyLabel_antonym {
+CopyLabel#copyLabel_antonym,
+CopyLabel#copyLabel_derivative {
     background-color: transparent;
     font-size: 24px;
 }
@@ -211,7 +212,15 @@ LinkLabel#linkLabel_antonym3,
 LinkLabel#linkLabel_antonym4,
 LinkLabel#linkLabel_antonym5,
 LinkLabel#linkLabel_antonym6,
-LinkLabel#linkLabel_antonym7 {
+LinkLabel#linkLabel_antonym7,
+LinkLabel#linkLabel_derivative0,
+LinkLabel#linkLabel_derivative1,
+LinkLabel#linkLabel_derivative2,
+LinkLabel#linkLabel_derivative3,
+LinkLabel#linkLabel_derivative4,
+LinkLabel#linkLabel_derivative5,
+LinkLabel#linkLabel_derivative6,
+LinkLabel#linkLabel_derivative7 {
     border: none;
     background-color: transparent;
     font-size: 24px;

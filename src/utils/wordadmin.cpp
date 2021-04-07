@@ -65,6 +65,7 @@ void WordInfo::init()
     m_exampleSentence[5] = "";
     m_synonym = "";
     m_antonym = "";
+    m_derivative = "";
 }
 
 void WordInfo::arrange()
@@ -109,6 +110,7 @@ void WordInfo::arrange()
     }
     m_synonym = WTool::arrangeWord(m_synonym, ';');
     m_antonym = WTool::arrangeWord(m_antonym, ';');
+    m_derivative = WTool::arrangeWord(m_derivative, ';');
 }
 
 QString WordInfo::toText()
@@ -136,14 +138,23 @@ QString WordInfo::toText()
         text.append("vi. " + m_vi_Chinese + "\n");
     if (!m_vi_English.isEmpty())
         text.append("vi. " + m_vi_English + "\n");
-    if (!m_pastTense.isEmpty())
-        text.append("过去式: " + m_pastTense + "  ");
-    if (!m_pastParticiple.isEmpty())
-        text.append("过去分词: " + m_pastParticiple + "\n");
-    if (!m_presentParticiple.isEmpty())
-        text.append("现在分词: " + m_presentParticiple + "  ");
-    if (!m_thirdPersonSingular.isEmpty())
-        text.append("第三人称单数: " + m_thirdPersonSingular + "\n");
+    {
+        QStringList tmp;
+        if (!m_pastTense.isEmpty())
+            tmp.append("过去式: " + m_pastTense);
+        if (!m_pastParticiple.isEmpty())
+            tmp.append("过去分词: " + m_pastParticiple);
+        if (!m_presentParticiple.isEmpty())
+            tmp.append("现在分词: " + m_presentParticiple);
+        if (!m_thirdPersonSingular.isEmpty())
+            tmp.append("第三人称单数: " + m_thirdPersonSingular);
+        for (int i = 0; i < tmp.size(); ++i)
+        {
+            text.append(tmp[i] + " ");
+            if ((i == 1 && i != tmp.size() - 1) || i == tmp.size() - 1)
+                text.append("\n");
+        }
+    }
     if (!m_noun_Chinese.isEmpty())
         text.append("n. " + m_noun_Chinese + "\n");
     if (!m_noun_English.isEmpty())
@@ -196,6 +207,19 @@ QString WordInfo::toText()
         }
         text.append("\n");
     }
+    if (!m_derivative.isEmpty())
+    {
+        text.append("派生词: ");
+        QStringList list = m_derivative.split(';');
+        for (int j = 0; j < list.count(); j++)
+        {
+            if (j ==  list.count() - 1)
+                text.append(QString(list.at(j)).trimmed());
+            else
+                text.append(QString(list.at(j)).trimmed() + " ");
+        }
+        text.append("\n");
+    }
     if (text.length() > 0 && text.at(text.length() - 1) != '\n')
         text.append("\n");
     return text;
@@ -206,96 +230,151 @@ int WordInfo::toMsecs()
     int msecs = 0, tmp = 0;
     if (m_name.isEmpty())
         return msecs;
+    int min = 1000, max = 2200, num = 0;
+    auto calcFunc = [&](const QString &str) -> int {
+        double len = 0, maxLen = 14;
+        for (int i = 0; i < str.size(); ++i)
+        {
+            if (str[i] == ' ' || str[i] == ';' || str[i] == ',' ||
+                str[i] == '(' || str[i] == ')')
+            {
+                continue;
+            }
+            else if (str[i] == '.')
+            {
+                len += 0.3;
+            }
+            else if (WTool::isChineseChar(str[i]))
+            {
+                len += 1;
+            }
+            else
+                len += 0.5;
+        }
+        if (len > maxLen) len = maxLen;
+        return int(max * ((maxLen * maxLen - (len - maxLen) * (len - maxLen)) / (maxLen * maxLen)));
+    };
     if (!m_adj_Chinese.isEmpty() || !m_adj_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_adj_Chinese + m_adj_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_adj_Chinese + m_adj_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_adv_Chinese.isEmpty() || !m_adv_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_adv_Chinese + m_adv_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_adv_Chinese + m_adv_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_vt_Chinese.isEmpty() || !m_vt_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_vt_Chinese + m_vt_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_vt_Chinese + m_vt_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_vi_Chinese.isEmpty() || !m_vi_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_vi_Chinese + m_vi_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_vi_Chinese + m_vi_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_pastTense.isEmpty() || !m_pastParticiple.isEmpty() || !m_presentParticiple.isEmpty() || !m_thirdPersonSingular.isEmpty())
     {
-        tmp = int(2000.0 * (m_pastTense + m_pastParticiple + m_presentParticiple + m_thirdPersonSingular).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 5000) tmp = 5000;
+        tmp = calcFunc(m_pastTense + m_pastParticiple + m_presentParticiple + m_thirdPersonSingular);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_noun_Chinese.isEmpty() || !m_noun_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_noun_Chinese + m_noun_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_noun_Chinese + m_noun_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_prep_Chinese.isEmpty() || !m_prep_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_prep_Chinese + m_prep_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_prep_Chinese + m_prep_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_conj_Chinese.isEmpty() || !m_conj_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_conj_Chinese + m_conj_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_conj_Chinese + m_conj_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_pron_Chinese.isEmpty() || !m_pron_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_pron_Chinese + m_pron_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_pron_Chinese + m_pron_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
     if (!m_art_Chinese.isEmpty() || !m_art_English.isEmpty())
     {
-        tmp = int(2000.0 * (m_art_Chinese + m_art_English).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 4000) tmp = 4000;
+        tmp = calcFunc(m_art_Chinese + m_art_English);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
-    for (int i = 0; i < 6; ++i)
-    {
-        if (m_exampleSentence[i].isEmpty())
-            break;
-        tmp = int(2000.0 * m_exampleSentence[i].size() / 14.0);
-        if (tmp < 1000) tmp = 1000;
-        if (tmp > 3000) tmp = 3000;
-        msecs += tmp;
-    }
+//    for (int i = 0; i < 6; ++i)
+//    {
+//        if (m_exampleSentence[i].isEmpty())
+//            break;
+//        tmp = calcFunc(m_exampleSentence[i]);
+//        if (tmp < 800) tmp = 800;
+//        if (tmp > 1300) tmp = 1300;
+//        msecs += tmp;
+//    }
     if (!m_synonym.isEmpty() || !m_antonym.isEmpty())
     {
-        tmp = int(2000.0 * (m_synonym + m_antonym).size() / 7.0);
-        if (tmp < 1500) tmp = 1500;
-        if (tmp > 5000) tmp = 5000;
+        tmp = calcFunc(m_synonym + m_antonym);
+        if (tmp < min) tmp = min;
+        if (tmp > max) tmp = max;
         msecs += tmp;
+        num++;
     }
-    if (msecs < 2000)
-        msecs = 2000;
-    if (!m_phoneticSymbol.isEmpty())
-        msecs += 500;
+//    if (!m_derivative.isEmpty())
+//    {
+//        tmp = calcFunc(m_derivative);
+//        if (tmp < min) tmp = min;
+//        if (tmp > max) tmp = max;
+//        msecs += tmp;
+//        num++;
+//    }
+    if (msecs < 1500)
+        msecs = 1500;
+    if (num == 2)
+    {
+        msecs = int(msecs * 0.8);
+    }
+    else if (num == 3)
+    {
+        msecs = int(msecs * 0.7);
+    }
+    else if (num > 3)
+    {
+        msecs = int(msecs * 0.6);
+    }
+//    if (!m_phoneticSymbol.isEmpty())
+//        msecs += 300;
     return msecs;
 }
 
@@ -443,7 +522,7 @@ bool WordAdmin::insertWord(WordInfo *word)
     QString sql = QString("insert into WordLibrary values(\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", "
         "\"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\", \"%13\", \"%14\", \"%15\", \"%16\", \"%17\", \"%18\", \"%19\", "
         "\"%20\", \"%21\", \"%22\", \"%23\", \"%24\", \"%25\", \"%26\", \"%27\", \"%28\", \"%29\", \"%30\", \"%31\", "
-        "\"%32\", \"%33\", \"%34\", \"%35\", \"%36\", \"%37\", \"%38\")")
+        "\"%32\", \"%33\", \"%34\", \"%35\", \"%36\", \"%37\", \"%38\", \"%39\")")
         .arg(word->m_name).arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid)
         .arg(word->m_remember).arg(((word->m_isPhrase) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
         .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
@@ -454,7 +533,7 @@ bool WordAdmin::insertWord(WordInfo *word)
         .arg(word->m_pron_Chinese).arg(word->m_pron_English).arg(word->m_art_Chinese).arg(word->m_art_English)
         .arg(word->m_exampleSentence[0]).arg(word->m_exampleSentence[1]).arg(word->m_exampleSentence[2])
         .arg(word->m_exampleSentence[3]).arg(word->m_exampleSentence[4]).arg(word->m_exampleSentence[5])
-        .arg(word->m_synonym).arg(word->m_antonym);
+        .arg(word->m_synonym).arg(word->m_antonym).arg(word->m_derivative);
     if (query.exec(sql))
     {
         m_currentNum++;
@@ -493,7 +572,7 @@ bool WordAdmin::updateWord(WordInfo *word)
                 "Noun_Chinese=\"%20\", Noun_English=\"%21\", Prep_Chinese=\"%22\", Prep_English=\"%23\", Conj_Chinese=\"%24\", "
                 "Conj_English=\"%25\", Pron_Chinese=\"%26\", Pron_English=\"%27\", Art_Chinese=\"%28\", Art_English=\"%29\", "
                 "ExampleSentence1=\"%30\", ExampleSentence2=\"%31\", ExampleSentence3=\"%32\", ExampleSentence4=\"%33\", "
-                "ExampleSentence5=\"%34\", ExampleSentence6=\"%35\", Synonym=\"%36\", Antonym=\"%37\" where Name=\"%38\"")
+                "ExampleSentence5=\"%34\", ExampleSentence6=\"%35\", Synonym=\"%36\", Antonym=\"%37\", Derivative=\"%38\" where Name=\"%39\"")
                 .arg(word->m_times).arg(word->m_modifyTime.toString(TIMEFORMAT)).arg(word->m_groupid).arg(word->m_remember)
                 .arg(((word->m_isPhrase) ? 1 : 0)).arg(word->m_phoneticSymbol).arg(word->m_voiceFile)
                 .arg(word->m_adj_Chinese).arg(word->m_adj_English).arg(word->m_adv_Chinese).arg(word->m_adv_English)
@@ -503,7 +582,7 @@ bool WordAdmin::updateWord(WordInfo *word)
                 .arg(word->m_conj_Chinese).arg(word->m_conj_English).arg(word->m_pron_Chinese).arg(word->m_pron_English)
                 .arg(word->m_art_Chinese).arg(word->m_art_English).arg(word->m_exampleSentence[0]).arg(word->m_exampleSentence[1])
                 .arg(word->m_exampleSentence[2]).arg(word->m_exampleSentence[3]).arg(word->m_exampleSentence[4])
-                .arg(word->m_exampleSentence[5]).arg(word->m_synonym).arg(word->m_antonym).arg(word->m_name);
+                .arg(word->m_exampleSentence[5]).arg(word->m_synonym).arg(word->m_antonym).arg(word->m_derivative).arg(word->m_name);
 //            DEBUG << sql;
             if (query.exec(sql))
             {
@@ -1145,7 +1224,7 @@ WordAdmin::WordAdmin(QObject *parent) : QObject(parent)
 
 void WordAdmin::initDB()
 {
-    //Name,Times,ModifyTime,Groupid,RememberState,IsPhrase,PhoneticSymbol,VoiceFile,Adj_Chinese,Adj_English,Adv_Chinese,Adv_English,Vt_Chinese,Vt_English,Vi_Chinese,Vi_English,PastTense,PastParticiple,PresentParticiple,ThirdPersonSingular,Noun_Chinese,Noun_English,Prep_Chinese,Prep_English,Conj_Chinese,Conj_English,Pron_Chinese,Pron_English,Art_Chinese,Art_English,ExampleSentence1,ExampleSentence2,ExampleSentence3,ExampleSentence4,ExampleSentence5,ExampleSentence6,Synonym,Antonym
+    //Name,Times,ModifyTime,Groupid,RememberState,IsPhrase,PhoneticSymbol,VoiceFile,Adj_Chinese,Adj_English,Adv_Chinese,Adv_English,Vt_Chinese,Vt_English,Vi_Chinese,Vi_English,PastTense,PastParticiple,PresentParticiple,ThirdPersonSingular,Noun_Chinese,Noun_English,Prep_Chinese,Prep_English,Conj_Chinese,Conj_English,Pron_Chinese,Pron_English,Art_Chinese,Art_English,ExampleSentence1,ExampleSentence2,ExampleSentence3,ExampleSentence4,ExampleSentence5,ExampleSentence6,Synonym,Antonym,Derivative
     if (!QFile(WTool::getWordDBFilePath()).exists())
     {
         WTool::writeFileInfo(WTool::getWordDBFilePath(), "");
@@ -1161,7 +1240,7 @@ void WordAdmin::initDB()
         {
             QString sql = QString("CREATE TABLE WordLibrary(%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, "
                 "%11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, "
-                "%28, %29, %30, %31, %32, %33, %34, %35, %36, %37, %38)")
+                "%28, %29, %30, %31, %32, %33, %34, %35, %36, %37, %38, %39)")
                 .arg("[Name] nvarchar")                 //1
                 .arg("[Times] integer")                 //2
                 .arg("[ModifyTime] nvarchar")           //3
@@ -1199,7 +1278,8 @@ void WordAdmin::initDB()
                 .arg("[ExampleSentence5] nvarchar")     //35
                 .arg("[ExampleSentence6] nvarchar")     //36
                 .arg("[Synonym] nvarchar")              //37
-                .arg("[Antonym] nvarchar");             //38
+                .arg("[Antonym] nvarchar")              //38
+                .arg("[Derivative] nvarchar");          //39
             QSqlQuery query;
             if (query.exec(sql))
             {
@@ -1329,6 +1409,7 @@ bool WordAdmin::readWordInfo(QString name, WordInfo *word)
         word->m_exampleSentence[5] = query.value(35).toString();
         word->m_synonym = query.value(36).toString();
         word->m_antonym = query.value(37).toString();
+        word->m_derivative = query.value(38).toString();
         return true;
     }
     return false;

@@ -87,6 +87,7 @@ private:
 
     LinkLabel *linkLabel_synonym[RELATED_NUM];
     LinkLabel *linkLabel_antonym[RELATED_NUM];
+    LinkLabel *linkLabel_derivative[RELATED_NUM];
 };
 
 #endif // WORDMEMORIZEWIDGET_H

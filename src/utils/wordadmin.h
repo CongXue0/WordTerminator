@@ -72,6 +72,7 @@ public:
     QString m_exampleSentence[6];
     QString m_synonym;
     QString m_antonym;
+    QString m_derivative;
 };
 
 class WordTest

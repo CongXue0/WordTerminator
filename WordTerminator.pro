@@ -53,7 +53,8 @@ SOURCES += main.cpp\
     src/view/copylabel.cpp \
     src/view/linklabel.cpp \
     src/view/dtcp_tool_button.cpp \
-    src/view/dtcp_input_dialog.cpp
+    src/view/dtcp_input_dialog.cpp \
+    src/view/dtcp_tool_tip.cpp
 
 HEADERS += src/widget/wordterminator.h \
     src/utils/scenenode.h \
@@ -77,7 +78,8 @@ HEADERS += src/widget/wordterminator.h \
     src/view/copylabel.h \
     src/view/linklabel.h \
     src/view/dtcp_tool_button.h \
-    src/view/dtcp_input_dialog.h
+    src/view/dtcp_input_dialog.h \
+    src/view/dtcp_tool_tip.h
 
 FORMS += src/widget/wordterminator.ui \
     src/widget/wordautomatedmemorizewidget.ui \

@@ -23,8 +23,6 @@ extern WordAdmin *p_wordAdmin;
 void WTool::dirInit()
 {
     WTool::makeDir("./user");
-    WTool::makeDir("./user/config");
-    WTool::makeDir("./user/db");
 }
 
 QRect WTool::getScreenGeometry()
@@ -40,7 +38,7 @@ int WTool::divide(int a, int b)
 
 QString WTool::getWordDBFilePath()
 {
-    return QString("./user/db/word.db");
+    return QString("./user/word.db");
 }
 
 int WTool::rand(int a, int b)
@@ -982,5 +980,5 @@ QString WTool::getStyleQss(QString className)
 
 QString WTool::getConfigPath()
 {
-    return "./user/config/config.xml";
+    return "./user/config.xml";
 }

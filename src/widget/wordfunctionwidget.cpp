@@ -174,7 +174,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
             if (dialog.wasCanceled())
                 break;
             if (p_wordAdmin->getWordInfo(list[i].m_name, &wordInfo))
-            {                
+            {
                 QStringList tmpList = wordInfo.toText().split('\n');
                 QString txt;
                 for (int j = 0; j < tmpList.size(); ++j)

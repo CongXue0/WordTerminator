@@ -23,6 +23,7 @@ WordShowWidget::WordShowWidget(QWidget *parent) :
     m_exampleNum = 0;
     m_synonymNum = 0;
     m_antonymNum = 0;
+    m_derivativeNum = 0;
 
     ui->btn_isRemember->setCheckedTip("set to not forever");
     ui->btn_isRemember->setUncheckedTip("set to forever");
@@ -50,6 +51,11 @@ WordShowWidget::WordShowWidget(QWidget *parent) :
     {
         linkLabel_antonym[i] = this->findChild<LinkLabel *>(QString("linkLabel_antonym%1").arg(i));
         connect(linkLabel_antonym[i], SIGNAL(released()), this, SLOT(slot_wordLinkPressed()));
+    }
+    for (int i = 0; i < RELATED_NUM; ++i)
+    {
+        linkLabel_derivative[i] = this->findChild<LinkLabel *>(QString("linkLabel_derivative%1").arg(i));
+        connect(linkLabel_derivative[i], SIGNAL(released()), this, SLOT(slot_wordLinkPressed()));
     }
 
     m_reloadFlag = true;
@@ -87,6 +93,7 @@ void WordShowWidget::recoveryInterface()
     m_exampleNum = 0;
     m_synonymNum = 0;
     m_antonymNum = 0;
+    m_derivativeNum = 0;
     ui->scrollArea->verticalScrollBar()->setValue(0);
     ui->copyLabel_word->clear();
     ui->copyLabel_phoneticSymbol->clear();
@@ -109,17 +116,23 @@ void WordShowWidget::recoveryInterface()
     ui->copyLabel_synonym->hide();
     ui->copyLabel_antonym->clear();
     ui->copyLabel_antonym->hide();
+    ui->copyLabel_derivative->clear();
+    ui->copyLabel_derivative->hide();
     for (int i = 0; i < RELATED_NUM; ++i)
     {
         linkLabel_synonym[i]->clear();
         linkLabel_synonym[i]->hide();
         linkLabel_antonym[i]->clear();
         linkLabel_antonym[i]->hide();
+        linkLabel_derivative[i]->clear();
+        linkLabel_derivative[i]->hide();
     }
     ui->widget_synonym0->hide();
     ui->widget_synonym1->hide();
     ui->widget_antonym0->hide();
     ui->widget_antonym1->hide();
+    ui->widget_derivative0->hide();
+    ui->widget_derivative1->hide();
 }
 
 void WordShowWidget::reloadGlobalValue()
@@ -151,6 +164,11 @@ bool WordShowWidget::loadWordInfo(QString name)
     }
     else
         return false;
+}
+
+WordInfo WordShowWidget::currentWordInfo()
+{
+    return m_word;
 }
 
 void WordShowWidget::keyPressEvent(QKeyEvent *event)
@@ -392,6 +410,28 @@ void WordShowWidget::setWordInfo()
         else if (m_antonymNum > 0)
             m_lineNum += 2;
     }
+    if (!m_word.m_derivative.isEmpty())
+    {
+        ui->copyLabel_derivative->setText("派生词：");
+        ui->copyLabel_derivative->show();
+        QStringList list = m_word.m_derivative.split(';');
+        for (i = 0; i < list.size() && i < RELATED_NUM; ++i)
+        {
+            if (list.at(i) != "")
+            {
+                linkLabel_derivative[i]->setText(list.at(i).trimmed());
+                linkLabel_derivative[i]->show();
+            }
+        }
+        m_derivativeNum = i;
+        if (m_derivativeNum > 0) ui->widget_derivative0->show();
+        if (m_derivativeNum > 4) ui->widget_derivative1->show();
+
+        if (m_derivativeNum > 4)
+            m_lineNum += 3;
+        else if (m_derivativeNum > 0)
+            m_lineNum += 2;
+    }
     reloadLayout();
 }
 
@@ -475,7 +515,6 @@ void WordShowWidget::reloadLayout()
 
     if (ui->copyLabel_antonym->isVisible())
     {
-
         ui->copyLabel_antonym->setGeometry(x, y, l_width, h);
         y += h + sp;
 
@@ -501,6 +540,37 @@ void WordShowWidget::reloadLayout()
                 if (!linkLabel_antonym[i]->isVisible()) continue;
                 linkLabel_antonym[i]->setGeometry(t_x, 0, linkLabel_antonym[i]->sizeHint().width(), h);
                 t_x += linkLabel_antonym[i]->width() + ui->widget_antonym1->layout()->spacing();
+            }
+        }
+    }
+
+    if (ui->copyLabel_derivative->isVisible())
+    {
+        ui->copyLabel_derivative->setGeometry(x, y, l_width, h);
+        y += h + sp;
+
+        int t_x = 0;
+        if (ui->widget_derivative0->isVisible())
+        {
+            ui->widget_derivative0->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 0; i < 4; ++i)
+            {
+                if (!linkLabel_derivative[i]->isVisible()) continue;
+                linkLabel_derivative[i]->setGeometry(t_x, 0, linkLabel_derivative[i]->sizeHint().width(), h);
+                t_x += linkLabel_derivative[i]->width() + ui->widget_derivative0->layout()->spacing();
+            }
+            t_x = 0;
+        }
+        if (ui->widget_derivative1->isVisible())
+        {
+            ui->widget_derivative1->setGeometry(x, y, l_width, h);
+            y += h + sp;
+            for (int i = 4; i < RELATED_NUM; ++i)
+            {
+                if (!linkLabel_derivative[i]->isVisible()) continue;
+                linkLabel_derivative[i]->setGeometry(t_x, 0, linkLabel_derivative[i]->sizeHint().width(), h);
+                t_x += linkLabel_derivative[i]->width() + ui->widget_derivative1->layout()->spacing();
             }
         }
     }
@@ -627,6 +697,10 @@ void WordShowWidget::slot_comboxGroup_currentIndexChanged(int index)
 void WordShowWidget::slot_wordLinkPressed()
 {
 //    DEBUG << sender()->objectName() << " pressed";
+    if (LinkLabel *link = dynamic_cast<LinkLabel *>(sender()))
+    {
+        emit Dispatch(this).signal_sendMessage(WMessage("show word", link->text()));
+    }
 }
 
 void WordShowWidget::slot_wordTimeDecline(QString name)

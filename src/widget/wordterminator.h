@@ -5,6 +5,7 @@
 #include "dtcp_tool_button.h"
 #include <QDialog>
 #include <QVector>
+#include <QStack>
 
 namespace Ui
 {
@@ -47,6 +48,7 @@ protected:
 
     QVector<int> m_widgets;
     QPushButton *m_btn_group[5];
+    QStack<QString> m_showWordStack;
 };
 
 #endif // WORDTERMINATOR_H

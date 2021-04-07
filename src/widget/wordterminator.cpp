@@ -225,6 +225,7 @@ void WordTerminator::slot_switchButtonClicked()
     }
 
     clearWidgetIndex();
+    m_showWordStack.clear();
     if (name == "btn_lib")
         index = Widget_WordLibrary;
     else if (name == "btn_autoMem")
@@ -362,13 +363,45 @@ void WordTerminator::slot_handleMessage(WMessage message)
             message.getMessage(0, info, value);
             if (info == "return")
             {
-                popWidgetIndex();
-                if (topWidgetIndex() == Widget_WordLibrary)
+                bool flag = true;
+                while (m_showWordStack.size() > 0)
                 {
-                    ui->widget_wordLibrary->updateWordList();
-                    ui->widget_wordLibrary->updateWordStatistics();
+                    QString name = m_showWordStack.pop();
+                    if (p_wordAdmin->isWordExist(name))
+                    {
+                        flag = false;
+                        ui->widget_wordShow->recoveryInterface();
+                        ui->widget_wordShow->reloadGlobalValue();
+                        ui->widget_wordShow->loadWordInfo(name);
+                        ui->widget_wordShow->setFocus();
+                        break;
+                    }
                 }
-                ui->stackedWidget->setCurrentIndex(topWidgetIndex());
+                if (flag)
+                {
+                    popWidgetIndex();
+                    if (topWidgetIndex() == Widget_WordLibrary)
+                    {
+                        ui->widget_wordLibrary->updateWordList();
+                        ui->widget_wordLibrary->updateWordStatistics();
+                    }
+                    ui->stackedWidget->setCurrentIndex(topWidgetIndex());
+                }
+            }
+            else if (info == "show word")
+            {
+                if (p_wordAdmin->isWordExist(value))
+                {
+                    m_showWordStack.push(ui->widget_wordShow->currentWordInfo().m_name);
+                    ui->widget_wordShow->recoveryInterface();
+                    ui->widget_wordShow->reloadGlobalValue();
+                    ui->widget_wordShow->loadWordInfo(value);
+                    ui->widget_wordShow->setFocus();
+                }
+                else
+                {
+                    MESSAGE("获取单词信息失败");
+                }
             }
             else if (info == "delete success")
             {
