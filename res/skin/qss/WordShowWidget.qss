@@ -156,7 +156,10 @@ CopyLabel#copyLabel_property15,
 CopyLabel#copyLabel_property16,
 CopyLabel#copyLabel_property17,
 CopyLabel#copyLabel_property18,
-CopyLabel#copyLabel_property19 {
+CopyLabel#copyLabel_property19,
+CopyLabel#copyLabel_property20,
+CopyLabel#copyLabel_property21,
+CopyLabel#copyLabel_property22 {
     background-color: #eaf5ff;
     border-radius: 6px;
     font-size: 24px;
@@ -182,6 +185,9 @@ CopyLabel#copyLabel_explain16,
 CopyLabel#copyLabel_explain17,
 CopyLabel#copyLabel_explain18,
 CopyLabel#copyLabel_explain19,
+CopyLabel#copyLabel_explain20,
+CopyLabel#copyLabel_explain21,
+CopyLabel#copyLabel_explain22,
 CopyLabel#copyLabel_exampleSentence,
 CopyLabel#copyLabel_example0,
 CopyLabel#copyLabel_example1,
@@ -189,6 +195,8 @@ CopyLabel#copyLabel_example2,
 CopyLabel#copyLabel_example3,
 CopyLabel#copyLabel_example4,
 CopyLabel#copyLabel_example5,
+CopyLabel#copyLabel_example6,
+CopyLabel#copyLabel_example7,
 CopyLabel#copyLabel_synonym,
 CopyLabel#copyLabel_antonym,
 CopyLabel#copyLabel_derivative {

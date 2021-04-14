@@ -252,7 +252,7 @@ void WordAutomatedMemorizeSceneGraphView::setState(int state)
                 if (m_node_wordBar->getCurrentWord()->isVisible())
                 {
                     m_btn_visible->setChecked(false);
-                    m_node_word->setText(wordInfo.toText());
+                    m_node_word->setText(wordInfo.toText(2));
                     m_node_word->eraseShow();
                 }
                 else
@@ -339,7 +339,7 @@ void WordAutomatedMemorizeSceneGraphView::setState(int state)
                 if (m_node_wordBar->getCurrentWord()->isVisible())
                 {
                     m_btn_visible->setChecked(false);
-                    m_node_word->setText(wordInfo.toText());
+                    m_node_word->setText(wordInfo.toText(2));
                     m_node_word->eraseShow();
                 }
                 else

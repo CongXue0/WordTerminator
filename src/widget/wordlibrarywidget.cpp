@@ -12,6 +12,7 @@
 #include <QHelpEvent>
 #include <QToolTip>
 #include <QCursor>
+#include <QClipboard>
 
 extern WordAdmin *p_wordAdmin;
 
@@ -37,6 +38,7 @@ WordLibraryWidget::WordLibraryWidget(QWidget *parent) :
 
     ui->wordList->setModel(m_model);
     ui->wordList->viewport()->setMouseTracking(true);
+    ui->wordList->installEventFilter(this);
     ui->wordList->viewport()->installEventFilter(this);
 
     ui->comboBox_search->addItem("prefix");
@@ -222,6 +224,23 @@ bool WordLibraryWidget::eventFilter(QObject *obj, QEvent *e)
                 slot_hideTipTimeout();
         }
     }
+    else if (obj == ui->wordList)
+    {
+        if (e->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(e);
+            if ((keyEvent->modifiers() & Qt::ControlModifier) && keyEvent->key() == Qt::Key_C)
+            {
+                auto list = ui->wordList->selectionModel()->selectedIndexes();
+                if (!list.isEmpty())
+                {
+                    QClipboard *clip= QApplication::clipboard();
+                    clip->setText(list.at(0).data().toString());
+                    WTool::opacityMessageBox("Copy", "", 0.1, 100);
+                }
+            }
+        }
+    }
     return QWidget::eventFilter(obj, e);
 }
 
@@ -234,7 +253,34 @@ void WordLibraryWidget::slot_hideTipTimeout()
 void WordLibraryWidget::slot_showTipTimeout()
 {
     auto pos = ui->wordList->mapFromGlobal(QCursor::pos());
-    if (pos.x() >= ui->wordList->width() / 2)
+    if (pos.x() >= int(ui->wordList->width() * (1.0 / 3)) && pos.x() < int(ui->wordList->width() * (2.0 / 3)))
+    {
+        auto index = ui->wordList->indexAt(pos);
+        QString name = index.data().toString();
+        if (!name.isEmpty())
+        {
+            WordInfo wordInfo;
+            if (p_wordAdmin->getWordInfo(name, &wordInfo))
+            {
+                QString txt;
+                for (int i = 0; i < EXAMPLE_NUM; ++i)
+                {
+                    if (wordInfo.m_exampleSentence[i].isEmpty())
+                        break;
+                    txt.append(QString::number(i + 1) + ". " + wordInfo.m_exampleSentence[i] + "\n");
+                }
+                if (!txt.isEmpty())
+                {
+                    if (txt[txt.size() - 1] == QChar('\n'))
+                        txt = txt.mid(0, txt.size() - 1);
+                    DtcpToolTip::showText(QCursor::pos(), txt);
+                }
+                else
+                    DtcpToolTip::hideText();
+            }
+        }
+    }
+    else if (pos.x() >= int(ui->wordList->width() * (2.0 / 3)))
     {
         auto index = ui->wordList->indexAt(pos);
         QString name = index.data().toString();

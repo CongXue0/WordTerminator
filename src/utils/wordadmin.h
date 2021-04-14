@@ -10,8 +10,8 @@
 #define MAX_WORD_NUM 200000
 #define WORD_NAME_UNDEFINED "-1"
 #define MAX_TIMES 99999
-#define PROPERTY_NUM 17
-#define EXAMPLE_NUM 6
+#define PROPERTY_NUM 23
+#define EXAMPLE_NUM 8
 #define RELATED_NUM 8
 
 class BriefWordInfo
@@ -35,9 +35,12 @@ class WordInfo
 public:
     void init();
     void arrange();
-    QString toText();
+    QString toText(int mode = 0, QString spaceStr = "");
     int toMsecs();
     bool contains(QString str) const;
+    bool isExampleSentenceEmpty();
+    static QString sqlStrEsc(QString str);
+    WordInfo sqliteEscape() const;
 
     QString m_name;
     int m_times;
@@ -69,7 +72,11 @@ public:
     QString m_pron_English;
     QString m_art_Chinese;
     QString m_art_English;
-    QString m_exampleSentence[6];
+    QString m_num_Chinese;
+    QString m_num_English;
+    QString m_int_Chinese;
+    QString m_int_English;
+    QString m_exampleSentence[EXAMPLE_NUM];
     QString m_synonym;
     QString m_antonym;
     QString m_derivative;

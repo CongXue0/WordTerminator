@@ -175,17 +175,7 @@ void WordFunctionWidget::exportWord(int t1, int t2, int group, int remember)
                 break;
             if (p_wordAdmin->getWordInfo(list[i].m_name, &wordInfo))
             {
-                QStringList tmpList = wordInfo.toText().split('\n');
-                QString txt;
-                for (int j = 0; j < tmpList.size(); ++j)
-                {
-                    if (j == 0 || j == tmpList.size() - 1)
-                        txt.append(tmpList[j]);
-                    else
-                        txt.append(spaceStr + tmpList[j]);
-                    if (j < tmpList.size() - 1)
-                        txt.append('\n');
-                }
+                QString txt = wordInfo.toText(1, spaceStr);
                 if (pageVolume > 0 && i != 0 && i % pageVolume == 0)
                     in << splitStr + "\n\n";
                 if (i == count - 1)

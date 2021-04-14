@@ -40,7 +40,7 @@
         <x>0</x>
         <y>0</y>
         <width>797</width>
-        <height>2912</height>
+        <height>3480</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -148,7 +148,7 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>(中文)adj.</string>
+            <string>(形容词)adj.</string>
            </property>
           </widget>
          </item>
@@ -169,7 +169,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>(英文)adj.</string>
+            <string>(注释)adj.</string>
            </property>
           </widget>
          </item>
@@ -190,7 +190,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>(中文)adv.</string>
+            <string>(副词)adv.</string>
            </property>
           </widget>
          </item>
@@ -211,7 +211,7 @@
          <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>(英文)adv.</string>
+            <string>(注释)adv.</string>
            </property>
           </widget>
          </item>
@@ -232,7 +232,7 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>(中文)vt.</string>
+            <string>(及物)vt.</string>
            </property>
           </widget>
          </item>
@@ -253,7 +253,7 @@
          <item>
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>(英文)vt.</string>
+            <string>(注释)vt.</string>
            </property>
           </widget>
          </item>
@@ -274,7 +274,7 @@
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>(中文)vi.</string>
+            <string>(不及物)vi.</string>
            </property>
           </widget>
          </item>
@@ -295,7 +295,7 @@
          <item>
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>(英文)vi.</string>
+            <string>(注释)vi.</string>
            </property>
           </widget>
          </item>
@@ -414,7 +414,7 @@
          <item>
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>(中文)n.</string>
+            <string>(名词)n.</string>
            </property>
           </widget>
          </item>
@@ -435,7 +435,7 @@
          <item>
           <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>(英文)n.</string>
+            <string>(注释)n.</string>
            </property>
           </widget>
          </item>
@@ -456,7 +456,7 @@
          <item>
           <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>(中文)prep.</string>
+            <string>(介词)prep.</string>
            </property>
           </widget>
          </item>
@@ -477,7 +477,7 @@
          <item>
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>(英文)prep.</string>
+            <string>(注释)prep.</string>
            </property>
           </widget>
          </item>
@@ -498,7 +498,7 @@
          <item>
           <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>(中文)conj.</string>
+            <string>(连词)conj.</string>
            </property>
           </widget>
          </item>
@@ -519,7 +519,7 @@
          <item>
           <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>(英文)conj.</string>
+            <string>(注释)conj.</string>
            </property>
           </widget>
          </item>
@@ -540,7 +540,7 @@
          <item>
           <widget class="QLabel" name="label_21">
            <property name="text">
-            <string>(中文)pron.</string>
+            <string>(代词)pron.</string>
            </property>
           </widget>
          </item>
@@ -561,7 +561,7 @@
          <item>
           <widget class="QLabel" name="label_22">
            <property name="text">
-            <string>(英文)pron.</string>
+            <string>(注释)pron.</string>
            </property>
           </widget>
          </item>
@@ -582,7 +582,7 @@
          <item>
           <widget class="QLabel" name="label_23">
            <property name="text">
-            <string>(中文)art.</string>
+            <string>(冠词)art.</string>
            </property>
           </widget>
          </item>
@@ -603,12 +603,96 @@
          <item>
           <widget class="QLabel" name="label_24">
            <property name="text">
-            <string>(英文)art.</string>
+            <string>(注释)art.</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit_art_English">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_33">
+         <item>
+          <widget class="QLabel" name="label_29">
+           <property name="text">
+            <string>(数词)num.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_num_Chinese">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_34">
+         <item>
+          <widget class="QLabel" name="label_30">
+           <property name="text">
+            <string>(注释)num.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_num_English">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_35">
+         <item>
+          <widget class="QLabel" name="label_31">
+           <property name="text">
+            <string>(感叹词)int.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_int_Chinese">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_36">
+         <item>
+          <widget class="QLabel" name="label_32">
+           <property name="text">
+            <string>(注释)int.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_int_English">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -743,6 +827,44 @@
          </property>
          <property name="placeholderText">
           <string>例句6</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit_exampleSentence6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>例句7</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit_exampleSentence7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>例句8</string>
          </property>
         </widget>
        </item>

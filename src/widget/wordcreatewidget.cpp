@@ -1,12 +1,11 @@
 #include "wordcreatewidget.h"
 #include "ui_wordcreatewidget.h"
-#include "wtool.h"
-#include "global.h"
-#include "wordadmin.h"
-#include "dispatcher.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QScrollBar>
+#include "wtool.h"
+#include "global.h"
+#include "dispatcher.h"
 
 extern WordAdmin *p_wordAdmin;
 
@@ -25,12 +24,10 @@ WordCreateWidget::WordCreateWidget(QWidget *parent) :
     ui->lineEdit_antonym->setPlaceholderText(QString("反义词最多为%1个，中间用 ';' 隔开").arg(RELATED_NUM));
     ui->lineEdit_derivative->setPlaceholderText(QString("派生词最多为%1个，中间用 ';' 隔开").arg(RELATED_NUM));
 
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence0);
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence1);
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence2);
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence3);
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence4);
-    textEdit_exampleSentence.append(ui->textEdit_exampleSentence5);
+    for (int i = 0; i < EXAMPLE_NUM; ++i)
+    {
+        textEdit_exampleSentence[i] = this->findChild<QTextEdit *>(QString("textEdit_exampleSentence%1").arg(i));
+    }
 
     m_reloadFlag = true;
     reloadGlobalValue();
@@ -75,11 +72,15 @@ void WordCreateWidget::recoveryInterface()
     ui->lineEdit_pron_English->clear();
     ui->lineEdit_art_Chinese->clear();
     ui->lineEdit_art_English->clear();
+    ui->lineEdit_num_Chinese->clear();
+    ui->lineEdit_num_English->clear();
+    ui->lineEdit_int_Chinese->clear();
+    ui->lineEdit_int_English->clear();
     ui->lineEdit_synonym->clear();
     ui->lineEdit_antonym->clear();
     ui->lineEdit_derivative->clear();
     ui->checkBox_phrase->setChecked(false);
-    for(int i = 0; i < 6; ++i)
+    for(int i = 0; i < EXAMPLE_NUM; ++i)
         textEdit_exampleSentence[i]->clear();
     ui->lineEdit_word->setFocus();
 }
@@ -141,6 +142,10 @@ bool WordCreateWidget::loadWordInfo(QString name)
         ui->lineEdit_pron_English->setText(word.m_pron_English);
         ui->lineEdit_art_Chinese->setText(word.m_art_Chinese);
         ui->lineEdit_art_English->setText(word.m_art_English);
+        ui->lineEdit_num_Chinese->setText(word.m_num_Chinese);
+        ui->lineEdit_num_English->setText(word.m_num_English);
+        ui->lineEdit_int_Chinese->setText(word.m_int_Chinese);
+        ui->lineEdit_int_English->setText(word.m_int_English);
         ui->lineEdit_synonym->setText(word.m_synonym);
         ui->lineEdit_antonym->setText(word.m_antonym);
         ui->lineEdit_derivative->setText(word.m_derivative);
@@ -153,7 +158,7 @@ bool WordCreateWidget::loadWordInfo(QString name)
                 break;
             }
         }
-        for(int i = 0; i < 6; ++i)
+        for(int i = 0; i < EXAMPLE_NUM; ++i)
             textEdit_exampleSentence[i]->setText(word.m_exampleSentence[i]);
         return true;
     }
@@ -190,7 +195,9 @@ QString WordCreateWidget::inputCheck()
         ui->lineEdit_prep_Chinese->text().trimmed().isEmpty() && ui->lineEdit_prep_English->text().trimmed().isEmpty() &&
         ui->lineEdit_conj_Chinese->text().trimmed().isEmpty() && ui->lineEdit_conj_English->text().trimmed().isEmpty() &&
         ui->lineEdit_pron_Chinese->text().trimmed().isEmpty() && ui->lineEdit_pron_English->text().trimmed().isEmpty() &&
-        ui->lineEdit_art_Chinese->text().trimmed().isEmpty() && ui->lineEdit_art_English->text().trimmed().isEmpty())
+        ui->lineEdit_art_Chinese->text().trimmed().isEmpty() && ui->lineEdit_art_English->text().trimmed().isEmpty() &&
+        ui->lineEdit_num_Chinese->text().trimmed().isEmpty() && ui->lineEdit_num_English->text().trimmed().isEmpty() &&
+        ui->lineEdit_int_Chinese->text().trimmed().isEmpty() && ui->lineEdit_int_English->text().trimmed().isEmpty())
         info.append("释义不能全为空\n");
     if (!ui->checkBox_phrase->isChecked() && (!WTool::isLetter(ui->lineEdit_word->text().trimmed()) ||
         ui->lineEdit_word->text().trimmed().contains(' ')))
@@ -198,14 +205,14 @@ QString WordCreateWidget::inputCheck()
     else if (ui->checkBox_phrase->isChecked() && (!WTool::isLetter(ui->lineEdit_word->text().trimmed()) ||
         !ui->lineEdit_word->text().trimmed().contains(' ')))
         info.append("词组输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_adj_English->text(), ';'))
-        info.append("adj. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_adv_English->text(), ';'))
-        info.append("adv. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_vt_English->text(), ';'))
-        info.append("vt. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_vi_English->text(), ';'))
-        info.append("vi. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_adj_English->text(), ';'))
+//        info.append("adj. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_adv_English->text(), ';'))
+//        info.append("adv. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_vt_English->text(), ';'))
+//        info.append("vt. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_vi_English->text(), ';'))
+//        info.append("vi. 输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_v_pastTense->text()))
         info.append("过去式输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_v_pastParticiple->text()))
@@ -214,16 +221,20 @@ QString WordCreateWidget::inputCheck()
         info.append("现在分词输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_v_thirdPersonSingular->text()))
         info.append("第三人称单数输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_noun_English->text(), ';'))
-        info.append("noun. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_prep_English->text(), ';'))
-        info.append("prep. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_conj_English->text(), ';'))
-        info.append("conj. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_pron_English->text(), ';'))
-        info.append("pron. 输入错误\n");
-    if (!WTool::isEnglishSentence(ui->lineEdit_art_English->text(), ';'))
-        info.append("art. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_noun_English->text(), ';'))
+//        info.append("noun. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_prep_English->text(), ';'))
+//        info.append("prep. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_conj_English->text(), ';'))
+//        info.append("conj. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_pron_English->text(), ';'))
+//        info.append("pron. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_art_English->text(), ';'))
+//        info.append("art. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_num_English->text(), ';'))
+//        info.append("num. 输入错误\n");
+//    if (!WTool::isEnglishSentence(ui->lineEdit_int_English->text(), ';'))
+//        info.append("int. 输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_synonym->text(), ';'))
         info.append("同义词输入错误\n");
     if (!WTool::isLetter(ui->lineEdit_antonym->text(), ';'))
@@ -312,8 +323,12 @@ void WordCreateWidget::slot_btnConfirm_clicked()
     wordInfo.m_pron_English = ui->lineEdit_pron_English->text();
     wordInfo.m_art_Chinese = ui->lineEdit_art_Chinese->text();
     wordInfo.m_art_English = ui->lineEdit_art_English->text();
+    wordInfo.m_num_Chinese = ui->lineEdit_num_Chinese->text();
+    wordInfo.m_num_English = ui->lineEdit_num_English->text();
+    wordInfo.m_int_Chinese = ui->lineEdit_int_Chinese->text();
+    wordInfo.m_int_English = ui->lineEdit_int_English->text();
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < EXAMPLE_NUM; ++i)
         wordInfo.m_exampleSentence[i] = textEdit_exampleSentence[i]->toPlainText();
     wordInfo.m_synonym = ui->lineEdit_synonym->text();
     wordInfo.m_antonym = ui->lineEdit_antonym->text();

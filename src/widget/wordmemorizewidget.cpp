@@ -366,7 +366,7 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_property[i]->setText("adj.");
         tmp = m_word.m_adj_English;
         copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
-        i++;
+        widget_explain[i++]->show();
     }
     if (!m_word.m_adv_Chinese.isEmpty())
     {
@@ -516,11 +516,37 @@ void WordMemorizeWidget::setWordInfo(bool isShield)
         copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
         widget_explain[i++]->show();
     }
+    if (!m_word.m_num_Chinese.isEmpty())
+    {
+        copyLabel_property[i]->setText("num.");
+        tmp = m_word.m_num_Chinese;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_num_English.isEmpty())
+    {
+        copyLabel_property[i]->setText("num.");
+        tmp = m_word.m_num_English;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_int_Chinese.isEmpty())
+    {
+        copyLabel_property[i]->setText("int.");
+        tmp = m_word.m_int_Chinese;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_int_English.isEmpty())
+    {
+        copyLabel_property[i]->setText("int.");
+        tmp = m_word.m_int_English;
+        copyLabel_explain[i]->setText((isShield ? WTool::shieldWord(tmp, m_word.m_name) : tmp));
+        widget_explain[i++]->show();
+    }
     m_lineNum += i;
 
-    if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
-        !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
-        !m_word.m_exampleSentence[4].isEmpty() || !m_word.m_exampleSentence[5].isEmpty())
+    if (!m_word.isExampleSentenceEmpty())
     {
         ui->copyLabel_exampleSentence->setText("例句：");
         ui->copyLabel_exampleSentence->show();

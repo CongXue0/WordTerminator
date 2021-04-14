@@ -344,12 +344,34 @@ void WordShowWidget::setWordInfo()
         copyLabel_explain[i]->setText(m_word.m_art_English);
         widget_explain[i++]->show();
     }
+    if (!m_word.m_num_Chinese.isEmpty())
+    {
+        copyLabel_property[i]->setText("num.");
+        copyLabel_explain[i]->setText(m_word.m_num_Chinese);
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_num_English.isEmpty())
+    {
+        copyLabel_property[i]->setText("num.");
+        copyLabel_explain[i]->setText(m_word.m_num_English);
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_int_Chinese.isEmpty())
+    {
+        copyLabel_property[i]->setText("int.");
+        copyLabel_explain[i]->setText(m_word.m_int_Chinese);
+        widget_explain[i++]->show();
+    }
+    if (!m_word.m_int_English.isEmpty())
+    {
+        copyLabel_property[i]->setText("int.");
+        copyLabel_explain[i]->setText(m_word.m_int_English);
+        widget_explain[i++]->show();
+    }
     m_propertyNum = i;
     m_lineNum += m_propertyNum;
 
-    if (!m_word.m_exampleSentence[0].isEmpty() || !m_word.m_exampleSentence[1].isEmpty() ||
-        !m_word.m_exampleSentence[2].isEmpty() || !m_word.m_exampleSentence[3].isEmpty() ||
-        !m_word.m_exampleSentence[4].isEmpty() || !m_word.m_exampleSentence[5].isEmpty())
+    if (!m_word.isExampleSentenceEmpty())
     {
         ui->copyLabel_exampleSentence->setText("例句：");
         ui->copyLabel_exampleSentence->show();

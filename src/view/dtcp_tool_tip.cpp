@@ -26,6 +26,8 @@ QLabel {
 )"));
         layout->addWidget(m_label);
         m_label->show();
+        m_label->setMaximumWidth(800);
+        m_label->setWordWrap(true);
     }
     if (text.isEmpty())
     {
@@ -38,7 +40,8 @@ QLabel {
         QString tmp;
         for (int i = 0; i < list.size(); ++i)
         {
-            tmp.append(fm.elidedText(list[i], Qt::ElideRight, 800));
+//            tmp.append(fm.elidedText(list[i], Qt::ElideNone, 800, Qt::TextWordWrap));
+            tmp.append(list[i]);
             if (i != list.size() - 1)
                 tmp.append("\n");
         }

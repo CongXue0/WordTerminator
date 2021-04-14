@@ -8,9 +8,10 @@
 #include <QCheckBox>
 #include <QTextEdit>
 #include <QPushButton>
-#include "wmessage.h"
 #include <QMutex>
 #include <QComboBox>
+#include "wmessage.h"
+#include "wordadmin.h"
 
 namespace Ui
 {
@@ -45,7 +46,7 @@ private:
     int m_times;
     int m_remember;
     QStringList m_groupList;
-    QVector<QTextEdit *> textEdit_exampleSentence;
+    QTextEdit *textEdit_exampleSentence[EXAMPLE_NUM];
 };
 
 #endif // WORDCREATEWIDGET_H
